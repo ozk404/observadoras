@@ -1,0 +1,58 @@
+# AGENTS.md — Instrucciones para Codex
+
+Trabajas en **Observadoras Digitales**, una plataforma piloto de monitoreo ciudadano para Fundación Oxlajuj No’j. El objetivo es implementar lo definido por el TDR y el Producto 1 aprobado, **sin ampliar el alcance** ni comprometer privacidad.
+
+## Leer antes de implementar
+
+1. `PROJECT.md`: propósito, funciones, límites y criterios globales.
+2. `FLUJOS_Y_DATOS.md`: actores, permisos propuestos, estados, datos y pruebas de negocio.
+3. `ADN_VISUAL.md`: identidad, componentes y accesibilidad.
+4. `FASES_DE_IMPLEMENTACION.md`: orden de trabajo y aceptación.
+5. `DECISIONES_PENDIENTES.md`: asuntos no aprobados y soluciones conservadoras.
+
+## Primera acción obligatoria: inspeccionar el repositorio
+
+- **No** asumas que empezamos desde cero: la plataforma ya está en desarrollo.
+- Identifica stack, estructura, servicios, autenticación y funciones reales **a partir del código**, no a partir de los diagramas.
+- No introduzcas frameworks, cambios de arquitectura, nueva infraestructura o servicios externos sin demostrar necesidad y obtener indicación.
+- Antes del primer cambio, presenta diagnóstico de implementado/parcial/ausente y propón el incremento mínimo.
+
+## Límites de producto
+
+**Excepción acordada expresamente con el usuario (25-10-2026):** el repositorio partía sin código. Se autoriza Next.js + TypeScript + PostgreSQL y Docker Compose. La fase 1 añade formulario público sin cuenta y catálogo de versiones revisadas; solo el original sigue privado. Se autoriza revisión/publicación manual básica en fase 1, sin automatización. Los límites previos sobre portal público se sustituyen únicamente para estas versiones aprobadas. Ver `FASE1-DISENO.md`.
+
+- **Sí:** registro estructurado, consulta autorizada, sugerencias IA, revisión humana, seguimiento, borradores de alertas, dashboard mínimo.
+- **No:** scraping de redes, análisis predictivo avanzado, identificación automática de personas, denuncia/publicación automática, portal público de casos, app nativa, BI avanzado.
+- La IA es auxiliar; no debe validar o decidir por sí sola.
+- Solo roles autorizados pueden revisar y validar.
+- El sistema debe seguir sirviendo para crear y revisar registros aunque la IA falle.
+
+## Protección de datos — requisito de implementación
+
+- Minimiza datos personales desde el diseño del formulario.
+- Antes de enviar información a cualquier proveedor de IA, elimina o protege información identificable y verifica que el tratamiento esté autorizado; si hay duda, **no envíes**.
+- No uses datos reales de víctimas, participantes o terceros en tests, demos, fixtures, prompts de depuración o logs.
+- No muestres información individualizable en dashboard ni en mensajes de error.
+- Valida autorización al leer/modificar datos; el ocultamiento visual de botones no es seguridad.
+- No incluyas secretos, claves, identificadores privados ni credenciales en el código o los documentos.
+- Evita afirmar “anonimizado” si solo se ocultaron algunos campos sin comprobar el riesgo de reidentificación.
+
+## Cómo ejecutar cada tarea
+
+1. Definir **una tarea acotada** y sus criterios de aceptación antes de tocar archivos.
+2. Reutilizar funciones y componentes existentes cuando resulte viable.
+3. Mantener consistencia visual con `ADN_VISUAL.md`, sin inventar logos o pantallas decorativas.
+4. Agregar o actualizar pruebas de permisos, estados y privacidad según el cambio.
+5. Ejecutar comprobaciones disponibles en el repositorio y comunicar las no ejecutadas.
+6. Al terminar informar: archivos modificados, conducta implementada, pruebas y resultados, limitaciones y siguiente incremento sugerido.
+
+## Qué hacer ante ambigüedad
+
+- Distinguir claramente **fuente aprobada** de **propuesta de implementación**.
+- Preferir mínimo privilegio y funcionalidad más simple cuando no aumente riesgo ni cree un compromiso nuevo.
+- En cuestiones sensibles —escala de riesgo, tratamiento de datos reales, permisos amplios, adjuntos sensibles, publicaciones, servicios externos— no inventar una política: registrar el bloqueo en `DECISIONES_PENDIENTES.md` y solicitar definición concreta.
+- No eliminar ni reemplazar trabajo existente para “simplificar” sin revisar impactos.
+
+## Definición de terminado para un incremento
+
+El flujo acordado funciona; se comprobaron permisos y protección de datos involucrados; no se introdujeron funcionalidades ajenas; es usable en móvil/escritorio cuando aplica; están documentados los límites; existe una forma clara de verificarlo.

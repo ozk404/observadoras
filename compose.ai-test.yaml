@@ -1,0 +1,46 @@
+name: observadoras-ai-test
+services:
+  db:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-observadoras}
+      POSTGRES_DB: ${POSTGRES_DB:-observadoras}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define .env}
+    volumes:
+      - ai_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  migrate:
+    image: observadoras-app:local
+    env_file: .env
+    command: ["npm", "run", "db:migrate"]
+    depends_on:
+      db:
+        condition: service_healthy
+  openai-mock:
+    image: observadoras-app:local
+    command: ["node", "scripts/mock-openai.mjs"]
+  app:
+    image: observadoras-app:local
+    env_file: .env
+    environment:
+      APP_ORIGIN: http://localhost:3100
+      COOKIE_SECURE: "false"
+      TRUST_PROXY: "false"
+      OPENAI_API_KEY: fictional-test-key
+      OPENAI_MODEL: simulated-model
+      AI_DATA_MODE: synthetic
+      AI_TEST_MODE: "true"
+      OPENAI_TEST_ENDPOINT: http://openai-mock:4000/v1/responses
+    ports:
+      - "127.0.0.1:3100:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openai-mock:
+        condition: service_started
+volumes:
+  ai_test_data:
