@@ -1,6 +1,6 @@
 # Observadoras — propuesta de ADN v2
 
-Estado: propuesta visual para revisión, 26-10-2026. No sustituye todavía `ADN_VISUAL.md` ni cambia la aplicación desplegada. El usuario solicita una identidad altamente creativa, calidad institucional internacional, trabajo página por página y morado oficial `#69088B`. Si faltan imágenes, dejar su espacio y especificar qué producir.
+Estado: dirección aprobada el 26-10-2026 con correcciones del usuario: blanco dominante, bloques completos protagonistas de morado institucional y copy concreto, sin obviedades o lemas morales. La lámina inicial conserva su valor histórico; su titular fue rechazado y queda sustituido por el diseño de Inicio. El usuario solicita una identidad altamente creativa, calidad institucional internacional, trabajo página por página y morado oficial `#69088B`. Si faltan imágenes, dejar su espacio y especificar qué producir.
 
 ## Dirección: institucional y expresiva
 
@@ -69,9 +69,9 @@ El dashboard conserva sus tres bloques funcionales. El nuevo ADN cambia su prese
 ## Primera página propuesta: Inicio
 
 1. Encabezado compacto con la marca y tres accesos reales.
-2. Apertura con titular propuesto «La participación de las mujeres cuenta.», descripción breve del observatorio, Enviar un reporte y Explorar reportes.
+2. Apertura con titular propuesto «Reportes de violencia política digital.», descripción breve del observatorio, Enviar un reporte y Explorar reportes.
 3. Ilustración humana propia en un encuadre lavanda asimétrico. El titular permanece en HTML, fuera de la imagen.
-4. Recorrido de tres momentos con etiquetas concretas: Compartes → Revisamos → Publicamos lo aprobado. Sin párrafo bajo cada paso por defecto.
+4. Bloque dividido blanco/morado que explica la separación entre original privado y versión pública; tres etapas breves, con publicación condicionada a aprobación.
 5. Entrada al catálogo con información real disponible o estado vacío; sin estadísticas, cifras de impacto, testimonios, casos o alianzas inventadas.
 6. Pie breve con identificación institucional y privacidad. No inventar correo de atención, canal de derechos ni compromisos de acompañamiento.
 
@@ -100,7 +100,7 @@ La falta de estas imágenes no bloquea la implementación: se conserva un espaci
 
 ## Economía de texto
 
-Se conserva íntegra la regla solicitada: **Avoid unnecessary supporting text, descriptive copy, and redundant UI microcopy.** El diseño explica mediante jerarquía y controles. Mantener etiquetas accesibles, errores específicos, consentimiento y privacidad necesarios, sin duplicarlos. No convertir «organismo internacional» en una interfaz cargada de advertencias y lenguaje burocrático.
+Se conserva íntegra la regla solicitada: **Avoid unnecessary supporting text, descriptive copy, and redundant UI microcopy.** Se rechazan obviedades, consensos morales y lemas intercambiables. Cada texto aporta propósito, alcance, requisitos o funcionamiento comprobable. El diseño explica mediante jerarquía y controles. Mantener etiquetas accesibles, errores específicos, consentimiento y privacidad necesarios, sin duplicarlos. No convertir «organismo internacional» en una interfaz cargada de advertencias y lenguaje burocrático.
 
 ## Aplicación por incrementos
 

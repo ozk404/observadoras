@@ -41,6 +41,9 @@ Trabajas en **Observadoras Digitales**, una plataforma piloto de monitoreo ciuda
 
 ### Economía de texto en la interfaz
 
+- Usar copy concreto y verificable sobre el producto. No usar obviedades o consensos morales disfrazados de mensaje («La participación de las mujeres cuenta») ni lemas motivacionales intercambiables. Cada frase debe aportar propósito, alcance, requisito o funcionamiento real.
+- Blanco dominante con bloques protagonistas de morado institucional `#69088B`, según ADN v2. Aplicar página por página; no rediseñar por accidente pantallas aún no revisadas mediante CSS global.
+
 - **Avoid unnecessary supporting text, descriptive copy, and redundant UI microcopy.** Evita etiquetas y descripciones secundarias innecesarias. Deja que el diseño haga la explicación.
 - Diseño y textos deben complementarse, sin repetir lo que ya comunican el título, la acción, el estado o la estructura visual.
 - No añadas subtítulos, párrafos explicativos, avisos o etiquetas decorativas por defecto. Cada texto debe aportar información necesaria para realizar la tarea o tomar una decisión.
