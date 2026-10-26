@@ -1186,6 +1186,19 @@ textarea::placeholder {
   .dashboard-table th, .dashboard-table td { padding: 14px 7px; font-size: 12px; }
   .private-nav { margin-top: -12px; }
 }
+/* ADN v2 shell applies only while Inicio is mounted. */
+body:has(.home-v2) .header-inner { width: min(1280px, calc(100% - 96px)); min-height: 96px; }
+body:has(.home-v2) .wordmark > span { font-family: "Archivo Home", sans-serif; font-weight: 800; font-size: 29px; letter-spacing: -1.2px; }
+body:has(.home-v2) .wordmark small { letter-spacing: 1.5px; }
+body:has(.home-v2) .nav-primary { border-radius: 8px; min-height: 44px; display: inline-flex; align-items: center; }
+body:has(.home-v2) .site-footer { border-color: #d9ccdf; }
+@media (max-width: 1000px) {
+  body:has(.home-v2) .header-inner { width: calc(100% - 56px); }
+}
+@media (max-width: 720px) {
+  body:has(.home-v2) .header-inner { width: calc(100% - 40px); padding-block: 22px; }
+  body:has(.home-v2) .wordmark > span { font-size: 27px; }
+}
 /* Operational screens favor readable labels and clearly bounded controls. */
 .help {
   font-size: 12px;

@@ -15,6 +15,10 @@ Este resumen prevalece para conocer el estado técnico vigente. Los diseños y v
 
 Última validación: 32/32 pruebas de servidor con PostgreSQL y 31/31 recorridos completos de navegador. TypeScript, construcción y actualización local correctos; aplicación/PostgreSQL saludables, worker activo. Ver `FASE4-DASHBOARD-VERIFICACION.md` y, para el incremento anterior, `REPORTES-REALES-VERIFICACION.md`.
 
+## Rediseño página por página
+
+ADN v2 aprobado con blanco dominante, bloques protagonistas de morado `#69088B` y copy verificable sin obviedades o lemas morales. Inicio actualizado; ilustración pendiente de producción por el usuario con espacio sustituible. El resto de páginas conserva su diseño hasta su incremento. Ver `ADN_VISUAL.md`, `diseno/ADN-V2-PROPUESTA.md` e `INICIO-ADN-V2-VERIFICACION.md`. Verificación visual: cuatro recorridos seleccionados, TypeScript y build aprobados; no se repitieron pruebas de base porque no cambió lógica ni contratos.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

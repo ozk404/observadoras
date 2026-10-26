@@ -25,7 +25,7 @@ Se actualiza la dirección editorial inicialmente sugerida: predominio de sans s
 - **Color concentrado:** el morado organiza la mirada en acciones, navegación y secciones concretas. Las pantallas de trabajo siguen siendo claras.
 - **Información con estructura:** separadores, alineación, tipografía y ritmo sustituyen el uso indiscriminado de tarjetas y descripciones.
 
-Las fuentes se alojarán localmente en la aplicación si se aprueba la dirección. Archivo es una propuesta tipográfica, no una fuente oficial atribuida a la Fundación.
+Archivo se aloja localmente en Inicio; Manrope se conserva para lectura e interfaz. Esta elección digital no se atribuye como tipografía institucional oficial de la Fundación.
 
 ## Paleta propuesta
 

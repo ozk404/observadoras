@@ -1,131 +1,72 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { Arrow, Shield } from "@/components/icons";
+import { Arrow } from "@/components/icons";
+import styles from "./home.module.css";
+
+export const metadata: Metadata = {
+  title: "Reportes de violencia política digital",
+  description:
+    "Envía reportes al observatorio y consulta las versiones revisadas y aprobadas por el equipo de Fundación Oxlajuj No’j.",
+};
 export default function Home() {
   return (
-    <>
-      <section className="hero wrap">
-        <div className="hero-copy">
-          <span className="eyebrow">
-            <span className="small-rule" />
-            Monitoreo ciudadano con perspectiva de género
-          </span>
-          <h1>
-            La participación
-            <br />
-            de las mujeres
-            <br />
-            <em>
-              merece un espacio
-              <br />
-              sin violencia.
-            </em>
+    <div className={`home-v2 ${styles.home}`}>
+      <section className={styles.hero} aria-labelledby="home-title">
+        <div className={styles.heroCopy}>
+          <h1 id="home-title">
+            Reportes de <span>violencia política digital.</span>
           </h1>
           <p>
-            Documentamos situaciones de violencia política digital,
-            desinformación y barreras a la participación. Tu relato puede
-            contribuir a hacerlas visibles.
+            Comparte situaciones de acoso, desinformación o barreras a la
+            participación política de las mujeres.
           </p>
-          <div className="hero-actions">
-            <Link className="button" href="/reportar">
+          <div className={styles.actions}>
+            <Link className={styles.primary} href="/reportar">
               Enviar un reporte <Arrow />
             </Link>
-            <Link className="inline-link" href="/reportes">
-              Explorar reportes revisados <Arrow />
+            <Link className={styles.textLink} href="/reportes">
+              Explorar reportes <Arrow />
             </Link>
           </div>
-          <div className="hero-note">
-            <Shield />
-            <span>
-              Sin crear una cuenta.
-              <br />
-              <strong>Con revisión humana antes de publicar.</strong>
-            </span>
-          </div>
         </div>
-        <aside className="hero-panel" aria-label="Nuestro proceso">
-          <span className="eyebrow">Del relato a la visibilidad</span>
-          <div className="panel-statement">
-            Escuchar.
-            <br />
-            Cuidar.
-            <br />
-            <span>Hacer visible.</span>
-          </div>
-          <p>
-            Cada relato merece atención.
-            <br />
-            Cada publicación, una revisión responsable.
-          </p>
-          <div className="panel-bottom">
-            <span>
-              Una iniciativa de
-              <br />
-              <strong>Fundación Oxlajuj No’j</strong>
-            </span>
-            <span className="panel-year">2026</span>
-          </div>
-        </aside>
-      </section>
-      <section className="process-section">
-        <div className="wrap">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Cómo funciona</span>
-              <h2>
-                Tu voz inicia el proceso.
-                <br />
-                El cuidado guía cada paso.
-              </h2>
-            </div>
-            <p>
-              El envío es privado. Solo una versión revisada y aprobada por el
-              equipo puede hacerse pública.
-            </p>
-          </div>
-          <div className="process-grid">
-            {[
-              [
-                "01",
-                "Comparte lo ocurrido",
-                "Describe la situación sin incluir datos personales innecesarios. No necesitas una cuenta.",
-              ],
-              [
-                "02",
-                "Revisamos con cuidado",
-                "El equipo del observatorio examina el relato y prepara una versión que proteja a las personas.",
-              ],
-              [
-                "03",
-                "Visibilizamos lo aprobado",
-                "El catálogo reúne únicamente las versiones expresamente aprobadas para publicación.",
-              ],
-            ].map(([n, title, text]) => (
-              <article key={n}>
-                <span className="step-number">{n}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
+        {/* Reserved for the illustration described in docs/diseno/ADN-V2-PROPUESTA.md. */}
+        <div className={styles.art} aria-hidden="true">
+          <div className={styles.artInset} />
         </div>
       </section>
-      <section className="wrap closing">
-        <div>
-          <span className="eyebrow">Reportes revisados</span>
-          <h2>
-            Conocer también es
+      <section className={styles.review} aria-labelledby="review-title">
+        <div className={styles.reviewCopy}>
+          <h2 id="review-title">
+            Original privado.
             <br />
-            una forma de participar.
+            Versión pública revisada.
           </h2>
-          <p>
-            Consulta las versiones públicas aprobadas por el equipo del
-            observatorio.
-          </p>
+          <p>La captura y la URL no aparecen en el catálogo.</p>
+          <Link href="/privacidad" className={styles.textLink}>
+            Tratamiento de la información <Arrow />
+          </Link>
         </div>
-        <Link className="button secondary" href="/reportes">
+        <ol className={styles.steps}>
+          <li>
+            <span aria-hidden="true">01</span>
+            <h3>Envío privado</h3>
+          </li>
+          <li>
+            <span aria-hidden="true">02</span>
+            <h3>Revisión del equipo</h3>
+          </li>
+          <li>
+            <span aria-hidden="true">03</span>
+            <h3>Publicación tras aprobación</h3>
+          </li>
+        </ol>
+      </section>
+      <section className={styles.catalog} aria-labelledby="catalog-title">
+        <h2 id="catalog-title">Reportes aprobados para consulta pública.</h2>
+        <Link className={styles.inverse} href="/reportes">
           Ver el catálogo <Arrow />
         </Link>
       </section>
-    </>
+    </div>
   );
 }

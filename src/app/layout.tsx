@@ -50,7 +50,6 @@ export default function RootLayout({
             <Link href="/privacidad">
               Privacidad y cuidado de la información
             </Link>
-            <span>Documentar. Revisar. Visibilizar.</span>
           </div>
         </footer>
       </body>
