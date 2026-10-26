@@ -24,6 +24,7 @@ try {
     ["test-alert-reviewer", "reviewer"],
     ["test-alert-participant", "participant"],
     ["test-alert-ai-reviewer", "reviewer"],
+    ["test-dashboard-reviewer", "reviewer"],
   ]) {
     const name = username.replace(/^test/, prefix);
     execFileSync(

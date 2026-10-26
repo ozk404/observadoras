@@ -85,6 +85,8 @@ La currícula señala sesiones formativas el **27 y 29 de octubre**, encuentro p
 
 ## Fase 4 — Dashboard mínimo
 
+**Primer incremento implementado y verificado (26-10-2026):** resumen exclusivo de revisoras con total de reportes validados/publicados, barras y tabla por clasificación humana o estado, y filtro por fecha de validación (30/90/365 días o todo el período). No lee ni expone originales, notas, imágenes o identificadores. Sin dimensiones institucionales inventadas. Se verificaron 32 pruebas de servidor y 31 recorridos completos. Ver `superpowers/specs/2026-10-26-dashboard-design.md` y `FASE4-DASHBOARD-VERIFICACION.md`. Otras dimensiones y filtros adicionales se evaluarán con campos/criterios aprobados.
+
 **Objetivo:** visualizar resultados sin construir una suite analítica.
 
 **Alcance:** contador general, un gráfico de barras con dimensión elegible, tabla resumida y filtros por período/categoría, usando datos agregados.

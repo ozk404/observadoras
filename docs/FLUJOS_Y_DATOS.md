@@ -175,6 +175,8 @@ El programa formativo menciona capturas, enlaces, fechas y contexto al enseñar 
 
 ## 9. Flujo E — Dashboard mínimo
 
+**Incremento vigente (26-10-2026):** `/equipo/dashboard` es exclusivo de revisoras habilitadas. Total, barras y tabla comparten una consulta de agregación sobre registros validados/publicados, con período según `validated_at`. Agrupación por clasificación humana o estado. Categorías repetidas no duplican reportes; varias categorías pueden sumar más del total. Sin clasificación válida se muestra «Sin clasificación suficiente». No se exponen relatos, identidades ni datos de IA. Este primer incremento no añade cruces demográficos ni garantiza anonimato institucional; ver D-08/D-09 y `FASE4-DASHBOARD-VERIFICACION.md`.
+
 Fuente: **registros consolidados** de la plataforma. Convención propuesta para evitar confundir hechos no revisados: contador total puede incluir todos los registros autorizados con etiqueta clara; las distribuciones de hallazgos y tendencias se basan en registros **validados**. Confirmar con la Fundación.
 
 Tres elementos de interfaz:

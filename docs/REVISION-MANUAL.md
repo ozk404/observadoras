@@ -42,3 +42,7 @@ Como revisora, abrir un registro validado o publicado. En **Seguimiento**, escri
 ## Análisis inicial con captura
 
 En `/reportar`, usar texto y captura enteramente ficticios y aceptar el aviso y autorización de OpenAI. Al abrir esa nueva reporte como revisora, comprobar el panel **Análisis inicial de IA**: estado de procesamiento y, al completar, pertinencia, categorías, observaciones de captura y puntos a revisar. No hay que pulsar Generar para este análisis. Seleccionar la clasificación humana y observación interna al validar; se guardan aparte. La URL no se consulta ni se envía a OpenAI. Un fallo o bloqueo permite continuar manualmente. No se analizan automáticamente los registros previos ni borradores internos.
+
+## Resumen privado
+
+Como revisora, abrir **Resumen**, comparar total, barras y tabla con reportes ficticios previamente validados, cambiar período y agrupar por estado. Aplicar y restablecer deben actualizar tanto datos como selectores. Pendientes y borradores no cuentan. Una participante no ve el acceso y no puede consultar la API; sin sesión, la página lleva a ingreso. Usar únicamente datos ficticios en las comprobaciones técnicas.

@@ -89,7 +89,7 @@ Ejecutar E2E solo en un entorno de prueba aislado: crea registros y publicacione
 
 ## Pendientes institucionales
 
-La ficha definitiva, matriz completa de permisos, conservación, canal de derechos, procedimiento de retirada pública, activos oficiales, alojamiento y respaldos siguen pendientes. El usuario autorizó recepción y análisis de reportes reales el 26-10-2026; esto no resuelve ni sustituye las decisiones institucionales operativas pendientes. Se admiten imágenes acotadas, seguimiento privado con cierre y borradores de alertas; no archivos genéricos ni dashboard todavía. Consulta `docs/FASE1-DISENO.md`, `docs/FASE2-DISENO.md`, `docs/EVIDENCIA-DISENO.md` y los documentos de producto.
+La ficha definitiva, matriz completa de permisos, conservación, canal de derechos, procedimiento de retirada pública, activos oficiales, alojamiento y respaldos siguen pendientes. El usuario autorizó recepción y análisis de reportes reales el 26-10-2026; esto no resuelve ni sustituye las decisiones institucionales operativas pendientes. Se admiten imágenes acotadas, seguimiento privado con cierre y borradores de alertas; sin archivos genéricos. El dashboard privado mínimo ya está disponible para revisoras. Consulta `docs/FASE1-DISENO.md`, `docs/FASE2-DISENO.md`, `docs/EVIDENCIA-DISENO.md` y los documentos de producto.
 
 ## Captura privada de reporte público
 
@@ -154,3 +154,7 @@ La recepción no espera al proveedor. Estados visibles: en cola, procesando, com
 ## Estado consolidado
 
 Consultar [estado actual](docs/ESTADO_ACTUAL.md) para distinguir funcionalidades vigentes, verificaciones y pendientes. Los documentos de verificación registran hitos históricos y no reemplazan ese resumen.
+
+## Resumen privado del observatorio
+
+Como revisora, abrir **Resumen** en el área privada (`/equipo/dashboard`). Contador, barras y tabla usan solo reportes validados/publicados, con filtro por fecha de validación y agrupación por clasificación humana o estado. Varias categorías pueden sumar más que el total. No incluye originales, identificadores ni categorías sugeridas por IA. Participantes y visitantes no acceden a los agregados. Ver `docs/FASE4-DASHBOARD-VERIFICACION.md`.

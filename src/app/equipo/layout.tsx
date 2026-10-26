@@ -26,6 +26,12 @@ export default async function TeamLayout({
           <Logout />
         </div>
       </div>
+      {user.role === "reviewer" && (
+        <nav className="private-nav" aria-label="Área de revisión">
+          <Link href="/equipo">Reportes</Link>
+          <Link href="/equipo/dashboard">Resumen</Link>
+        </nav>
+      )}
       {children}
     </div>
   );
