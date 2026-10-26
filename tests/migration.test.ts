@@ -139,6 +139,97 @@ test(
         ),
       );
       await client.query("ROLLBACK TO SAVEPOINT duplicate_request");
+      await client.query(
+        await readFile("db/migrations/005_private_evidence.sql", "utf8"),
+      );
+      assert.equal(
+        (
+          await client.query("SELECT source_url FROM reports WHERE id=$1", [
+            reportId,
+          ])
+        ).rows[0].source_url,
+        null,
+      );
+      assert.equal(
+        (
+          await client.query(
+            "SELECT count(*)::int AS total FROM report_evidence",
+          )
+        ).rows[0].total,
+        0,
+      );
+      await client.query(
+        await readFile("db/migrations/006_intake_analysis.sql", "utf8"),
+      );
+      await client.query(
+        await readFile("db/migrations/007_private_followup.sql", "utf8"),
+      );
+      await client.query(
+        await readFile("db/migrations/008_alert_drafts.sql", "utf8"),
+      );
+      await client.query(
+        await readFile("db/migrations/009_alert_generations.sql", "utf8"),
+      );
+      await client.query(
+        "INSERT INTO intake_analyses(id,report_id,report_version,synthetic_confirmed,state) VALUES($1,$2,1,true,'queued')",
+        [randomUUID(), pendingId],
+      );
+      await client.query(
+        await readFile("db/migrations/010_intake_consent.sql", "utf8"),
+      );
+      const historical = (await client.query(
+        "SELECT synthetic_confirmed,ai_consent,consent_version,consented_at FROM intake_analyses WHERE report_id=$1", [pendingId],
+      )).rows[0];
+      assert.equal(historical.synthetic_confirmed, true);
+      assert.equal(historical.ai_consent, false);
+      assert.equal(historical.consent_version, null);
+      assert.equal(historical.consented_at, null);
+      assert.equal(
+        (
+          await client.query(
+            "SELECT count(*)::int AS total FROM alert_generations",
+          )
+        ).rows[0].total,
+        0,
+      );
+      assert.equal(
+        (await client.query("SELECT count(*)::int AS total FROM alert_drafts"))
+          .rows[0].total,
+        0,
+      );
+      assert.equal(
+        (
+          await client.query(
+            "SELECT count(*)::int AS total FROM report_followup_events",
+          )
+        ).rows[0].total,
+        0,
+      );
+      assert.equal(
+        (
+          await client.query(
+            "SELECT count(*)::int AS total FROM intake_analyses WHERE ai_consent",
+          )
+        ).rows[0].total,
+        0,
+      );
+      assert.deepEqual(
+        (
+          await client.query(
+            "SELECT reviewed_categories FROM reports WHERE id=$1",
+            [reportId],
+          )
+        ).rows[0].reviewed_categories,
+        [],
+      );
+      assert.equal(
+        (
+          await client.query("SELECT id FROM publications WHERE report_id=$1", [
+            reportId,
+          ])
+        ).rows[0].id,
+        publicationId,
+      );
     } finally {
       await client.query("ROLLBACK");
       client.release();

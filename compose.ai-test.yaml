@@ -42,5 +42,22 @@ services:
         condition: service_completed_successfully
       openai-mock:
         condition: service_started
+  ai-worker:
+    image: observadoras-app:local
+    env_file: .env
+    command: ["node", "--import", "tsx", "scripts/ai-worker.ts"]
+    environment:
+      APP_ORIGIN: http://localhost:3100
+      OPENAI_API_KEY: fictional-test-key
+      OPENAI_MODEL: simulated-model
+      AI_DATA_MODE: synthetic
+      AI_TEST_MODE: "true"
+      OPENAI_TEST_ENDPOINT: http://openai-mock:4000/v1/responses
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openai-mock:
+        condition: service_started
+    stop_grace_period: 35s
 volumes:
   ai_test_data:

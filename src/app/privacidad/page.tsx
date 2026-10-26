@@ -13,41 +13,52 @@ export default function Privacy() {
       </p>
       <h2>Qué recoge este formulario</h2>
       <p>
-        Un título y la descripción que decidas compartir. No solicita nombre,
-        correo, teléfono ni archivos. Evita incluir identificadores personales
-        en el texto. Enviar sin cuenta no garantiza anonimato frente a tu
-        conexión o proveedor de Internet.
+        Una descripción y una captura o imagen obligatoria; puedes
+        añadir una URL opcional. No solicita nombre, correo ni teléfono. Oculta
+        datos personales innecesarios en el texto y la captura antes de
+        enviarlos. Enviar sin cuenta no garantiza anonimato frente a tu conexión
+        o proveedor de Internet.
       </p>
       <h2>Quién puede leerlo</h2>
       <p>
         El original queda en el área privada del equipo autorizado. Una persona
         revisora puede preparar un título y texto diferentes para publicación,
         revisar el riesgo de identificación y aprobarlos expresamente. El
-        original no se publica automáticamente.
+        original no se publica automáticamente. La imagen y la URL se conservan
+        como material privado para revisión, incluso si se publica una versión
+        textual. La URL no se adjunta a solicitudes de IA. Las imágenes se
+        normalizan para retirar metadatos, lo que no elimina datos visibles
+        dentro de la captura ni garantiza anonimato.
       </p>
       <h2>Qué ocurre con la IA</h2>
       <p>
-        El envío del formulario no activa IA. En el entorno de pruebas, una
-        persona revisora puede preparar un texto ficticio, revisarlo y solicitar
-        sugerencias mediante OpenAI si el servicio está configurado. El original
-        no se adjunta automáticamente. El tratamiento de datos reales mediante
-        IA permanece deshabilitado hasta definir las condiciones
-        institucionales.
+        Al enviar un reporte, autorizas el análisis automático de la descripción
+        y la captura mediante OpenAI, un proveedor externo. Se registra tu
+        aceptación, su fecha y la versión de este aviso. Se aplican controles
+        previos sobre el texto; la URL no se consulta ni se adjunta
+        automáticamente. Los datos visibles en una imagen también se transmiten:
+        oculta los que no sean necesarios antes de enviarla. El análisis sugiere categorías, pertinencia
+        y observaciones para revisión humana; no demuestra que los hechos sean
+        verdaderos ni que la captura sea auténtica. El envío se conserva si la
+        IA falla. Las revisoras también pueden solicitar propuestas de alerta
+        con texto preparado y revisado; esas solicitudes no adjuntan
+        automáticamente el original, la captura ni las notas de seguimiento.
+        Las solicitudes a la API usan la opción de no guardar la respuesta;
+        esto no garantiza que el proveedor no conserve registros técnicos
+        conforme a sus políticas.
       </p>
       <h2>Protección frente a abuso</h2>
       <p>
         Se limitan los intentos de envío y acceso. Cuando el entorno tiene un
         proxy confiable configurado, se utilizan identificadores técnicos
         derivados de la dirección de conexión para aplicar límites, sin guardar
-        esa dirección en el registro de la denuncia.
+        esa dirección en el reporte.
       </p>
-      <h2>Condiciones antes del uso institucional</h2>
+      <h2>Alcance del envío</h2>
       <p>
-        Este entorno inicial está destinado a pruebas con datos ficticios. La
-        institución debe definir el plazo de conservación, el canal para ejercer
-        derechos sobre la información y las condiciones operativas antes de
-        recibir datos reales. No envíes información real en este entorno de
-        desarrollo.
+        El reporte informa al observatorio. No presenta una denuncia penal ni
+        activa una atención de emergencia. La revisión y cualquier publicación
+        requieren una decisión humana.
       </p>
     </article>
   );

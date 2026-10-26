@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
+import { categoryKeys, categoryLabels } from "@/lib/ai-contract";
 export function ValidationForm({
   id,
   version,
@@ -13,6 +14,8 @@ export function ValidationForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const [categories, setCategories] = useState<string[]>([]);
+  const [observation, setObservation] = useState("");
   return (
     <section className="form-panel">
       <span className="eyebrow">Revisión humana</span>
@@ -42,6 +45,8 @@ export function ValidationForm({
             await send(`/api/privado/registros/${id}/validacion`, {
               confirmed,
               version,
+              reviewedCategories: categories,
+              reviewObservation: observation,
             });
             router.refresh();
           } catch (error) {
@@ -56,6 +61,50 @@ export function ValidationForm({
             {error}
           </p>
         )}
+        <fieldset className="category-choices">
+          <legend>Clasificación de la revisora</legend>
+          <p className="help">
+            Elige hasta cuatro categorías orientativas. Se guardan como tu
+            decisión, separadas de las sugerencias de IA.
+          </p>
+          {categoryKeys.map((key) => (
+            <label className="checkbox" key={key}>
+              <input
+                type="checkbox"
+                checked={categories.includes(key)}
+                disabled={categories.length >= 4 && !categories.includes(key)}
+                onChange={(event) => {
+                  setCategories((previous) =>
+                    event.target.checked
+                      ? [...previous, key]
+                      : previous.filter((value) => value !== key),
+                  );
+                  setConfirmed(false);
+                }}
+              />
+              <span>{categoryLabels[key]}</span>
+            </label>
+          ))}
+        </fieldset>
+        <div>
+          <label htmlFor="review-observation">
+            Observación interna de la revisora <span>(opcional)</span>
+          </label>
+          <textarea
+            id="review-observation"
+            value={observation}
+            maxLength={2000}
+            rows={3}
+            onChange={(event) => {
+              setObservation(event.target.value);
+              setConfirmed(false);
+            }}
+          />
+          <p className="help">
+            Indica tu valoración sin datos personales innecesarios. No se
+            publica.
+          </p>
+        </div>
         <label className="checkbox">
           <input
             type="checkbox"

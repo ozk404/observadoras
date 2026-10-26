@@ -70,6 +70,8 @@ Los UML contemplan **Participante**, **Equipo del Observatorio** y **Administrac
 
 ## 3. Estados de un hallazgo (propuesta inicial)
 
+**Flujo local acordado el 26-10-2026:** el seguimiento tiene historial privado y cierre independientes del estado de revisión/publicación. Solo revisoras escriben notas y cierran registros validados o publicados. Cerrar conserva la publicación y la validación; no añade un estado principal «cerrado», no retira contenido y no impide publicar posteriormente un registro validado. No se incluye reapertura en este incremento. La propuesta inicial siguiente no sustituye este acuerdo ni constituye una política institucional definitiva.
+
 Estos nombres no están prescritos por el TDR y requieren validación antes de convertirse en reglas inmutables:
 
 ```text
@@ -120,6 +122,8 @@ El TDR menciona como ejemplos: **acoso, amenaza, desinformación, discurso de od
 
 ### Evidencias y archivos
 
+**Actualización de la conversación:** el usuario autorizó una captura obligatoria en `/denuncia`, URL opcional y descripción, con un único archivo PNG/JPEG/WebP de hasta 5 MiB/20 megapíxeles. Se retiran metadatos y se almacena una versión normalizada privada, sin publicar la imagen/URL. Por autorización posterior, descripción y captura declaradas ficticias se analizan automáticamente con OpenAI; la URL no se envía. No se conserva el archivo original ni se certifica autenticidad o custodia forense. La restricción general siguiente continúa aplicando a archivos genéricos y ampliaciones de evidencias, pero ya no impide este campo acotado autorizado. Ver `EVIDENCIA-DISENO.md`; conservación y condiciones para datos reales siguen pendientes.
+
 El programa formativo menciona capturas, enlaces, fechas y contexto al enseñar documentación segura, pero el TDR del piloto **no exige explícitamente un gestor completo de evidencias adjuntas**. No habilitar cargas de capturas/archivos ni almacenar URLs personales como parte obligatoria del MVP sin reglas aprobadas de privacidad, acceso y conservación. Un campo de referencia restringido es una decisión pendiente, no una funcionalidad comprometida.
 
 ## 5. Flujo A — Crear hallazgo
@@ -158,6 +162,8 @@ El programa formativo menciona capturas, enlaces, fechas y contexto al enseñar 
 **Criterios de aceptación:** queda explícito quién validó y cuándo; un usuario sin rol revisor no puede validar; las sugerencias se distinguen del resultado revisado.
 
 ## 8. Flujo D — Borrador de alerta ciudadana
+
+**Incrementos locales del 26-10-2026:** existe un borrador privado editable por registro validado o publicado, accesible solo a revisoras. Se redacta manualmente, se usa explícitamente un resumen IA vigente o se solicita una propuesta nueva con texto preparado y confirmado ficticio. La propuesta se conserva separada: aplicarla y guardar son decisiones explícitas. Solo se transmite el texto preparado; no se adjuntan originales, evidencias, URL ni notas. Se comprueban permisos, vencimiento y versiones al iniciar y terminar; los resultados obsoletos se descartan. Se guardan versión propia, procedencia y atribución sin modificar el original, el seguimiento ni la publicación. No se envía, publica ni deriva la alerta. Ver `FASE3-GENERACION-VERIFICACION.md`.
 
 1. Una persona revisora autorizada solicita un borrador sobre información adecuada y revisada.
 2. El sistema prepara un texto claro, cuidadoso, no partidista y no revictimizante.

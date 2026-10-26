@@ -46,7 +46,7 @@ Adaptar la identidad de **Fundación Oxlajuj No’j** a una aplicación web de m
 
 - Encabezado con **logotipo institucional real** y nombre del producto.
 - Navegación de primer nivel únicamente para áreas necesarias: hallazgos, dashboard (si el rol tiene acceso) y administración (si corresponde).
-- En páginas operativas: título específico, contexto breve, acción primaria visible, contenido principal.
+- En páginas operativas: título específico, acción primaria visible y contenido principal. Añadir contexto solo cuando aporte información necesaria que el diseño no comunique.
 - Acciones destructivas o que cambian estados: confirmar e informar el resultado.
 - No introducir paneles KPI o menús simplemente para llenar espacio.
 
@@ -97,4 +97,19 @@ Las ilustraciones institucionales pueden aparecer en bienvenida o estados vacío
 
 ## 10. Criterio de aceptación visual
 
-Una pantalla pasa la revisión visual si: comunica una tarea clara, respeta la paleta, utiliza componentes coherentes, se entiende en móvil y escritorio, permite uso accesible y no introduce datos, funciones ni identidades inventadas.
+Una pantalla pasa la revisión visual si: comunica una tarea clara, respeta la paleta, utiliza componentes coherentes, se entiende en móvil y escritorio, permite uso accesible, evita redundancias entre diseño y textos y no introduce datos, funciones ni identidades inventadas.
+
+## 11. Economía de texto y claridad visual
+
+**Avoid unnecessary supporting text, descriptive copy, and redundant UI microcopy.** Evita etiquetas y descripciones secundarias innecesarias. Deja que el diseño haga la explicación.
+
+- La jerarquía, el espaciado, la agrupación y los controles deben hacer comprensible la interfaz. Diseño y textos se complementan; no repiten la misma explicación.
+- No acompañar cada título, tarjeta, campo o botón con una descripción por defecto. Añadir texto solo si resuelve una duda concreta o aporta información necesaria para actuar.
+- Evitar subtítulos, antetítulos, etiquetas decorativas, ayudas y avisos que repitan una acción, un estado o información ya visible. No llenar espacios vacíos con texto.
+- Usar etiquetas y acciones breves, específicas y suficientes por sí mismas.
+- Mantener las etiquetas necesarias para accesibilidad, los errores específicos y la información de privacidad o confirmación necesaria. Presentarla en el lugar oportuno y sin duplicaciones.
+- Antes de aprobar una pantalla, revisar cada texto secundario: si eliminarlo no cambia la comprensión, la accesibilidad ni la capacidad de decidir, eliminarlo.
+
+## Vocabulario del observatorio
+
+Usar «reporte» en navegación, formularios, catálogo, estados y mensajes. Acciones: «Enviar un reporte» y «Ver reportes». Preferir «captura o imagen» a «evidencia». El envío documenta una situación para el observatorio; no presentarlo como una denuncia penal. Aclararlo una vez en el formulario, sin repetir advertencias legales en cada control.

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { PublicForm } from "@/components/public-form";
 import { Shield } from "@/components/icons";
-export const metadata: Metadata = { title: "Registrar denuncia" };
-export default function Denuncia() {
+export const metadata: Metadata = { title: "Enviar reporte" };
+export default function Reportar() {
   return (
     <div className="wrap page-space">
       <div className="page-heading">
         <span className="eyebrow">Un espacio para tu relato</span>
-        <h1>Registrar una denuncia</h1>
+        <h1>Enviar un reporte</h1>
         <p>
           Comparte una situación de violencia política digital, desinformación o
           una barrera a la participación política de las mujeres.
@@ -31,6 +31,10 @@ export default function Denuncia() {
           <ul>
             <li>No solicitamos tu nombre ni datos de contacto.</li>
             <li>
+              La captura y la URL se consultan únicamente en el área privada.
+              Oculta datos personales innecesarios antes de adjuntar la imagen.
+            </li>
+            <li>
               Evita identificar a víctimas, participantes o terceras personas.
             </li>
             <li>
@@ -39,9 +43,8 @@ export default function Denuncia() {
             </li>
           </ul>
           <div className="aside-note">
-            Este espacio documenta situaciones para el observatorio. No
-            sustituye una denuncia ante una autoridad ni es un servicio de
-            emergencia.
+            Este envío informa al observatorio; no presenta una denuncia penal
+            ni es un servicio de emergencia.
           </div>
         </aside>
       </div>

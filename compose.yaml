@@ -37,5 +37,14 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+  ai-worker:
+    image: observadoras-app:local
+    env_file: .env
+    command: ["node", "--import", "tsx", "scripts/ai-worker.ts"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    stop_grace_period: 35s
 volumes:
   postgres_data:

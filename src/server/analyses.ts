@@ -57,7 +57,7 @@ export async function generateAnalysis(
   if (!config.ready)
     throw new HttpError(
       503,
-      "La IA no está configurada para pruebas ficticias. Puedes continuar manualmente.",
+      "La IA no está configurada para análisis autorizado. Puedes continuar manualmente.",
     );
   await limit(`ai:user:${user.id}`, 10, 3600);
   await limit("ai:global", 60, 3600);

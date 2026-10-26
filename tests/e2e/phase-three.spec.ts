@@ -70,11 +70,11 @@ test("internal human validation persists while the original stays private; publi
   expect(record.validation_source).toBe("explicit");
   const publicContext = await browser.newContext();
   const visitor = await publicContext.newPage();
-  await visitor.goto(`${origin}/denuncias`);
+  await visitor.goto(`${origin}/reportes`);
   await expect(
     visitor.getByText(`Validación ficticia ${prefix} privada`),
   ).toHaveCount(0);
-  expect((await visitor.request.get(`/denuncias/${id}`)).status()).toBe(404);
+  expect((await visitor.request.get(`/reportes/${id}`)).status()).toBe(404);
   expect(
     (
       await visitor.request.post(`/api/privado/registros/${id}/validacion`, {
@@ -133,7 +133,7 @@ test("internal human validation persists while the original stays private; publi
   ).json();
   expect(after.validated_by).toBe(record.validated_by);
   expect(after.validated_at).toBe(record.validated_at);
-  await page.goto(`/denuncias/${publicId}`);
+  await page.goto(`/reportes/${publicId}`);
   await expect(
     page.getByRole("heading", { name: publicData.title }),
   ).toBeVisible();

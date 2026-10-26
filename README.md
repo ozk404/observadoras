@@ -1,6 +1,6 @@
 # Observadoras Digitales
 
-Next.js, TypeScript, PostgreSQL y Docker Compose. Fase 1: recepción pública, borradores privados y publicación humana de una versión independiente. Fase 2: sugerencias opcionales mediante OpenAI, desactivadas hasta configurar el servidor y limitadas a contenido ficticio.
+Next.js, TypeScript, PostgreSQL y Docker Compose. Fase 1: recepción pública, borradores privados y publicación humana de una versión independiente. IA mediante OpenAI: análisis automático de descripción y captura para nuevos reportes públicos con consentimiento explícito, y preparación manual para borradores internos. Requiere configuración del servidor.
 
 ## Arranque local
 
@@ -32,15 +32,25 @@ Usa `participant` para cuentas que solo crean/consultan sus registros, o `review
 ## Recorridos
 
 - `/`: index inicial.
-- `/denuncia`: envío sin cuenta; original privado, solo título/descripción y reconocimiento del aviso.
-- `/denuncias`: catálogo de versiones aprobadas; detalle mediante identificador público independiente.
+
+- `/reportar`: envío sin cuenta con **captura obligatoria, URL opcional y descripción**; original y evidencia privados. No solicita título manual; genera una referencia interna. Se reconoce el aviso antes del envío.
+
+- `/reportes`: catálogo de versiones aprobadas; detalle mediante identificador público independiente.
+
 - `/ingreso`, `/equipo`: acceso cerrado, listado restringido, nuevos borradores y detalle.
+
 - Una participante guarda y retoma sus borradores; al enviar dejan de ser editables.
+
 - Una revisora lee pendientes y puede **Validar sin publicar**. La confirmación registra usuario, fecha y evento; el original permanece privado. Después puede redactar título/texto públicos separados. Dos confirmaciones públicas y confirmación final preceden la publicación atribuida y transaccional.
+
 - Flujo actual: **Pendiente → Validado internamente → Publicado**. La validación interna no acredita judicialmente los hechos ni obliga a publicar. Revisar no depende de OpenAI. La autora puede consultar la validación de su propio registro; no se expone en el catálogo.
+
 - En registros internos pendientes, la revisora también puede **Devolver para ajustes** con una observación privada y confirmación explícita. La autora ve qué corregir, puede **Guardar correcciones** sin cambiar el estado y **Reenviar a revisión** cuando complete los campos mínimos. Se conserva la observación, persona/fecha y reenvío de cada ciclo; el detalle muestra las 10 solicitudes más recientes. Una sola solicitud puede estar abierta por registro.
+
 - Flujo adicional: **Pendiente → Requiere ajustes → Pendiente**. Solo la autora edita; mientras espera ajustes no puede validarse ni publicarse. No se devuelven registros validados/publicados ni envíos sin cuenta. No se envían correos ni se inventa un contacto para denuncias públicas.
+
 - Migración 004: historial de ajustes y marca de obsolescencia de sugerencias IA. Las sugerencias anteriores a la devolución siguen privadas, señaladas como no vigentes y sin acción de llevarlas al borrador público. Las respuestas en curso se descartan por estado/versión y marca de obsolescencia. No se transmite ninguna observación automáticamente a OpenAI.
+
 - Migración 003: publicaciones anteriores conservan su revisión humana real como `legacy_publication`; la interfaz la identifica como revisión registrada al publicar. No se inventan eventos de validación anteriores. Si un estado publicado no tiene publicación atribuible, la migración falla sin inventar datos y debe investigarse.
 
 Las sesiones opacas duran 8 horas; solo se guarda su hash. Deshabilitar cuenta invalida su acceso. Las contraseñas usan scrypt con sal individual. No se guardan cuerpos privados en logs de aplicación. El catálogo no consulta originales ni identidades internas.
@@ -79,13 +89,21 @@ Ejecutar E2E solo en un entorno de prueba aislado: crea registros y publicacione
 
 ## Pendientes institucionales
 
-La ficha definitiva, matriz completa de permisos, conservación, canal de derechos, procedimiento de retirada pública, activos oficiales, alojamiento y respaldos siguen pendientes. Este entorno se usa con datos ficticios hasta resolverlos. No hay adjuntos, seguimiento avanzado ni dashboard. Consulta `docs/FASE1-DISENO.md`, `docs/FASE2-DISENO.md` y los documentos de producto.
+La ficha definitiva, matriz completa de permisos, conservación, canal de derechos, procedimiento de retirada pública, activos oficiales, alojamiento y respaldos siguen pendientes. El usuario autorizó recepción y análisis de reportes reales el 26-10-2026; esto no resuelve ni sustituye las decisiones institucionales operativas pendientes. Se admiten imágenes acotadas, seguimiento privado con cierre y borradores de alertas; no archivos genéricos ni dashboard todavía. Consulta `docs/FASE1-DISENO.md`, `docs/FASE2-DISENO.md`, `docs/EVIDENCIA-DISENO.md` y los documentos de producto.
+
+## Captura privada de reporte público
+
+Una captura estática PNG/JPEG/WebP, obligatoria, de hasta 5 MiB y 20 megapíxeles. Se comprueban tamaño, firma/formato real y decodificación; se normaliza a WebP sin pérdida ni metadatos. No se guarda el nombre ni archivo original, ni se certifica autenticidad/custodia forense. La eliminación de metadatos no oculta información visible; la persona debe evitar datos personales innecesarios antes del envío. Máximo dos decodificaciones simultáneas por proceso; peticiones multipart hasta 6 MiB, conservando controles de frecuencia y origen.
+
+La migración 005 guarda evidencia binaria en una tabla privada separada de PostgreSQL, dentro de la misma transacción de registro/evento. El volumen existente conserva datos e imagen al recrear la app. Listados y catálogo no seleccionan binarios. Los respaldos deben incluir esta tabla; revisar almacenamiento antes de uso institucional. Los reintentos con la misma clave no duplican ni reemplazan evidencia.
+
+La imagen solo se sirve mediante endpoint autenticado con los permisos del registro y sin caché. La revisora puede verla y abrir la URL de fuente desde el detalle privado. URLs solo http/https, sin credenciales; no se consultan desde el servidor. Ni URL ni imagen se publican con la versión textual. Con consentimiento explícito, el análisis inicial envía descripción e imagen a OpenAI; la URL permanece excluida. Las denuncias previas sin imagen y el flujo de borradores internos se conservan.
 
 ## IA opcional: OpenAI
 
-Configura únicamente en `.env` local `OPENAI_API_KEY`, `OPENAI_MODEL` (modelo de tu cuenta compatible con Responses y Structured Outputs) y `AI_DATA_MODE=synthetic`. No hay modelo impuesto ni clave predeterminada. No pegues secretos en el chat ni uses variables `NEXT_PUBLIC_`. Recrea la app con `docker compose up -d app` después de cambiar el entorno. La generación debe probarse con contenido ficticio antes de habilitar cualquier uso institucional.
+Configura únicamente en `.env` local `OPENAI_API_KEY`, `OPENAI_MODEL` (modelo de tu cuenta compatible con Responses y Structured Outputs) y `AI_DATA_MODE=consented`. No hay modelo impuesto ni clave predeterminada. No pegues secretos en el chat ni uses variables `NEXT_PUBLIC_`. Recrea la app con `docker compose up -d app` después de cambiar el entorno. La generación debe probarse con contenido ficticio antes de habilitar cualquier uso institucional.
 
-La revisora prepara un texto aparte, depura identificadores comunes y confirma privacidad y carácter ficticio. Solo ese texto se envía a `https://api.openai.com/v1/responses`, sin autor, identificador interno, original, herramientas o archivos. Se usa `store:false`, salida estructurada, tiempo máximo de 25 segundos, hasta 1800 tokens de salida y respuesta limitada a 64 KB. `store:false` **no garantiza retención cero**: deben revisarse los controles y condiciones de datos del proveedor antes de autorizar información real.
+La revisora prepara un texto aparte, depura identificadores comunes y confirma privacidad y autorización del texto preparado. Solo ese texto se envía a `https://api.openai.com/v1/responses`, sin autor, identificador interno, original, herramientas o archivos. Se usa `store:false`, salida estructurada, tiempo máximo de 25 segundos, hasta 1800 tokens de salida y respuesta limitada a 64 KB. `store:false` **no garantiza retención cero**: deben revisarse los controles y condiciones de datos del proveedor antes de autorizar información real.
 
 Categorías orientativas y resumen se almacenan como sugerencias privadas, con persona/fecha, modelo, versión y hash del texto preparado. No se guarda otra copia de la entrada ni la respuesta cruda del proveedor. La detección no demuestra anonimización; también requiere revisión de nombres y contexto. No se calcula riesgo ni se inventan patrones entre casos a partir de un solo relato. Hasta cinco solicitudes recientes son visibles en el detalle privado. Hay límite de 10 solicitudes por revisora/hora y 60 globales/hora, una solicitud activa por registro y rechazo de resultados obsoletos. Ante fallos, el original y la publicación manual siguen disponibles.
 
@@ -107,6 +125,32 @@ docker compose -f compose.ai-test.yaml down
 
 El Compose de pruebas tiene PostgreSQL separado, puerto 3100, credencial ficticia y proveedor simulado etiquetado; no llama a OpenAI. Su volumen se conserva hasta eliminarlo expresamente. El endpoint alternativo solo se acepta con la combinación exacta de entorno de prueba y origen local prevista en el código; no configura destinos arbitrarios. Las pruebas comprueban la aplicación, el contrato y la recuperación ante fallos; no demuestran conectividad, calidad o disponibilidad del modelo real.
 
-La prueba de migración usa un esquema temporal dentro de una transacción que se revierte: crea fixtures del esquema previo y comprueba conservación de publicaciones, originales y atribución, exclusión de envíos sin cuenta del estado de ajustes y unicidad de solicitudes abiertas. No modifica registros existentes. Consulta `docs/FASE3-VALIDACION-DISENO.md` y `docs/FASE3-AJUSTES-DISENO.md`. Cierre, seguimiento ampliado y alertas todavía no están implementados.
+La prueba de migración usa un esquema temporal dentro de una transacción que se revierte: crea fixtures del esquema previo y comprueba conservación de publicaciones, originales y atribución, exclusión de envíos sin cuenta del estado de ajustes y unicidad de solicitudes abiertas. No modifica registros existentes. Consulta `docs/FASE3-VALIDACION-DISENO.md` y `docs/FASE3-AJUSTES-DISENO.md`. Seguimiento, cierre y borradores de alertas se implementaron posteriormente; consulta los apartados siguientes y `docs/ESTADO_ACTUAL.md`.
 
 Documentación oficial consultada: [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) y [controles de datos de OpenAI](https://platform.openai.com/docs/guides/your-data).
+
+## Borradores de alertas
+
+Las revisoras pueden guardar un borrador por registro validado o publicado, incluso con seguimiento cerrado. Se redacta manualmente, se usa explícitamente un resumen vigente como base o se solicita una propuesta nueva de IA sobre texto preparado. Se conserva la referencia de procedencia, creadora, última editora y fechas. Generar o usar una propuesta no guarda, envía ni publica la alerta.
+
+La migración 008 añade la tabla privada con versión propia. El endpoint `/api/privado/registros/[id]/borrador-alerta` exige rol revisor; verifica las versiones y la pertenencia/vigencia de la referencia IA. Guardar no modifica el original, su versión principal ni el catálogo. El borrador no se expone a participantes.
+
+La migración 009 conserva las solicitudes y propuestas privadas en `alert_generations`. En **Generar con IA**, la revisora prepara texto revisado y confirma su revisión de privacidad antes de solicitar. Responses recibe solo ese texto, con `store:false`; no adjunta original, captura, URL ni notas. Mantiene modelo configurado, cuotas compartidas de 10 solicitudes por revisora/hora y 60 globales/hora, un trabajo en curso por registro y vencimiento de dos minutos. No hay reintentos automáticos: un trabajo abandonado se recupera al pedir otra generación. La propuesta se descarta si cambia el registro, el borrador o los permisos, o si venció el trabajo. Ante fallos se conserva la alternativa manual. El modo `consented` permite contenido real autorizado; las pruebas usan únicamente fixtures ficticios.
+
+## Seguimiento privado
+
+En registros validados o publicados, las revisoras pueden guardar notas y cerrar el seguimiento con motivo y confirmación. Cada entrada conserva revisora y fecha. El cierre impide nuevas notas; no retira publicaciones ni altera la validación. Un registro validado con seguimiento cerrado puede publicarse mediante el flujo humano existente. Participantes y catálogo no reciben este historial. No se incluye reapertura ni notificaciones.
+
+## Análisis inicial con captura
+
+La migración 006 crea una cola persistente en PostgreSQL y campos separados de clasificación humana. `docker compose up -d` inicia también `ai-worker` con la misma imagen de la app. No se analizan registros históricos ni borradores internos automáticamente.
+
+Al enviar `/reportar` se acepta el aviso y se autoriza el análisis de descripción y captura con OpenAI. La migración 010 registra consentimiento, fecha y versión del aviso desde el servidor; no atribuye consentimiento nuevo a registros anteriores. El worker envía ambas a OpenAI (imagen normalizada por datos inline, `store:false`); no envía URL, identificadores del registro ni cuentas. El modo operativo es `AI_DATA_MODE=consented`; `synthetic` solo funciona con la configuración aislada del proveedor simulado. `AI_AUTOMATIC_ENABLED=false` bloquea nuevas llamadas automáticas.
+
+La revisora ve pertinencia preliminar, categorías orientativas, resumen, observaciones sobre la imagen, faltantes y limitaciones. No certifica veracidad, identidad ni autenticidad. La clasificación y observación humanas se guardan aparte al validar. Nada aprueba ni publica automáticamente.
+
+La recepción no espera al proveedor. Estados visibles: en cola, procesando, completado, fallido, bloqueado o descartado por cambio de versión. Hay dos intentos como máximo por ejecución, espera de cinco segundos y recuperación de trabajos con lease vencido de noventa segundos. Un fallo no impide revisar manualmente; una revisora puede solicitar un nuevo intento explícito. El endpoint del análisis es exclusivo del rol revisor y sin caché.
+
+## Estado consolidado
+
+Consultar [estado actual](docs/ESTADO_ACTUAL.md) para distinguir funcionalidades vigentes, verificaciones y pendientes. Los documentos de verificación registran hitos históricos y no reemplazan ese resumen.

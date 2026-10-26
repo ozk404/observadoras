@@ -79,9 +79,9 @@ test("public token rejects tampering and automated immediate submission", () => 
 });
 test("public intake requires notice acknowledgement and empty honeypot", () => {
   const sample = {
-    title: "Situación ficticia",
     description: "Descripción ficticia suficientemente extensa.",
     consent: true,
+
     website: "",
     token: "token",
     submissionKey: "00000000-0000-4000-8000-000000000001",

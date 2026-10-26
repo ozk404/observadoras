@@ -1,0 +1,13 @@
+# Análisis inicial automático de descripción y captura
+
+Autorizado por el usuario: iniciar IA al recibir `/denuncia`, incluir captura y mostrar categorías y observaciones a la revisora. Sustituye la restricción previa de no enviar imágenes, exclusivamente bajo los controles de este incremento. No afirma aprobación institucional ni habilita datos reales: el modo continúa `synthetic`, con declaración explícita de que texto e imagen son ficticios y aviso del procesamiento con OpenAI.
+
+Guardar denuncia, evidencia y trabajo pendiente en una transacción. Un worker de la misma imagen Docker reclama trabajos de PostgreSQL con bloqueo, lease y token de ejecución; sin Redis ni tareas en memoria que se pierdan al reiniciar Next.js. Dos intentos máximos para indisponibilidad/timeout; nunca reintentar indefinidamente. No procesar denuncias históricas automáticamente. No depender de OpenAI para conservar, revisar o validar el registro.
+
+Entrada: descripción y captura normalizada, sin adjuntar URL, identidades internas ni observaciones humanas. No consultar la URL. Bloquear si falta configuración, modo ficticio/declaración o hay identificadores comunes en descripción. La declaración no verifica anonimización: no permitir uso institucional hasta resolver D-07. La captura se envía como dato de imagen en memoria a Responses, sin URL pública. `store:false` no promete retención cero.
+
+Salida estructurada: pertinencia preliminar (pertinente, falta contexto, fuera de alcance, posible spam), motivo, categorías orientativas, resumen, observaciones sobre captura, puntos para revisar, información faltante y límites. La IA no certifica veracidad, identidad o autenticidad de la imagen. No rechaza, valida, cierra ni publica. Contenido de texto e imagen es entrada no confiable, nunca instrucciones para el modelo.
+
+Una ficha privada muestra en cola/en proceso/listo/bloqueado/error y actualiza resultados sin repetir solicitudes. Solo revisores consultan o reintentan sobre pendiente y versión vigente. La clasificación y observación final de la revisora se guardan por separado al validar. El catálogo continúa usando únicamente la versión pública humana; no expone evidencias ni evaluación automática.
+
+Verificar: contrato multimodal y esquema, no herramientas/URL de captura pública, guardado desacoplado, worker persistente, unicidad por registro/versión, recuperación por lease, reintentos acotados, permisos, bloqueo de privacidad/configuración, respuestas obsoletas descartadas, revisión manual ante fallo y ausencia de publicación automática. Pruebas con captura sintética y proveedor simulado, más una prueba real acotada con material enteramente ficticio si la configuración está disponible.

@@ -3,6 +3,26 @@ import { z } from "zod";
 import { db } from "./db";
 import { HttpError } from "./security";
 import type { User } from "./auth";
+import type { Evidence } from "./evidence";
+import { categoryKeys } from "../lib/ai-contract";
+import { AI_CONSENT_VERSION } from "../lib/consent";
+export const sourceUrlField = z
+  .string()
+  .trim()
+  .max(2048, "La URL es demasiado larga.")
+  .refine((value) => {
+    if (!value) return true;
+    try {
+      const url = new URL(value);
+      return (
+        ["http:", "https:"].includes(url.protocol) &&
+        !url.username &&
+        !url.password
+      );
+    } catch {
+      return false;
+    }
+  }, "Usa una URL completa http:// o https://, sin contraseñas.");
 export const reportFields = z.object({
   title: z
     .string()
@@ -15,8 +35,10 @@ export const reportFields = z.object({
     .min(20, "Describe la situación con al menos 20 caracteres.")
     .max(6000, "Usa hasta 6000 caracteres."),
 });
-export const publicSubmission = reportFields
-  .extend({
+export const publicSubmission = z
+  .object({
+    description: reportFields.shape.description,
+    sourceUrl: sourceUrlField.default(""),
     consent: z.literal(true, {
       error: "Confirma que leíste el aviso de tratamiento.",
     }),
@@ -48,6 +70,8 @@ export const validationInput = z
       error: "Confirma la revisión humana antes de validar.",
     }),
     version: z.number().int().positive(),
+    reviewedCategories: z.array(z.enum(categoryKeys)).max(4).default([]),
+    reviewObservation: z.string().trim().max(2000).default(""),
   })
   .strict();
 export const adjustmentInput = z
@@ -75,6 +99,10 @@ export type Report = {
   validated_at: Date | null;
   validation_source: "explicit" | "legacy_publication" | null;
   validator_username: string | null;
+  source_url: string | null;
+  has_evidence: boolean;
+  reviewed_categories: string[];
+  review_observation: string | null;
 };
 export async function createReport(
   title: string,
@@ -82,16 +110,45 @@ export async function createReport(
   author: string | null,
   submit: boolean,
   key: string | null = null,
+  attachment?: {
+    sourceUrl: string;
+    evidence: Evidence;
+    aiConsent: true;
+  },
 ) {
   const client = await db.connect();
   try {
     await client.query("BEGIN");
     const id = randomUUID();
     const inserted = await client.query(
-      `INSERT INTO reports(id,title,description,author_id,status,submission_key)
-      VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(submission_key) DO NOTHING RETURNING id`,
-      [id, title, description, author, submit ? "pending" : "draft", key],
+      `INSERT INTO reports(id,title,description,author_id,status,submission_key,source_url)
+      VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(submission_key) DO NOTHING RETURNING id`,
+      [
+        id,
+        title,
+        description,
+        author,
+        submit ? "pending" : "draft",
+        key,
+        attachment?.sourceUrl || null,
+      ],
     );
+    if (inserted.rowCount && attachment)
+      await client.query(
+        "INSERT INTO report_evidence(report_id,content,width,height,sha256) VALUES($1,$2,$3,$4,$5)",
+        [
+          id,
+          attachment.evidence.content,
+          attachment.evidence.width,
+          attachment.evidence.height,
+          attachment.evidence.sha256,
+        ],
+      );
+    if (inserted.rowCount && attachment)
+      await client.query(
+        "INSERT INTO intake_analyses(id,report_id,report_version,ai_consent,consent_version,consented_at,state) VALUES($1,$2,1,$3,$4,now(),'queued')",
+        [randomUUID(), id, attachment.aiConsent, AI_CONSENT_VERSION],
+      );
     if (inserted.rowCount)
       await client.query(
         "INSERT INTO report_events(id,report_id,actor_id,action) VALUES($1,$2,$3,$4)",
@@ -130,7 +187,7 @@ export async function getReport(user: User, id: string) {
   if (!z.uuid().safeParse(id).success)
     throw new HttpError(404, "Registro no encontrado.");
   const result = await db.query<Report>(
-    `SELECT r.id,r.title,r.description,r.author_id,r.status,r.version,r.created_at,r.validated_by,r.validated_at,r.validation_source,u.username AS validator_username FROM reports r
+    `SELECT r.id,r.title,r.description,r.author_id,r.status,r.version,r.created_at,r.validated_by,r.validated_at,r.validation_source,r.source_url,r.reviewed_categories,r.review_observation,EXISTS(SELECT 1 FROM report_evidence e WHERE e.report_id=r.id) AS has_evidence,u.username AS validator_username FROM reports r
     LEFT JOIN users u ON u.id=r.validated_by
     WHERE r.id=$1 AND (r.author_id=$2 OR ($3='reviewer' AND r.status<>'draft'))`,
     [id, user.id, user.role],
@@ -243,14 +300,21 @@ export async function validateReport(user: User, id: string, input: unknown) {
   const data = validationInput.parse(input);
   const result = await db.query(
     `WITH changed AS (
-    UPDATE reports SET status='validated',validated_by=$2,validated_at=now(),validation_source='explicit',version=version+1,updated_at=now()
+    UPDATE reports SET status='validated',validated_by=$2,validated_at=now(),validation_source='explicit',reviewed_categories=$5,review_observation=$6,version=version+1,updated_at=now()
     WHERE id=$1 AND status='pending' AND version=$3
     AND EXISTS(SELECT 1 FROM users WHERE id=$2 AND enabled AND role='reviewer')
     RETURNING id,version,validated_at
   ), event AS (
     INSERT INTO report_events(id,report_id,actor_id,action) SELECT $4,id,$2,'validated' FROM changed
   ) SELECT id,version,validated_at FROM changed`,
-    [id, user.id, data.version, randomUUID()],
+    [
+      id,
+      user.id,
+      data.version,
+      randomUUID(),
+      data.reviewedCategories,
+      data.reviewObservation || null,
+    ],
   );
   if (!result.rowCount)
     throw new HttpError(

@@ -11,7 +11,7 @@ export default async function PublicDetail({
   if (!row) notFound();
   return (
     <article className="wrap page-space reading">
-      <Link className="back-link" href="/denuncias">
+      <Link className="back-link" href="/reportes">
         ← Volver al catálogo
       </Link>
       <span className="eyebrow">Versión pública · Revisión humana</span>

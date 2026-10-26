@@ -30,9 +30,9 @@ export default function RootLayout({
               <small>DIGITALES / OXLAJUJ NO’J</small>
             </Link>
             <nav aria-label="Navegación principal">
-              <Link href="/denuncias">Ver denuncias</Link>
-              <Link href="/denuncia" className="nav-primary">
-                Registrar denuncia
+              <Link href="/reportes">Ver reportes</Link>
+              <Link href="/reportar" className="nav-primary">
+                Enviar reporte
               </Link>
               <Link href="/ingreso" className="team-link">
                 Acceso del equipo ↗

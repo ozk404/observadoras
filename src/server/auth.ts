@@ -31,7 +31,7 @@ export async function requireUser(reviewer = false) {
   if (reviewer && user.role !== "reviewer")
     throw new HttpError(
       403,
-      "No tienes permiso para revisar o publicar denuncias.",
+      "No tienes permiso para revisar o publicar reportes.",
     );
   return user;
 }

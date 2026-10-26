@@ -17,6 +17,26 @@ createServer(async (req, res) => {
   }
   const payload = JSON.parse(body);
   const input = payload.input?.[0]?.content?.[0]?.text ?? "";
+  if (input.includes("simular demora alerta"))
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  if (input.includes("simular rechazo alerta")) {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        status: "completed",
+        output: [
+          {
+            type: "message",
+            role: "assistant",
+            content: [{ type: "refusal", refusal: "fixture refusal" }],
+          },
+        ],
+      }),
+    );
+    return;
+  }
+  if (input.includes("simular demora inicial"))
+    await new Promise((resolve) => setTimeout(resolve, 4000));
   if (input.includes("simular espera"))
     await new Promise((resolve) => setTimeout(resolve, 1000));
   if (input.includes("simular fallo")) {
@@ -38,13 +58,51 @@ createServer(async (req, res) => {
     res.end();
     return;
   }
-  const result = {
+  let result = {
     categories: ["desinformacion"],
     summary:
       "Se describe una situación ficticia de desinformación que podría limitar la participación de las mujeres.",
     limitations:
       "Esta simulación no verifica hechos ni reemplaza la revisión humana. Solo se considera un relato.",
   };
+  if (payload.text.format.name === "observadoras_alert_draft") {
+    result = {
+      title: "Alerta sobre un relato ficticio",
+      body: input.includes("simular salida identificable")
+        ? "Una referencia ficticia con correo prueba@example.test que debe bloquearse."
+        : "Se recibió un relato ficticio sobre desinformación y participación política de las mujeres. El equipo debe revisar el contexto antes de decidir cualquier acción.",
+      limitations:
+        "El relato no está verificado. Se requiere revisión humana y contexto adicional.",
+    };
+  }
+  if (payload.text.format.name === "observadoras_intake") {
+    if (
+      !payload.input[0].content.some(
+        (part) =>
+          part.type === "input_image" &&
+          part.image_url.startsWith("data:image/webp;base64,"),
+      )
+    ) {
+      res.writeHead(400);
+      res.end();
+      return;
+    }
+    Object.assign(result, {
+      assessment: input.includes("sin relación")
+        ? "out_of_scope"
+        : "needs_context",
+      assessmentReason:
+        "La descripción requiere comprobar contexto antes de determinar su pertinencia.",
+      evidenceNotes:
+        "La captura es sintética y no permite certificar autenticidad de hechos.",
+      observations: [
+        "Revisar la relación entre el relato y la captura antes de validar.",
+      ],
+      missingInformation: [
+        "Falta contexto sobre la relación con la participación política.",
+      ],
+    });
+  }
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(
     JSON.stringify({

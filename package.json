@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx scripts/migrate.ts",
     "user": "tsx scripts/user.ts",
+    "worker:ai": "tsx scripts/ai-worker.ts",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test"
   },
@@ -19,6 +20,7 @@
     "pg": "^8.16.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "sharp": "0.35.5",
     "tsx": "^4.20.0",
     "zod": "^4.1.0"
   },

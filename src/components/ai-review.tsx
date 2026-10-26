@@ -28,7 +28,6 @@ export function AiReview({
 }) {
   const [text, setText] = useState("");
   const [privacy, setPrivacy] = useState(false);
-  const [synthetic, setSynthetic] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [publicDraft, setPublicDraft] = useState<{ text: string; key: number }>(
@@ -78,7 +77,7 @@ export function AiReview({
                   text,
                   version,
                   privacyConfirmed: privacy,
-                  syntheticConfirmed: synthetic,
+
                 });
                 router.refresh();
               } catch (error) {
@@ -107,7 +106,7 @@ export function AiReview({
                 onChange={(e) => {
                   setText(e.target.value);
                   setPrivacy(false);
-                  setSynthetic(false);
+
                 }}
                 required
                 minLength={20}
@@ -128,7 +127,7 @@ export function AiReview({
                     onClick={() => {
                       setText(redactCommonIdentifiers(text));
                       setPrivacy(false);
-                      setSynthetic(false);
+
                     }}
                   >
                     Depurar identificadores comunes
@@ -153,19 +152,6 @@ export function AiReview({
               <span>
                 Revisé este texto y su contexto; no contiene información
                 identificable ni datos que no puedan enviarse.
-              </span>
-            </label>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={synthetic}
-                required
-                onChange={(e) => setSynthetic(e.target.checked)}
-              />
-              <span>
-                Confirmo que este contenido es ficticio y se usa exclusivamente
-                para pruebas. El procesamiento de datos reales aún no está
-                autorizado.
               </span>
             </label>
             <button

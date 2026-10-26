@@ -2,6 +2,8 @@
 
 ## 0. Naturaleza de este documento
 
+**Corrección posterior de registro público, autorizada por el usuario:** `/denuncia` solicita captura obligatoria, URL opcional y descripción. No exige título manual. La imagen y la URL son evidencia privada; solo la versión textual aprobada se publica. Registros anteriores y formularios internos se conservan. Ver `EVIDENCIA-DISENO.md`. Esta decisión no sustituye las definiciones institucionales pendientes de conservación ni habilita uso de datos reales.
+
 **Actualización acordada con el usuario (25-10-2026):** se parte de estos Markdown, sin código previo. Se añade recepción pública en `/denuncia`, sin cuenta, y catálogo público de versiones expresamente revisadas y aprobadas por una persona autorizada. El original permanece privado. Esta decisión sustituye la exclusión anterior de un portal público solo para esas versiones revisadas; no habilita consulta pública de originales ni publicación automática. La fase 1 incorpora revisión/publicación manual básica; IA por APIs en fase 2. Ver `FASE1-DISENO.md`. No se atribuye esta ampliación a los documentos contractuales originales.
 
 Especificación **funcional y sin stack tecnológico**. Describe el producto que se busca construir; no afirma que esté desarrollado ni convierte decisiones pendientes en acuerdos con la Fundación.
@@ -132,3 +134,7 @@ No es necesario que cada función sea una ruta o pantalla separada.
 - Currícula: sesiones 6 y 7, únicamente para coherencia entre herramienta y ejercicios formativos.
 
 > Las especificaciones detalladas de roles, campos, estados, prioridad y manejo de evidencias son propuestas de implementación. Las decisiones no determinadas por las fuentes aparecen en `DECISIONES_PENDIENTES.md`.
+
+**Incremento autorizado 26-10-2026:** nuevas denuncias públicas declaradas ficticias reciben análisis automático de descripción y captura. La revisora ve categorías, pertinencia, observaciones y faltantes. Cola persistente y campos de decisión humana separados. No se certifica verdad, no se analizan registros previos ni se publica automáticamente. Ver `IA-INICIAL-DISENO.md`.
+
+**Actualización autorizada 26-10-2026:** la interfaz adopta «reporte». Se retira el requisito de contenido ficticio y el usuario autoriza descripción y captura reales para OpenAI con consentimiento explícito, fecha y versión del aviso. Rutas `/reportar` y `/reportes`, con redirecciones de enlaces anteriores. Originales privados y publicación humana independiente. No se reinterpretan consentimientos históricos; las pruebas técnicas siguen usando fixtures ficticios. Ver `superpowers/specs/2026-10-26-real-reports-design.md`.

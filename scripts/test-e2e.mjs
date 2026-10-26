@@ -18,6 +18,12 @@ try {
     ["test-participant", "participant"],
     ["test-other", "participant"],
     ["test-disabled", "participant"],
+    ["test-intake-reviewer", "reviewer"],
+    ["test-followup-reviewer", "reviewer"],
+    ["test-followup-participant", "participant"],
+    ["test-alert-reviewer", "reviewer"],
+    ["test-alert-participant", "participant"],
+    ["test-alert-ai-reviewer", "reviewer"],
   ]) {
     const name = username.replace(/^test/, prefix);
     execFileSync(

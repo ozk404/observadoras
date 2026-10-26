@@ -1,12 +1,19 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { send } from "./api";
+import { MAX_EVIDENCE_BYTES, EVIDENCE_TYPES } from "@/lib/evidence";
 import { Arrow } from "./icons";
 export function PublicForm() {
   const [token, setToken] = useState("");
   const [failure, setFailure] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [preview, setPreview] = useState("");
+  useEffect(
+    () => () => {
+      if (preview) URL.revokeObjectURL(preview);
+    },
+    [preview],
+  );
   const [fields, setFields] = useState<Record<string, string[]>>({});
   const key = useRef("");
   const feedback = useRef<HTMLDivElement>(null);
@@ -33,15 +40,29 @@ export function PublicForm() {
     setFields({});
     const data = new FormData(event.currentTarget);
     try {
-      await send("/api/denuncias", {
-        title: data.get("title"),
-        description: data.get("description"),
-        consent: data.get("consent") === "on",
-        website: data.get("website"),
-        token,
-        submissionKey: key.current,
+      const image = data.get("evidence");
+      if (!(image instanceof File) || !image.size)
+        throw new Error("Adjunta una captura o imagen.");
+      if (
+        image.size > MAX_EVIDENCE_BYTES ||
+        !EVIDENCE_TYPES.includes(image.type)
+      )
+        throw new Error("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
+      data.set("consent", String(data.get("consent") === "on"));
+      data.set("token", token);
+      data.set("submissionKey", key.current);
+      const response = await fetch("/api/denuncias", {
+        method: "POST",
+        body: data,
       });
+      const result = await response.json();
+      if (!response.ok)
+        throw Object.assign(
+          new Error(result.error ?? "No se pudo enviar el reporte."),
+          { fields: result.fields },
+        );
       setDone(true);
+      setPreview("");
     } catch (error) {
       setFailure((error as Error).message);
       setFields((error as { fields?: Record<string, string[]> }).fields ?? {});
@@ -53,10 +74,11 @@ export function PublicForm() {
     return (
       <div className="confirmation" ref={feedback} tabIndex={-1}>
         <span className="eyebrow">Envío completado</span>
-        <h2>Tu denuncia fue recibida.</h2>
+        <h2>Tu reporte fue recibido.</h2>
         <p>
-          El equipo del observatorio podrá revisarla. El envío no publica tu
-          relato ni constituye una denuncia ante una autoridad.
+          El equipo del observatorio podrá revisarla junto con un análisis
+          preliminar de IA de la descripción y la captura, cuando esté
+          disponible. El envío no publica tu relato.
         </p>
         <p>No hay seguimiento público individual en esta etapa.</p>
         <a className="button" href="/">
@@ -65,35 +87,79 @@ export function PublicForm() {
       </div>
     );
   return (
-    <form onSubmit={submit} className="form-stack">
+    <form
+      onSubmit={submit}
+      className="form-stack"
+      encType="multipart/form-data"
+    >
       {failure && (
         <div role="alert" tabIndex={-1} ref={feedback} className="error">
           {failure}
         </div>
       )}
-      <div>
-        <label htmlFor="title">
-          Título breve <span>(obligatorio)</span>
+      <div className="evidence-upload">
+        <label htmlFor="evidence">
+          Captura o imagen <span>(obligatoria)</span>
         </label>
-        <p id="title-help" className="help">
-          Describe la situación sin nombres ni identificadores personales.
+        <p id="evidence-help" className="help">
+          Adjunta una captura de pantalla o imagen que documente lo ocurrido.
+          Oculta datos personales innecesarios antes de enviarla. PNG, JPG o
+          WebP, hasta 5 MB y 20 megapíxeles.
         </p>
         <input
-          id="title"
-          name="title"
+          id="evidence"
+          name="evidence"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
           required
-          minLength={5}
-          maxLength={160}
-          autoComplete="off"
-          aria-describedby="title-help title-error"
-          aria-invalid={!!fields.title}
-          placeholder="Por ejemplo: mensajes que buscan silenciar la participación"
+          aria-describedby="evidence-help"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            setPreview("");
+            if (file) {
+              if (
+                file.size > MAX_EVIDENCE_BYTES ||
+                !EVIDENCE_TYPES.includes(file.type)
+              ) {
+                setFailure("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
+                event.target.value = "";
+              } else {
+                setFailure("");
+                setPreview(URL.createObjectURL(file));
+              }
+            }
+          }}
         />
-        <FieldError name="title" fields={fields} />
+        {preview && (
+          <img
+            className="evidence-preview"
+            src={preview}
+            alt="Vista previa de la imagen que vas a enviar"
+          />
+        )}
+      </div>
+      <div>
+        <label htmlFor="sourceUrl">
+          URL de la publicación o fuente <span>(opcional)</span>
+        </label>
+        <p id="url-help" className="help">
+          Pega el enlace completo, si está disponible. Quedará privado para
+          revisión.
+        </p>
+        <input
+          id="sourceUrl"
+          name="sourceUrl"
+          type="url"
+          maxLength={2048}
+          placeholder="https://…"
+          aria-describedby="url-help sourceUrl-error"
+          aria-invalid={!!fields.sourceUrl}
+        />
+        <FieldError name="sourceUrl" fields={fields} />
       </div>
       <div>
         <label htmlFor="description">
-          ¿Qué ocurrió? <span>(obligatorio)</span>
+          Descripción de lo ocurrido <span>(obligatoria)</span>
         </label>
         <p id="description-help" className="help">
           Cuenta el contexto necesario. Evita teléfonos, correos, usuarios,
@@ -111,9 +177,7 @@ export function PublicForm() {
           placeholder="Describe los hechos que deseas compartir con el observatorio…"
         />
         <FieldError name="description" fields={fields} />
-        <span className="help">
-          Entre 20 y 6000 caracteres. No se admiten archivos adjuntos.
-        </span>
+        <span className="help">Entre 20 y 6000 caracteres.</span>
       </div>
       <div className="honeypot" aria-hidden="true">
         <label htmlFor="website">Deja este campo vacío</label>
@@ -128,12 +192,12 @@ export function PublicForm() {
       <label className="checkbox">
         <input type="checkbox" name="consent" required />
         <span>
-          He leído el{" "}
+          Acepto el{" "}
           <a href="/privacidad" target="_blank" rel="noreferrer">
             aviso de tratamiento de información
           </a>
-          . Entiendo que el equipo recibirá este relato de forma privada y que
-          cualquier versión pública requiere revisión humana.
+          . Autorizo el análisis de la descripción y la captura con OpenAI para
+          apoyar la revisión del equipo. El original y la imagen permanecen privados.
         </span>
       </label>
       <div className="form-actions">

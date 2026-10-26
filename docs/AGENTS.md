@@ -39,6 +39,13 @@ Trabajas en **Observadoras Digitales**, una plataforma piloto de monitoreo ciuda
 
 ## Cómo ejecutar cada tarea
 
+### Economía de texto en la interfaz
+
+- **Avoid unnecessary supporting text, descriptive copy, and redundant UI microcopy.** Evita etiquetas y descripciones secundarias innecesarias. Deja que el diseño haga la explicación.
+- Diseño y textos deben complementarse, sin repetir lo que ya comunican el título, la acción, el estado o la estructura visual.
+- No añadas subtítulos, párrafos explicativos, avisos o etiquetas decorativas por defecto. Cada texto debe aportar información necesaria para realizar la tarea o tomar una decisión.
+- Conserva las etiquetas accesibles, errores específicos y avisos de privacidad o confirmaciones necesarios; exprésalos de forma breve, contextual y sin duplicarlos.
+
 1. Definir **una tarea acotada** y sus criterios de aceptación antes de tocar archivos.
 2. Reutilizar funciones y componentes existentes cuando resulte viable.
 3. Mantener consistencia visual con `ADN_VISUAL.md`, sin inventar logos o pantallas decorativas.

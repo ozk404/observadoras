@@ -10,6 +10,12 @@ import { listAnalyses } from "@/server/analyses";
 import { aiConfiguration } from "@/server/openai";
 import { ValidationForm } from "@/components/validation-form";
 import { AdjustmentForm } from "@/components/adjustment-form";
+import { IntakeInsights } from "@/components/intake-insights";
+import { categoryLabels } from "@/lib/ai-contract";
+import { listFollowup } from "@/server/followup";
+import { FollowupPanel } from "@/components/followup-panel";
+import { getAlertContext } from "@/server/alert-drafts";
+import { AlertDraftForm } from "@/components/alert-draft-form";
 export default async function Detail({
   params,
 }: {
@@ -30,6 +36,13 @@ export default async function Detail({
   const { ready, simulation } = aiConfiguration();
   const adjustments = await listAdjustments(user, report.id);
   const corrections = report.status === "needs_adjustments";
+  const canFollowup =
+    user.role === "reviewer" &&
+    ["validated", "published"].includes(report.status);
+  const followup = canFollowup ? await listFollowup(user, report.id) : [];
+  const alertContext = canFollowup
+    ? await getAlertContext(user, report.id)
+    : null;
   return (
     <>
       <Link href="/equipo" className="back-link">
@@ -105,6 +118,50 @@ export default async function Detail({
             </span>
             <h2>Información recibida</h2>
             <div className="report-body">{report.description}</div>
+            {(report.has_evidence || report.source_url) && (
+              <section className="private-evidence">
+                <h3>Imagen recibida · Privada</h3>
+                {report.has_evidence && (
+                  <>
+                    <p className="help">
+                      Esta imagen es privada. Con el consentimiento del envío, OpenAI
+                      la analiza junto con la descripción.
+                    </p>
+                    <a
+                      href={`/api/privado/registros/${report.id}/evidencia`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        className="evidence-preview"
+                        src={`/api/privado/registros/${report.id}/evidencia`}
+                        alt="Imagen adjunta al reporte"
+                      />
+                    </a>
+                    <a
+                      className="inline-link"
+                      href={`/api/privado/registros/${report.id}/evidencia`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Abrir imagen ↗
+                    </a>
+                  </>
+                )}
+                {report.source_url && (
+                  <p>
+                    <a
+                      href={report.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                    >
+                      Abrir URL de la fuente ↗
+                    </a>
+                    <span className="help source-url">{report.source_url}</span>
+                  </p>
+                )}
+              </section>
+            )}
             {report.validated_at && (
               <aside className="notice">
                 <strong>
@@ -123,11 +180,33 @@ export default async function Detail({
                 <span>
                   Esta revisión no equivale a una determinación judicial.
                 </span>
+                {report.reviewed_categories.length > 0 && (
+                  <p>
+                    Clasificación de la revisora:{" "}
+                    {report.reviewed_categories
+                      .map(
+                        (key) =>
+                          categoryLabels[key as keyof typeof categoryLabels] ??
+                          key,
+                      )
+                      .join(" · ")}
+                  </p>
+                )}
+                {report.review_observation && (
+                  <p className="report-body">
+                    Observación interna: {report.review_observation}
+                  </p>
+                )}
               </aside>
             )}
           </section>
           {user.role === "reviewer" ? (
             <div className="review-assistance">
+              <IntakeInsights
+                id={report.id}
+                version={report.version}
+                canRetry={report.status === "pending"}
+              />
               {report.status === "pending" && (
                 <ValidationForm id={report.id} version={report.version} />
               )}
@@ -145,6 +224,21 @@ export default async function Detail({
                   El registro espera correcciones de su autora. No se puede
                   validar ni publicar hasta que vuelva a enviarlo a revisión.
                 </p>
+              )}
+              {canFollowup && (
+                <FollowupPanel
+                  id={report.id}
+                  version={report.version}
+                  entries={followup}
+                />
+              )}
+              {alertContext && (
+                <AlertDraftForm
+                  id={report.id}
+                  reportVersion={report.version}
+                  context={alertContext}
+                  aiReady={ready}
+                />
               )}
               <AiReview
                 id={report.id}

@@ -25,6 +25,62 @@ export const suggestionSchema = z
   })
   .strict();
 export type Suggestion = z.infer<typeof suggestionSchema>;
+export const assessmentLabels = {
+  relevant: "Parece pertinente al observatorio",
+  needs_context: "Requiere más contexto",
+  out_of_scope: "Parece fuera de alcance",
+  possible_spam: "Presenta señales de posible spam",
+} as const;
+export const intakeSuggestionSchema = suggestionSchema
+  .extend({
+    assessment: z.enum([
+      "relevant",
+      "needs_context",
+      "out_of_scope",
+      "possible_spam",
+    ]),
+    assessmentReason: z.string().trim().min(10).max(1000),
+    evidenceNotes: z.string().trim().min(10).max(1200),
+    observations: z.array(z.string().trim().min(5).max(500)).min(1).max(5),
+    missingInformation: z.array(z.string().trim().min(5).max(400)).max(5),
+  })
+  .strict();
+export type IntakeSuggestion = z.infer<typeof intakeSuggestionSchema>;
+export const intakeStateLabels = {
+  queued: "Análisis en cola",
+  processing: "Analizando descripción y captura",
+  completed: "Análisis preliminar disponible",
+  failed: "No se pudo completar el análisis",
+  blocked: "Análisis detenido",
+  superseded: "Análisis no vigente",
+} as const;
+export const intakeErrorLabels: Record<string, string> = {
+  configuration:
+    "OpenAI no está configurado o el análisis automático está desactivado.",
+  privacy:
+    "El envío requiere revisión de privacidad antes de procesarse. No se envió a OpenAI.",
+  quota: "Se alcanzó el límite de análisis. Puedes continuar manualmente.",
+  stale:
+    "El registro cambió o su revisión terminó; no se utilizará este resultado.",
+  unavailable:
+    "OpenAI no estuvo disponible. El reporte se conserva para revisión manual.",
+  timeout: "Se agotó el tiempo de espera. Puedes continuar manualmente.",
+  invalid_response:
+    "La respuesta no cumplió el formato o las reglas de privacidad.",
+  refused: "El proveedor no pudo procesar este contenido.",
+};
+export type IntakeView = {
+  id: string;
+  report_version: number;
+  state: keyof typeof intakeStateLabels;
+  attempts: number;
+  result: IntakeSuggestion | null;
+  error_code: string | null;
+  model: string | null;
+  transport: "openai" | "simulation" | null;
+  created_at: string;
+  finished_at: string | null;
+};
 export const aiInputSchema = z
   .object({
     text: z
@@ -33,7 +89,7 @@ export const aiInputSchema = z
       .min(20, "Prepara un texto de al menos 20 caracteres.")
       .max(6000),
     privacyConfirmed: z.literal(true),
-    syntheticConfirmed: z.literal(true),
+
     version: z.number().int().positive(),
   })
   .strict();

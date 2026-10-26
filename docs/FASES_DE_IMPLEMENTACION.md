@@ -1,5 +1,7 @@
 # FASES_DE_IMPLEMENTACION.md — Plan incremental para Codex
 
+**Estado vigente:** consultar `ESTADO_ACTUAL.md`. Las actualizaciones por incremento que siguen conservan su contexto histórico; las posteriores sustituyen sus pendientes ya resueltos.
+
 ## Propósito y límites
 
 Este archivo contiene **fases de construcción**, no fases de facturación ni nuevas entregas contractuales. Codex debe avanzar sobre el **repositorio existente**, sin elegir stack por cuenta propia antes de inspeccionarlo.
@@ -44,6 +46,8 @@ La currícula señala sesiones formativas el **27 y 29 de octubre**, encuentro p
 
 **Actualización posterior:** el usuario configuró credenciales y `gpt-4o-mini`. Se recreó el contenedor y se comprobó una llamada real del adaptador con texto ficticio: HTTP 200, esquema válido y sin identificadores comunes detectados. La puerta de conexión del adaptador queda verificada; no se usaron denuncias, no hubo escrituras en base de datos y D-07 sigue pendiente para datos reales.
 
+**Incremento verificado el 26-10-2026:** las nuevas denuncias públicas declaradas ficticias encolan automáticamente el análisis de descripción y captura. La revisora consulta pertinencia preliminar, categorías, observaciones y faltantes; guarda su clasificación y observación por separado al validar. Hay cola persistente, recuperación de trabajos, reintentos acotados y descarte de respuestas obsoletas. Se verificaron 23 pruebas, 17 recorridos de navegador y una llamada real con imagen sintética. Ver `IA-INICIAL-DISENO.md` y `IA-INICIAL-VERIFICACION.md`. No se analizan registros históricos ni se habilitan datos reales; evaluación de calidad y taxonomía institucional siguen pendientes.
+
 **Objetivo:** obtener sugerencias útiles **sin automatizar decisiones**.
 
 **Alcance:** protección previa de datos, clasificación sugerida, resumen interno, posibles patrones si hay información suficiente y riesgo preliminar solo con criterios aprobados.
@@ -59,11 +63,17 @@ La currícula señala sesiones formativas el **27 y 29 de octubre**, encuentro p
 
 ## Fase 3 — Revisión humana, seguimiento y borradores
 
-**Incremento 1 autorizado:** validación interna independiente. Pendiente → Validado internamente → Publicado; validar conserva privacidad y atribuye persona/fecha/evento. La publicación exige esa validación previa y confirmaciones separadas. Ver `FASE3-VALIDACION-DISENO.md` y `FASE3-VALIDACION-VERIFICACION.md`. Por indicación del usuario, la prueba real de OpenAI sigue pendiente. Ajustes, cierre, seguimiento y alertas no forman parte de este primer incremento.
+**Incremento 1 autorizado e implementado:** validación interna independiente. Pendiente → Validado internamente → Publicado; validar conserva privacidad y atribuye persona/fecha/evento. La publicación exige esa validación previa y confirmaciones separadas. Ver `FASE3-VALIDACION-DISENO.md` y `FASE3-VALIDACION-VERIFICACION.md`. La conexión real de OpenAI se verificó posteriormente con material ficticio, como consta en fase 2. Ajustes, cierre, seguimiento y alertas no forman parte de este primer incremento.
 
 **Incremento 2 — Ajustes internos:** autorizado e implementado el recorrido Pendiente → Requiere ajustes → Pendiente para registros con autora interna. Observación y confirmación de revisora, guardado de avances por la autora, reenvío e historial privado atribuible; los envíos sin cuenta quedan excluidos. Sugerencias anteriores a la devolución se conservan como no vigentes. Ver `FASE3-AJUSTES-DISENO.md` y `FASE3-AJUSTES-VERIFICACION.md`. Cierre, seguimiento ampliado y alertas siguen pendientes. La conexión real con OpenAI ya fue comprobada por separado con texto ficticio; este incremento se verificó sin llamadas reales.
 
 **Objetivo:** completar el flujo del equipo del observatorio.
+
+**Incremento 3 — Seguimiento y cierre privado (26-10-2026):** implementado para revisoras sobre registros validados o publicados, incluidos envíos sin cuenta. Notas y cierre con motivo, persona/fecha e historial privado; cierre separado del estado principal y conservación de la publicación según confirmación del usuario. Bloqueo de nuevas notas tras cierre, control de versión y concurrencia. No incluye reapertura ni notificaciones. Ver `superpowers/specs/2026-10-26-followup-design.md` y `FASE3-SEGUIMIENTO-VERIFICACION.md`. Se verificaron 24 pruebas y 20 recorridos de navegador. Borradores de alertas siguen pendientes; no se declara completa toda la fase 3.
+
+**Incremento 4 — Borrador interno de alerta (26-10-2026):** implementado un borrador por registro validado/publicado, exclusivo de revisoras. Redacción manual o uso explícito de resumen IA existente como base editable, con procedencia comprobada, versión propia y atribución. Guardar no modifica el original ni publica; funciona con seguimiento cerrado. Ver `superpowers/specs/2026-10-26-alert-draft-design.md` y `FASE3-ALERTAS-VERIFICACION.md`. Se verificaron 25 pruebas de servidor y 24 recorridos de navegador. La generación remota de alertas nuevas y su circulación/aprobación institucional quedan pendientes; no se declara implementada esa generación.
+
+**Incremento 5 — Generación asistida de alertas (26-10-2026):** implementada y actualizada en localhost. Revisoras solicitan una propuesta privada mediante texto preparado y confirmado ficticio; la revisan, aplican, editan y guardan explícitamente. Sin adjuntar originales, captura, URL ni notas. Permisos, cuotas, vencimiento y versiones comprobados antes y después de la llamada; procedencia conservada tras ediciones humanas. Se verificaron 29 pruebas de servidor con PostgreSQL y 28 recorridos de navegador, sin omisiones. Ver `superpowers/specs/2026-10-26-alert-generation-design.md` y `FASE3-GENERACION-VERIFICACION.md`. La circulación/aprobación institucional, datos reales y dashboard siguen pendientes; no se declara terminada toda la fase 3.
 
 **Alcance:** cola de revisión, corrección de sugerencias, validación humana atribuible, estados de seguimiento y generación o redacción manual de **borradores** de alerta.
 
@@ -107,3 +117,7 @@ La currícula señala sesiones formativas el **27 y 29 de octubre**, encuentro p
 ## Priorización para demostraciones
 
 Para mostrar avances, usar **cuentas y registros ficticios**. La demostración no debe depender de un servicio de IA activo ni incluir información real de participantes. Preferir un recorrido corto que funcione de extremo a extremo a múltiples pantallas sin comportamiento verificable.
+
+## Cambio transversal — reportes y consentimiento (26-10-2026)
+
+Por autorización del usuario, se retira la declaración obligatoria de contenido ficticio y se adopta «reporte». El modo operativo `consented` admite contenido real con aceptación explícita del procesamiento de descripción y captura por OpenAI. Migración 010: consentimiento nuevo con fecha y versión del aviso, sin reautorizar trabajos históricos. Rutas públicas `/reportar` y `/reportes`, con redirecciones anteriores. La verificación técnica usa únicamente datos ficticios y proveedor simulado. Ver `REPORTES-REALES-VERIFICACION.md`.

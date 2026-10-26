@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const password = process.env.TEST_PASSWORD;
 const prefix = process.env.TEST_PREFIX ?? "test";
@@ -20,34 +21,48 @@ test("public intake → private human review → separately approved public vers
   page,
   browser,
 }) => {
-  let submitted: Record<string, unknown> | undefined;
-  page.on("request", (request) => {
-    if (request.url().endsWith("/api/denuncias") && request.method() === "POST")
-      submitted = request.postDataJSON();
-  });
+  const submissionKey = crypto.randomUUID();
+  await page.addInitScript((key) => {
+    Object.defineProperty(crypto, "randomUUID", { value: () => key });
+  }, submissionKey);
   const unique = prefix;
-  const privateTitle = `Relato privado ficticio ${unique}`;
   const privateText = `Texto privado de prueba ${unique}, que no debe aparecer en el catálogo público.`;
   const publicTitle = `Versión revisada ficticia ${unique}`;
-  await page.goto("/denuncia");
-  await page.getByLabel("Título breve").fill(privateTitle);
-  await page.getByLabel("¿Qué ocurrió?").fill(privateText);
-  await page.getByRole("checkbox").check();
+  await page.goto("/reportar");
+  const fixture = await imageFixture();
+  await page.getByLabel("Captura o imagen").setInputFiles(fixture);
+  await page
+    .getByLabel("URL de la publicación o fuente")
+    .fill("https://example.test/fuente-privada");
+  await page.getByLabel("Descripción de lo ocurrido").fill(privateText);
+  await page.getByRole("checkbox", { name: /Acepto el/ }).check();
   await page.waitForTimeout(1600);
   await page.getByRole("button", { name: "Enviar a revisión" }).click();
   await expect(
-    page.getByRole("heading", { name: "Tu denuncia fue recibida." }),
+    page.getByRole("heading", { name: "Tu reporte fue recibido." }),
   ).toBeVisible();
-  expect(submitted).toBeDefined();
+  expect(submissionKey).toMatch(/^[a-f0-9-]{36}$/);
+  const privateTitle = `Reporte recibido · ${submissionKey.slice(0, 8)}`;
+  const retryToken = await (await page.request.get("/api/form-token")).json();
+  await page.waitForTimeout(1600);
   expect(
     (
       await page.request.post("/api/denuncias", {
         headers: { origin },
-        data: submitted,
+        multipart: {
+          description: privateText,
+          sourceUrl: "https://example.test/fuente-privada",
+          consent: "true",
+
+          website: "",
+          token: retryToken.token,
+          submissionKey,
+          evidence: fixture,
+        },
       })
     ).status(),
   ).toBe(201);
-  await page.goto("/denuncias");
+  await page.goto("/reportes");
   await expect(page.getByText(privateTitle)).toHaveCount(0);
   const denied = await page.request.get(
     "/api/privado/registros/00000000-0000-4000-8000-000000000001",
@@ -60,6 +75,27 @@ test("public intake → private human review → separately approved public vers
   await page.getByRole("heading", { name: privateTitle }).click();
   await expect(page.getByText(privateText, { exact: true })).toBeVisible();
   const reportId = new URL(page.url()).pathname.split("/").at(-1)!;
+  const evidence = await page.request.get(
+    `/api/privado/registros/${reportId}/evidencia`,
+  );
+  expect(evidence.status()).toBe(200);
+  expect(evidence.headers()["content-type"]).toBe("image/webp");
+  expect(evidence.headers()["cache-control"]).toContain("no-store");
+  await expect(
+    page.getByRole("img", { name: "Imagen adjunta al reporte" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Abrir URL de la fuente" }),
+  ).toHaveAttribute("href", "https://example.test/fuente-privada");
+  const otherContext = await browser.newContext();
+  const other = await otherContext.newPage();
+  await login(other, "test-participant");
+  expect(
+    (
+      await other.request.get(`/api/privado/registros/${reportId}/evidencia`)
+    ).status(),
+  ).toBe(404);
+  await otherContext.close();
   expect(
     (
       await page.request.post(
@@ -123,14 +159,30 @@ test("public intake → private human review → separately approved public vers
   ).toBe(409);
   const publicContext = await browser.newContext();
   const publicPage = await publicContext.newPage();
-  await publicPage.goto(`${origin}/denuncias`);
+  await publicPage.goto(`${origin}/reportes`);
   await expect(
     publicPage.getByRole("heading", { name: publicTitle }),
   ).toBeVisible();
   await expect(publicPage.getByText(privateText)).toHaveCount(0);
   await expect(publicPage.getByText(privateTitle)).toHaveCount(0);
   await publicPage.getByRole("heading", { name: publicTitle }).click();
+  await expect(publicPage).toHaveURL(/\/reportes\/[a-f0-9-]+$/);
   await expect(publicPage.getByText(privateText)).toHaveCount(0);
+  await expect(
+    publicPage.getByRole("img", {
+      name: "Imagen adjunta al reporte",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    publicPage.getByRole("link", { name: "Abrir URL de la fuente" }),
+  ).toHaveCount(0);
+  expect(
+    (
+      await publicPage.request.get(
+        `/api/privado/registros/${reportId}/evidencia`,
+      )
+    ).status(),
+  ).toBe(401);
   expect(
     (
       await publicPage.request.get(`/api/privado/registros/${reportId}`)
@@ -239,7 +291,7 @@ test("disabled accounts, origin checks, body limits and rate limiting", async ({
     headers: { origin },
     data: { description: "x".repeat(27000) },
   });
-  expect(big.status()).toBe(413);
+  expect(big.status()).toBe(415);
   const statuses = [];
   for (let i = 0; i < 12; i++)
     statuses.push(
@@ -254,7 +306,7 @@ test("disabled accounts, origin checks, body limits and rate limiting", async ({
 });
 test("mobile layout and keyboard reachability", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const path of ["/", "/denuncia", "/denuncias", "/ingreso"]) {
+  for (const path of ["/", "/reportar", "/reportes", "/ingreso"]) {
     await page.goto(path);
     expect(
       await page.evaluate(
@@ -262,12 +314,12 @@ test("mobile layout and keyboard reachability", async ({ page }) => {
       ),
     ).toBe(true);
   }
-  await page.goto("/denuncia");
+  await page.goto("/reportar");
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Saltar al contenido" }),
   ).toBeFocused();
-  await page.getByLabel("Título breve").focus();
+  await page.getByLabel("URL de la publicación o fuente").focus();
   await page.keyboard.press("Tab");
-  await expect(page.getByLabel("¿Qué ocurrió?")).toBeFocused();
+  await expect(page.getByLabel("Descripción de lo ocurrido")).toBeFocused();
 });

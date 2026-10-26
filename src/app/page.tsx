@@ -26,11 +26,11 @@ export default function Home() {
             contribuir a hacerlas visibles.
           </p>
           <div className="hero-actions">
-            <Link className="button" href="/denuncia">
-              Registrar una denuncia <Arrow />
+            <Link className="button" href="/reportar">
+              Enviar un reporte <Arrow />
             </Link>
-            <Link className="inline-link" href="/denuncias">
-              Explorar denuncias revisadas <Arrow />
+            <Link className="inline-link" href="/reportes">
+              Explorar reportes revisados <Arrow />
             </Link>
           </div>
           <div className="hero-note">
@@ -111,7 +111,7 @@ export default function Home() {
       </section>
       <section className="wrap closing">
         <div>
-          <span className="eyebrow">Denuncias revisadas</span>
+          <span className="eyebrow">Reportes revisados</span>
           <h2>
             Conocer también es
             <br />
@@ -122,7 +122,7 @@ export default function Home() {
             observatorio.
           </p>
         </div>
-        <Link className="button secondary" href="/denuncias">
+        <Link className="button secondary" href="/reportes">
           Ver el catálogo <Arrow />
         </Link>
       </section>

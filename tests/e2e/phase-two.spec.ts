@@ -29,7 +29,7 @@ const input = (text: string) => ({
   text,
   version: 1,
   privacyConfirmed: true,
-  syntheticConfirmed: true,
+
 });
 async function validate(page: Page) {
   await page
@@ -100,9 +100,6 @@ test("prepared input only; suggestions persist; human edits and approvals remain
       "Un relato ficticio sobre desinformación que puede limitar la participación de las mujeres.",
     );
   await page.getByRole("checkbox", { name: /Revisé este texto/ }).check();
-  await page
-    .getByRole("checkbox", { name: /Confirmo que este contenido es ficticio/ })
-    .check();
   await page
     .getByRole("button", { name: "Solicitar sugerencias", exact: true })
     .click();
@@ -200,9 +197,9 @@ test("prepared input only; suggestions persist; human edits and approvals remain
   ).toBe(409);
   const publicContext = await browser.newContext();
   const publicPage = await publicContext.newPage();
-  await publicPage.goto(`${origin}/denuncias`);
+  await publicPage.goto(`${origin}/reportes`);
   await publicPage.getByRole("heading", { name: title }).click();
-  await expect(publicPage).toHaveURL(/\/denuncias\/[a-f0-9-]+$/);
+  await expect(publicPage).toHaveURL(/\/reportes\/[a-f0-9-]+$/);
   await expect(publicPage.locator(".report-body")).toHaveText(humanText);
   await expect(
     publicPage.getByText("original@example.test", { exact: false }),

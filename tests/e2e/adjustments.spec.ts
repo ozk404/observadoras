@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const prefix = process.env.TEST_PREFIX ?? "test";
 async function login(page: Page, role: string) {
@@ -62,7 +63,7 @@ test("author saves and resubmits corrections; private history survives repeated 
       await visitor.request.get(`/api/privado/registros/${id}/ajustes`)
     ).status(),
   ).toBe(401);
-  await visitor.goto(`${origin}/denuncias`);
+  await visitor.goto(`${origin}/reportes`);
   await expect(visitor.getByText(note, { exact: true })).toHaveCount(0);
   await visitorContext.close();
   const otherContext = await browser.newContext();
@@ -237,7 +238,7 @@ test("author saves and resubmits corrections; private history survives repeated 
   );
   expect(publication.status()).toBe(201);
   const publicationId = (await publication.json()).id;
-  await page.goto(`/denuncias/${publicationId}`);
+  await page.goto(`/reportes/${publicationId}`);
   await expect(page.getByText(note, { exact: true })).toHaveCount(0);
   await expect(page.getByText(secondNote, { exact: true })).toHaveCount(0);
   await expect(page.getByText(newText, { exact: false })).toHaveCount(0);
@@ -308,21 +309,23 @@ test("requests reject unsupported states, anonymous reports, forged or stale act
       })
     ).status(),
   ).toBe(409);
-  const publicTitle = `Envío anónimo ficticio ${prefix}`;
+  const submissionKey = crypto.randomUUID();
+  const publicTitle = `Reporte recibido · ${submissionKey.slice(0, 8)}`;
   const token = await (await page.request.get("/api/form-token")).json();
   await page.waitForTimeout(1600);
   expect(
     (
       await page.request.post("/api/denuncias", {
         headers: { origin },
-        data: {
-          title: publicTitle,
+        multipart: {
           description:
             "Relato ficticio sin cuenta que no dispone de canal para solicitar ajustes.",
-          consent: true,
+          consent: "true",
+
           website: "",
           token: token.token,
-          submissionKey: crypto.randomUUID(),
+          submissionKey,
+          evidence: await imageFixture(),
         },
       })
     ).status(),
@@ -388,7 +391,7 @@ test(
     const data = {
       text: "Un relato ficticio suficientemente amplio para una sugerencia de prueba.",
       privacyConfirmed: true,
-      syntheticConfirmed: true,
+
       version: 1,
     };
     expect(

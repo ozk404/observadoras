@@ -32,11 +32,11 @@ test("sensitive input is detected and common identifiers can be removed locally"
     ).includes("posible nombre compuesto"),
   );
 });
-test("preparation requires both confirmations and a matching report version", () => {
+test("preparation requires privacy confirmation and a matching report version", () => {
   const input = {
     text: "Un relato ficticio con contenido preparado para análisis.",
     privacyConfirmed: true,
-    syntheticConfirmed: true,
+
     version: 1,
   };
   assert.equal(aiInputSchema.safeParse(input).success, true);
@@ -146,6 +146,8 @@ test("configuration fails closed for data modes and unsafe simulation endpoints"
     assert.equal(aiConfiguration().ready, false);
     process.env.AI_DATA_MODE = "synthetic";
     delete process.env.AI_TEST_MODE;
+    assert.equal(aiConfiguration().ready, false);
+    process.env.AI_DATA_MODE = "consented";
     assert.equal(aiConfiguration().ready, true);
     process.env.AI_TEST_MODE = "true";
     process.env.OPENAI_TEST_ENDPOINT = "https://foreign.test";

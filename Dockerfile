@@ -1,7 +1,8 @@
 FROM node:22-bookworm-slim AS dependencies
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --include=optional --no-audit --no-fund --fetch-retries=2 --fetch-timeout=120000 \
+    && node -e "require('@next/swc-'+process.platform+'-'+process.arch+'-gnu'); require('sharp')"
 
 FROM dependencies AS build
 COPY . .

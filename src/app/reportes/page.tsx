@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { publications } from "@/server/reports";
 import { Arrow } from "@/components/icons";
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Denuncias revisadas" };
+export const metadata: Metadata = { title: "Reportes revisados" };
 export default async function Catalog({
   searchParams,
 }: {
@@ -30,7 +30,7 @@ export default async function Catalog({
         </p>
       </div>
       <div className="catalog-heading">
-        <h2>Denuncias revisadas</h2>
+        <h2>Reportes revisados</h2>
         <span className="help">Publicación con revisión humana</span>
       </div>
       {rows.length ? (
@@ -39,7 +39,7 @@ export default async function Catalog({
             <article className="catalog-card" key={row.id}>
               <span className="eyebrow">Versión pública revisada</span>
               <h3>
-                <Link href={`/denuncias/${row.id}`}>{row.title}</Link>
+                <Link href={`/reportes/${row.id}`}>{row.title}</Link>
               </h3>
               <p>
                 {row.body.slice(0, 210)}
@@ -53,7 +53,7 @@ export default async function Catalog({
                   }).format(row.published_at)}
                 </time>
                 <Link
-                  href={`/denuncias/${row.id}`}
+                  href={`/reportes/${row.id}`}
                   aria-label={`Leer: ${row.title}`}
                 >
                   Leer relato <Arrow />
@@ -71,20 +71,20 @@ export default async function Catalog({
               : "Este espacio está por comenzar."}
           </h2>
           <p>
-            Las denuncias aparecerán aquí cuando el equipo haya revisado y
+            Los reportes aparecerán aquí cuando el equipo haya revisado y
             aprobado una versión pública.
           </p>
-          <Link className="button secondary" href="/denuncia">
-            Compartir una denuncia <Arrow />
+          <Link className="button secondary" href="/reportar">
+            Enviar un reporte <Arrow />
           </Link>
         </div>
       )}
       <div className="pagination">
         {page > 1 && (
-          <Link href={`/denuncias?pagina=${page - 1}`}>← Anterior</Link>
+          <Link href={`/reportes?pagina=${page - 1}`}>← Anterior</Link>
         )}
         {rows.length > 12 && (
-          <Link href={`/denuncias?pagina=${page + 1}`}>Siguiente →</Link>
+          <Link href={`/reportes?pagina=${page + 1}`}>Siguiente →</Link>
         )}
       </div>
     </div>
