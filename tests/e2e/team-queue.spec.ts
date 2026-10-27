@@ -43,6 +43,16 @@ test("team queue filters, counts and pagination respect both roles and fit the A
   await expect(page.getByRole("link", { name: "Nuevo registro" })).toHaveCount(
     0,
   );
+  const header = page.getByRole("banner");
+  await expect(
+    header.getByRole("link", { name: `Cuenta: ${prefix}-reviewer` }),
+  ).toBeVisible();
+  await expect(
+    header.getByRole("button", { name: "Cerrar sesión" }),
+  ).toBeVisible();
+  await expect(
+    header.getByRole("link", { name: "Acceso del equipo ↗" }),
+  ).toBeHidden();
   const baseline = {
     total: await count(page, "Todos"),
     pending: await count(page, "Pendientes"),

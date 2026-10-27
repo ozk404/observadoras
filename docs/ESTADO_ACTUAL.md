@@ -33,6 +33,8 @@ Validación focalizada: bandeja y recorrido de evidencia aprobados con datos fic
 
 Simplificación autorizada: retirada la pantalla de creación interna y su botón «Nuevo registro». `/equipo/nuevo` redirige a `/reportar`, único formulario de recepción visible. No se añade otra modalidad de envío ni borradores al formulario público. Los registros/borradores previos y sus permisos se conservan; la API interna permanece por compatibilidad. La ruta antigua exige sesión por el layout privado y después redirige al formulario público. Validación: 6/6 recorridos phase-one/team-queue, TypeScript y build aprobados; solo app actualizada (b4e43fc4f583), worker intacto. Smoke empaquetado: health/reportar200 y protección de acceso sin sesión.
 
+Cuenta del área privada integrada en la cabecera principal: nombre enlazado a Equipo y cierre de sesión sustituyen «Acceso del equipo»; retirada la franja privada duplicada. Integración cliente desde el layout autenticado, sin añadir consultas de sesión a las páginas públicas. Bandeja/permisos y ubicación de controles aprobados con fixtures; revisión visual y sin overflow en 320/390/768/1440, TypeScript y único build final aprobados (cacf33e265f2). Solo app actualizada; worker intacto. Smoke empaquetado: inicio/health200 y acceso privado protegido.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

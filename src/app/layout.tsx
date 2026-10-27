@@ -37,6 +37,7 @@ export default function RootLayout({
               <Link href="/ingreso" className="team-link">
                 Acceso del equipo ↗
               </Link>
+              <span id="header-account-slot" />
             </nav>
           </div>
         </header>

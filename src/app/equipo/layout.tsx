@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { currentUser } from "@/server/auth";
-import { Logout } from "@/components/private-forms";
+import { HeaderAccount } from "@/components/header-account";
 import { TeamNavigation } from "@/components/team-navigation";
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -17,16 +16,7 @@ export default async function TeamLayout({
   if (!user) redirect("/ingreso");
   return (
     <div className="wrap page-space">
-      <div className="private-bar">
-        <Link href="/equipo">
-          Área privada /{" "}
-          {user.role === "reviewer" ? "Revisión" : "Mis registros"}
-        </Link>
-        <div>
-          <span>{user.username}</span>
-          <Logout />
-        </div>
-      </div>
+      <HeaderAccount username={user.username} />
       {user.role === "reviewer" && <TeamNavigation />}
       {children}
     </div>
