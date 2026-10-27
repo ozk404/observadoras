@@ -129,8 +129,21 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
         prevBtnText: "Anterior",
         doneBtnText: "Terminar",
         closeBtnLabel: "Cerrar tutorial",
-        onPopoverRender(popover) {
+        onPopoverRender(popover, { state }) {
           popover.wrapper.setAttribute("aria-modal", "true");
+          const index = state.activeIndex ?? 0;
+          if (index === 0) {
+            const illustration = document.createElement("img");
+            illustration.src = "/illustrations/intro.webp";
+            illustration.alt = "";
+            illustration.width = 1080;
+            illustration.height = 1080;
+            illustration.className = "report-tour-welcome-art";
+            popover.wrapper.prepend(illustration);
+            popover.wrapper.style.display = "grid";
+          } else {
+            popover.progress.textContent = `${index} de 5`;
+          }
           popover.wrapper.addEventListener("keydown", (event) => {
             if (event.key !== "Tab") return;
             event.preventDefault();
@@ -160,6 +173,22 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
         },
         onDestroyed: finishTour,
         steps: [
+          {
+            popover: {
+              popoverClass: "report-tour-popover report-tour-welcome",
+              title: "Hola, ¿empezamos?",
+              description:
+                "Te mostraremos dónde adjuntar tu captura y cómo completar el reporte.",
+              nextBtnText: "Empezar",
+              prevBtnText: "Omitir",
+              showProgress: false,
+              disableButtons: [],
+              onPrevClick(_element, _step, { driver: activeDriver }) {
+                activeDriver.destroy();
+                finishTour();
+              },
+            },
+          },
           {
             element: "[data-report-tour='capture']",
             popover: {

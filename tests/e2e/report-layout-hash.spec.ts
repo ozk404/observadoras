@@ -43,7 +43,7 @@ test("direct tutorial fragment opens and closing preserves query without reopeni
 }) => {
   await page.goto("/reportar?origen=guia#tutorial");
   await expect(
-    page.getByRole("dialog", { name: "Adjunta la captura" }),
+    page.getByRole("dialog", { name: "Hola, ¿empezamos?" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Cerrar tutorial" }).click();
   await expect(page).toHaveURL("/reportar?origen=guia");
@@ -72,7 +72,7 @@ test("same-page hash opens the tutorial and foreign fragments are preserved", as
     location.hash = "tutorial";
   });
   await expect(
-    page.getByRole("dialog", { name: "Adjunta la captura" }),
+    page.getByRole("dialog", { name: "Hola, ¿empezamos?" }),
   ).toBeVisible();
   await page.evaluate(() => {
     location.hash = "contexto";
@@ -125,7 +125,7 @@ test("changing fragment while Driver loads cancels the pending tutorial", async 
     location.hash = "tutorial";
   });
   await expect(
-    page.getByRole("dialog", { name: "Adjunta la captura" }),
+    page.getByRole("dialog", { name: "Hola, ¿empezamos?" }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
 });

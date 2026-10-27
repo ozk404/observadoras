@@ -32,3 +32,13 @@ A petición del usuario se conserva la composición aprobada. Spotlight de Drive
 - Pase inicial de tutorial/retícula/hash6/7: un caso simulaba hashchange antes de hidratar el formulario. Se espera ahora a que el formulario esté listo antes de esa acción de la prueba. Pase final7/7, salida0; incluye cierre temprano, teclado, enlace directo y movimiento reducido.
 - Docker local actualizado; app/db saludables, worker activo, health200. Datos conservados:4 reportes,1 publicación,3 evidencias. Entorno aislado detenido conservando volumen.
 - No se repitió la suite de servidor ni el envío completo: cambio limitado a movimiento. Comprobación en Chromium; valoración humana del movimiento y dispositivos físicos pendiente.
+
+## Bienvenida ilustrada — 26-10-2026
+
+Primer paso centrado de bienvenida: «Hola, ¿empezamos?», una frase y acciones Empezar/Omitir. Ilustración original del usuario `public/illustrations/intro.webp` (1080x1080, 84840 bytes, transparencia) incorporada sin modificación. Dos columnas en escritorio y apilado móvil. No se recopilan nombres ni datos nuevos.
+
+Se conserva instancia Driver, animación, cierre/foco, #tutorial y cinco focos posteriores. Anterior desde captura vuelve a bienvenida; Omitir cierra y limpia fragmento. La bienvenida no muestra contador; los focos mantienen1de5…5de5. Imagen decorativa con dimensiones, sin interpolar información privada.
+
+Typecheck/build aprobados, salida0; imagen final e35c926c6961. Primer pase8/8 y revisión visual; se ocultó después el contador de bienvenida detectado en capturas. Pase final `report-tour.spec.ts report-layout-hash.spec.ts`:8/8, salida0. Incluye imagen cargada, empezar/omitir/volver, Escape/foco, conservación de datos, enlace/query/hashchange, limpieza y movimiento reducido; anchos320/390/768/1440 y móvil320x568. Capturas de escritorio/móvil revisadas. No se repitió suite de API ni envío completo por no cambiar esos flujos.
+
+Docker local actualizado. Health e ilustración HTTP200, app/db saludables y worker activo. Conservados4 reportes,1 publicación y3 evidencias. Entorno aislado detenido sin borrar volumen. Sigue pendiente valoración humana y pruebas en Safari/dispositivo físico.

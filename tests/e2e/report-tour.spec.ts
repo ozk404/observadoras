@@ -24,10 +24,10 @@ test("tutorial is optional, keyboard accessible and preserves the report", async
   await page.getByRole("checkbox").check();
   const launch = page.getByRole("button", { name: "Ver cómo reportar" });
   await launch.click();
-  const dialog = page.getByRole("dialog", { name: "Adjunta la captura" });
+  const dialog = page.getByRole("dialog", { name: "Hola, ¿empezamos?" });
   await expect(dialog).toBeVisible();
   await expect(page.locator("form")).toHaveJSProperty("inert", true);
-  await expect(dialog.getByRole("button", { name: "Siguiente" })).toBeFocused();
+  await expect(dialog.getByRole("button", { name: "Empezar" })).toBeFocused();
   for (let index = 0; index < 6; index++) {
     await page.keyboard.press("Tab");
     expect(
@@ -87,6 +87,29 @@ test("all five visual steps fit small and large screens without submitting", asy
     await page.setViewportSize({ width, height: width < 600 ? 844 : 1000 });
     await page.getByRole("button", { name: "Ver cómo reportar" }).click();
     await expect(page.locator("body")).toHaveClass(/driver-simple/);
+    const welcome = page.getByRole("dialog", { name: "Hola, ¿empezamos?" });
+    await expect(welcome).toBeVisible();
+    await expect(
+      welcome.locator(".driver-popover-progress-text"),
+    ).not.toBeVisible();
+    await expect
+      .poll(() =>
+        welcome
+          .locator("img")
+          .evaluate((img: HTMLImageElement) => img.naturalWidth),
+      )
+      .toBe(1080);
+    const welcomeBounds = await welcome.boundingBox();
+    expect(welcomeBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(welcomeBounds!.x + welcomeBounds!.width).toBeLessThanOrEqual(width);
+    expect(welcomeBounds!.y).toBeGreaterThanOrEqual(0);
+    expect(welcomeBounds!.y + welcomeBounds!.height).toBeLessThanOrEqual(
+      width < 600 ? 844 : 1000,
+    );
+    await page.screenshot({
+      path: `artifacts/report-tour-welcome-${width}.png`,
+    });
+    await welcome.getByRole("button", { name: "Empezar" }).click();
     for (let index = 0; index < titles.length; index++) {
       const dialog = page.getByRole("dialog", { name: titles[index] });
       await expect(dialog).toBeVisible();
@@ -145,7 +168,36 @@ test("leaving the route removes the tutorial overlay and restores the page", asy
   await page.getByRole("link", { name: "Enviar reporte", exact: true }).click();
   await page.getByRole("button", { name: "Ver cómo reportar" }).click();
   await expect(
-    page.getByRole("dialog", { name: "Adjunta la captura" }),
+    page.getByRole("dialog", { name: "Hola, ¿empezamos?" }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
+});
+
+test("welcome can be skipped or revisited without sending the report", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/reportar?origen=prueba#tutorial");
+  const welcome = page.getByRole("dialog", { name: "Hola, ¿empezamos?" });
+  await expect(welcome).toBeVisible();
+  await welcome.getByRole("button", { name: "Omitir" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page).toHaveURL("/reportar?origen=prueba");
+  await expect(page.locator("form")).toHaveJSProperty("inert", false);
+  await expect(
+    page.getByRole("button", { name: "Ver cómo reportar" }),
+  ).toBeFocused();
+  await page.getByRole("button", { name: "Ver cómo reportar" }).click();
+  await welcome.getByRole("button", { name: "Empezar" }).click();
+  const capture = page.getByRole("dialog", { name: "Adjunta la captura" });
+  await expect(capture).toBeVisible();
+  await capture.getByRole("button", { name: "Anterior" }).click();
+  await expect(welcome).toBeVisible();
+  await expect(welcome.locator("img")).toHaveCount(1);
+  const bounds = await welcome.boundingBox();
+  expect(bounds!.y).toBeGreaterThanOrEqual(0);
+  expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(568);
+  await welcome.getByRole("button", { name: "Omitir" }).click();
+  await expect(page.getByRole("checkbox")).not.toBeChecked();
+  await expect(page.getByLabel("Descripción de lo ocurrido")).toHaveValue("");
 });
