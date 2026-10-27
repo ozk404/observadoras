@@ -8,6 +8,7 @@ import {
 } from "@/server/reports";
 import { Arrow } from "@/components/icons";
 import { Status } from "@/components/status";
+import { TeamTour } from "@/components/team-tour";
 import { EvidencePreview } from "@/components/evidence-preview";
 import styles from "./queue.module.css";
 export const metadata = { title: "Reportes del equipo" };
@@ -55,8 +56,13 @@ export default async function Queue({
     <div className={styles.page}>
       <header className={styles.heading}>
         <h1>{user.role === "reviewer" ? "Reportes" : "Mis reportes"}</h1>
+        <TeamTour reviewer={user.role === "reviewer"} />
       </header>
-      <nav className={styles.filters} aria-label="Filtrar reportes por estado">
+      <nav
+        data-team-tour="filters"
+        className={styles.filters}
+        aria-label="Filtrar reportes por estado"
+      >
         <Link href={queueUrl()} aria-current={!status ? "page" : undefined}>
           Todos <span>{total}</span>
         </Link>
@@ -70,7 +76,11 @@ export default async function Queue({
           </Link>
         ))}
       </nav>
-      <section className={styles.records} aria-label="Listado de reportes">
+      <section
+        data-team-tour="reports"
+        className={styles.records}
+        aria-label="Listado de reportes"
+      >
         {rows.length ? (
           <>
             <div className={styles.columns} aria-hidden="true">
@@ -91,7 +101,10 @@ export default async function Queue({
                         available={report.has_evidence}
                       />
                       <h2>
-                        <Link href={`/equipo/${report.id}`}>
+                        <Link
+                          data-team-tour="open"
+                          href={`/equipo/${report.id}`}
+                        >
                           {report.title}
                         </Link>
                       </h2>

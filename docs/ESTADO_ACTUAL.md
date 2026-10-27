@@ -35,6 +35,8 @@ Simplificación autorizada: retirada la pantalla de creación interna y su botó
 
 Cuenta del área privada integrada en la cabecera principal: nombre enlazado a Equipo y cierre de sesión sustituyen «Acceso del equipo»; retirada la franja privada duplicada. Integración cliente desde el layout autenticado, sin añadir consultas de sesión a las páginas públicas. Bandeja/permisos y ubicación de controles aprobados con fixtures; revisión visual y sin overflow en 320/390/768/1440, TypeScript y único build final aprobados (cacf33e265f2). Solo app actualizada; worker intacto. Smoke empaquetado: inicio/health200 y acceso privado protegido.
 
+Tutorial voluntario de Equipo con Driver.js y ADN existente: filtros, listado, captura y apertura de ficha cuando existen, y resumen solo para revisoras. Acceso «Ver tutorial» y `/equipo#tutorial`, conservando query de filtros/paginación al cerrar. Sin datos ficticios visibles ni mutaciones; interacción de fondo bloqueada durante el recorrido, foco restaurado y movimiento reducido respetado. Prueba focalizada aprobada: recorrido, hash, Escape, teclado, pantalla vacía, salida de ruta y móvil de 320 px. TypeScript y único build final aprobados (7c7926e33b78); solo app actualizada, worker intacto. Smoke empaquetado health200 y acceso privado protegido. No se repitieron suites de datos ajenas; Safari/dispositivos físicos pendientes.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

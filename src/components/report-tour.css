@@ -264,3 +264,5 @@
 .report-tour-welcome .driver-popover-progress-text {
   display: none !important;
 }
+
+.team-tour-popover .driver-popover-title { font-family: "Archivo Equipo", sans-serif; }
