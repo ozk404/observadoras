@@ -13,7 +13,7 @@ async function login(page: import("@playwright/test").Page, username: string) {
   username = username.replace(/^test/, prefix);
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(username);
-  await page.getByLabel("Contraseña").fill(password!);
+  await page.getByLabel("Contraseña", { exact: true }).fill(password!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }
@@ -348,7 +348,7 @@ test("private forms cannot submit before JavaScript is ready", async ({
   const anonymous = await browser.newContext({ javaScriptEnabled: false });
   const entry = await anonymous.newPage();
   await entry.goto("/ingreso");
-  await expect(entry.getByLabel("Contraseña")).toBeDisabled();
+  await expect(entry.getByLabel("Contraseña", { exact: true })).toBeDisabled();
   await expect(
     entry.getByRole("button", { name: "Ingresar al área privada" }),
   ).toBeDisabled();

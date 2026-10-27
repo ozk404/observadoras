@@ -1,0 +1,255 @@
+@font-face {
+  font-family: "Archivo Ingreso";
+  src: url("../fonts/archivo-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+.page {
+  max-width: 1184px;
+  padding: 56px 32px 64px;
+  margin: 0 auto;
+  color: #271b30;
+}
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 540px;
+  border: 1px solid #d9ccdf;
+  border-radius: 24px;
+  overflow: hidden;
+  background: white;
+}
+.identity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px;
+  overflow: hidden;
+  background: #69088b;
+  color: white;
+  border-bottom-right-radius: 96px;
+}
+.identity > svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.identity .name {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-family: "Archivo Ingreso", sans-serif;
+  font-size: clamp(40px, 4.2vw, 60px);
+  font-weight: 850;
+  line-height: 1.02;
+  letter-spacing: -2px;
+  margin: 0 0 80px;
+}
+.name span {
+  display: block;
+}
+.identity .programme {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 14px;
+  color: white;
+  line-height: 1.6;
+}
+.arc {
+  position: absolute;
+  pointer-events: none;
+  right: -128px;
+  bottom: -200px;
+  width: 480px;
+  height: 480px;
+  border: 1px solid #ffffff40;
+  border-radius: 50%;
+}
+.arc::after {
+  content: "";
+  position: absolute;
+  inset: 56px;
+  border: 1px solid #ffffff30;
+  border-radius: 50%;
+}
+.access {
+  padding: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+.access header {
+  margin-bottom: 32px;
+}
+.access h1 {
+  font-family: "Archivo Ingreso", sans-serif;
+  font-size: clamp(30px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  margin: 0 0 14px;
+}
+.access header p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #675d6e;
+  margin: 0;
+}
+.page :global(.login-form) {
+  gap: 24px;
+}
+.page label {
+  font-size: 15px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.page input:not([type="checkbox"]) {
+  font-size: 16px;
+  color: #271b30;
+  background: white;
+  min-height: 56px;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+}
+.page input:not([type="checkbox"]):focus {
+  border-color: #69088b;
+}
+.page input:focus-visible,
+.page button:focus-visible,
+.page a:focus-visible {
+  outline: 3px solid #69088b;
+  outline-offset: 4px;
+}
+.page :global(.login-form .button) {
+  font-size: 14px;
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  background: #69088b;
+  color: white;
+  padding-inline: 20px;
+}
+.page :global(.login-form .button):hover {
+  background: #51076b;
+}
+.page :global(.login-form .button):disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.page :global(.password-control) {
+  position: relative;
+}
+.page :global(.password-control) input {
+  padding-right: 94px;
+}
+.page :global(.password-control) button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  min-height: 46px;
+  min-width: 78px;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  background: white;
+  color: #69088b;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.page :global(.password-control) button:hover {
+  background: #fcf8fe;
+}
+.page :global(.login-form .error) {
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+}
+:global(body):has(.page) :global(.site-header nav a) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+:global(body):has(.page) :global(.site-footer) {
+  font-size: 13px;
+}
+@media (max-width: 1000px) {
+  .access,
+  .identity {
+    padding: 36px;
+  }
+  .identity .name {
+    font-size: 44px;
+  }
+}
+@media (max-width: 860px) {
+  .page {
+    padding: 28px 20px 48px;
+  }
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    border-radius: 16px;
+  }
+  .identity {
+    padding: 24px 28px;
+    border-bottom-right-radius: 48px;
+  }
+  .identity > svg {
+    display: none;
+  }
+  .identity .name {
+    font-size: 28px;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .name span {
+    display: inline;
+  }
+  .identity .programme {
+    font-size: 12px;
+  }
+  .arc {
+    right: -180px;
+    bottom: -380px;
+  }
+  .access {
+    padding: 32px 28px;
+  }
+  .access h1 {
+    font-size: 32px;
+  }
+  .access header {
+    margin-bottom: 28px;
+  }
+  :global(body):has(.page) :global(.site-header nav) {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page * {
+    scroll-behavior: auto;
+  }
+}
+
+:global(body):has(.page) :global(.wordmark > span) {
+  font-family: "Archivo Ingreso", sans-serif;
+  font-weight: 800;
+}
+.page :global(.login-form .error):focus {
+  outline: 3px solid #69088b;
+  outline-offset: 4px;
+}

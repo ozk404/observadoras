@@ -5,7 +5,7 @@ const prefix = process.env.TEST_PREFIX ?? "test";
 async function login(page: Page, role = "reviewer") {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-followup-${role}`);
-  await page.getByLabel("Contraseña").fill(process.env.TEST_PASSWORD!);
+  await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }

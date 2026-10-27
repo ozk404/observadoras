@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
 import { Arrow } from "./icons";
@@ -13,12 +13,18 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const feedback = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (error) feedback.current?.focus();
+  }, [error]);
   return (
     <form
       method="post"
-      className="form-stack"
+      className="form-stack login-form"
       onSubmit={async (e) => {
         e.preventDefault();
+        if (busy || !ready) return;
         setBusy(true);
         setError("");
         const data = new FormData(e.currentTarget);
@@ -34,32 +40,48 @@ export function LoginForm() {
       }}
     >
       {error && (
-        <p className="error" role="alert">
+        <p className="error" role="alert" ref={feedback} tabIndex={-1}>
           {error}
         </p>
       )}
       <div>
         <label htmlFor="username">Nombre de usuario</label>
         <input
-          disabled={!ready}
+          disabled={!ready || busy}
           id="username"
           name="username"
           required
           autoComplete="username"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
           maxLength={64}
         />
       </div>
       <div>
         <label htmlFor="password">Contraseña</label>
-        <input
-          disabled={!ready}
-          id="password"
-          name="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          maxLength={128}
-        />
+        <div className="password-control">
+          <input
+            disabled={!ready || busy}
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            required
+            autoComplete="current-password"
+            maxLength={128}
+          />
+          <button
+            type="button"
+            disabled={!ready || busy}
+            aria-controls="password"
+            aria-label={
+              showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+            }
+            onClick={() => setShowPassword((previous) => !previous)}
+          >
+            {showPassword ? "Ocultar" : "Mostrar"}
+          </button>
+        </div>
       </div>
       <button className="button" disabled={busy || !ready}>
         {busy ? "Ingresando…" : "Ingresar al área privada"} <Arrow />

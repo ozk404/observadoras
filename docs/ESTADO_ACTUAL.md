@@ -21,6 +21,8 @@ ADN v2 aprobado con blanco dominante, bloques protagonistas de morado `#69088B` 
 
 Reportar: retícula de columnas iguales en escritorio, captura y descripción alineadas, tutorial integrado en cabecera y apertura directa mediante `/reportar#tutorial`. Último pase de este incremento: 15/15 recorridos seleccionados, build y actualización local aprobados; ver `REPORTAR-RETICULA-VERIFICACION.md`. Sustituye la composición en una columna de los hitos anteriores.
 
+Ingreso modernizado con ADN v2: composición blanco/morado en dos columnas, Archivo local, copy breve, campos de 56px, mostrar/ocultar contraseña y error enfocado. CSS limitado a la ruta; autenticación/cookie/redirección y cuentas cerradas conservadas. Validación focalizada en desarrollo: 2/2 de interfaz y 1/1 autenticado (cuenta habilitada/deshabilitada y sesión existente), sin overflow en320/390/768/1440. Selectores de contraseña de pruebas existentes hechos exactos para distinguir el nuevo botón accesible. TypeScript y único build final aprobados (075d6edf0fda); actualizada solo app y worker intacto. Apertura empaquetada /ingreso y health200. No se repitieron suites de servidor ni flujos ajenos; pendiente revisión humana y Safari/dispositivos físicos.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.
