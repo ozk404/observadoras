@@ -55,6 +55,10 @@ Resumen modernizado con ADN: cabecera integrada con Reportes/Resumen/Usuarios se
 
 Validación del incremento: dos recorridos focalizados aprobados con PostgreSQL y fixtures ficticios (filtros, teclado, cifras consistentes, separación de originales, permisos y rechazo de filtros inválidos/duplicados), con repetición visual focalizada tras ajustar el encabezado de porcentaje y esperar la cabecera hidratada. Sin overflow en 320/390/768/1440; CSS limitado a la ruta. TypeScript aprobado. Único build final aprobado (31766cda2cb7); solo app recreada. Smoke autenticado de Resumen, health200 y rechazo anónimo401 aprobados; sesión temporal eliminada. No se repitieron suites ajenas ni se modificaron migraciones o worker. Safari/dispositivos físicos y aceptación humana pendientes.
 
+Catálogo público `/reportes` modernizado con ADN: cabecera morada y título factual, tarjetas editoriales de fecha/título/extracto con lectura por enlace único y foco sobre tarjeta, pies alineados y retícula 3/2/1 columnas. Retirados lema genérico y etiquetas repetidas. Vacíos expresan ausencia de publicaciones y permiten regresar desde páginas sin resultados. Consulta exclusivamente publicaciones aprobadas; originales/capturas siguen privados, sin añadir categorías o imágenes de los registros internos.
+
+Validación focalizada: recorrido recepción → revisión → publicación independiente y recorrido de catálogo con 14 versiones ficticias para comprobar paginación 12+1, lectura por teclado, ausencia de originales/imágenes y retorno desde página vacía. Revisión visual y sin overflow en 320/390/768/1440; TypeScript aprobado. Único build final aprobado (b80ae48060e1); solo app recreada, worker intacto. Smoke empaquetado: catálogo y página vacía200, health200. Sin cambios de SQL, permisos, almacenamiento o ficha pública individual; Safari/dispositivos físicos y aceptación humana pendientes.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

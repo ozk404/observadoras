@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { publications } from "@/server/reports";
 import { Arrow } from "@/components/icons";
+import styles from "./catalog.module.css";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Reportes revisados" };
 export default async function Catalog({
@@ -15,78 +16,76 @@ export default async function Catalog({
     Math.min(10000, Number.parseInt(params.pagina ?? "1") || 1),
   );
   const rows = await publications(page);
+  const date = new Intl.DateTimeFormat("es-GT", {
+    dateStyle: "medium",
+    timeZone: "America/Guatemala",
+  });
   return (
-    <div className="wrap page-space">
-      <div className="page-heading">
-        <span className="eyebrow">Catálogo público</span>
-        <h1>
-          Relatos que hacen visible
-          <br />
-          lo que debe cambiar.
-        </h1>
-        <p>
-          Versiones revisadas y aprobadas por el equipo del observatorio. Los
-          relatos originales y los datos de las personas permanecen privados.
-        </p>
-      </div>
-      <div className="catalog-heading">
-        <h2>Reportes revisados</h2>
-        <span className="help">Publicación con revisión humana</span>
-      </div>
+    <div className={`wrap ${styles.page}`}>
+      <header className={styles.hero}>
+        <div>
+          <h1>Reportes revisados</h1>
+          <p>
+            Publicaciones aprobadas por el equipo del observatorio. Las capturas
+            y los originales permanecen privados.
+          </p>
+        </div>
+        <Link href="/reportar" className={styles.report}>
+          Enviar un reporte <Arrow />
+        </Link>
+      </header>
       {rows.length ? (
-        <div className="catalog-grid">
+        <section className={styles.grid} aria-label="Publicaciones revisadas">
           {rows.slice(0, 12).map((row) => (
-            <article className="catalog-card" key={row.id}>
-              <span className="eyebrow">Versión pública revisada</span>
-              <h3>
+            <article className={styles.card} key={row.id}>
+              <time dateTime={row.published_at.toISOString()}>
+                {date.format(row.published_at)}
+              </time>
+              <h2>
                 <Link href={`/reportes/${row.id}`}>{row.title}</Link>
-              </h3>
+              </h2>
               <p>
-                {row.body.slice(0, 210)}
-                {row.body.length > 210 ? "…" : ""}
+                {row.body.slice(0, 260)}
+                {row.body.length > 260 ? "…" : ""}
               </p>
-              <div className="card-bottom">
-                <time dateTime={row.published_at.toISOString()}>
-                  {new Intl.DateTimeFormat("es-GT", {
-                    dateStyle: "medium",
-                    timeZone: "America/Guatemala",
-                  }).format(row.published_at)}
-                </time>
-                <Link
-                  href={`/reportes/${row.id}`}
-                  aria-label={`Leer: ${row.title}`}
-                >
-                  Leer relato <Arrow />
-                </Link>
-              </div>
+              <span className={styles.read} aria-hidden="true">
+                Leer reporte <Arrow />
+              </span>
             </article>
           ))}
-        </div>
+        </section>
       ) : (
-        <div className="empty-state">
-          <span className="empty-index">—</span>
+        <section className={styles.empty} aria-label="Catálogo sin resultados">
           <h2>
             {page > 1
-              ? "No hay más publicaciones."
-              : "Este espacio está por comenzar."}
+              ? "No hay publicaciones en esta página."
+              : "Todavía no hay reportes publicados."}
           </h2>
-          <p>
-            Los reportes aparecerán aquí cuando el equipo haya revisado y
-            aprobado una versión pública.
-          </p>
-          <Link className="button secondary" href="/reportar">
-            Enviar un reporte <Arrow />
-          </Link>
-        </div>
+          {page > 1 && (
+            <Link href="/reportes">
+              Volver al catálogo <Arrow />
+            </Link>
+          )}
+        </section>
       )}
-      <div className="pagination">
-        {page > 1 && (
-          <Link href={`/reportes?pagina=${page - 1}`}>← Anterior</Link>
-        )}
-        {rows.length > 12 && (
-          <Link href={`/reportes?pagina=${page + 1}`}>Siguiente →</Link>
-        )}
-      </div>
+      {(page > 1 || rows.length > 12) && (
+        <nav
+          className={styles.pagination}
+          aria-label="Paginación de reportes públicos"
+        >
+          <div>
+            {page > 1 && (
+              <Link href={`/reportes?pagina=${page - 1}`}>← Anterior</Link>
+            )}
+          </div>
+          <span>Página {page}</span>
+          <div>
+            {rows.length > 12 && (
+              <Link href={`/reportes?pagina=${page + 1}`}>Siguiente →</Link>
+            )}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }
