@@ -1,0 +1,76 @@
+x-node: &node
+  image: node:22-bookworm-slim
+  working_dir: /app
+  init: true
+  env_file: .env.dev
+  volumes:
+    - ./src:/app/src:ro
+    - ./public:/app/public:ro
+    - ./db:/app/db:ro
+    - ./scripts:/app/scripts:ro
+    - ./tests:/app/tests:ro
+    - ./package.json:/app/package.json:ro
+    - ./package-lock.json:/app/package-lock.json:ro
+    - ./tsconfig.json:/app/tsconfig.json:ro
+    - ./next.config.ts:/app/next.config.ts:ro
+    - dev_node_modules:/app/node_modules
+    - dev_next:/app/.next
+    - dev_npm_cache:/root/.npm
+name: observadoras-dev
+services:
+  db:
+    image: postgres:17-bookworm
+    env_file: .env.dev
+    volumes:
+      - dev_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  deps:
+    <<: *node
+    command: ["node", "scripts/dev-dependencies.mjs"]
+  migrate:
+    <<: *node
+    command: ["npm", "run", "db:migrate"]
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+  openai-mock:
+    <<: *node
+    command: ["node", "scripts/mock-openai.mjs"]
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+  app:
+    <<: *node
+    command: ["npm", "run", "dev", "--", "--webpack"]
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "127.0.0.1:3100:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openai-mock:
+        condition: service_started
+  ai-worker:
+    <<: *node
+    profiles: [ai]
+    command: ["node", "--import", "tsx", "scripts/ai-worker.ts"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openai-mock:
+        condition: service_started
+    stop_grace_period: 35s
+volumes:
+  dev_node_modules:
+  dev_next:
+  dev_npm_cache:
+  dev_postgres:

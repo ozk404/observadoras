@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+const development = process.env.NODE_ENV === "development";
 const config: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["pg"],
@@ -6,7 +7,11 @@ const config: NextConfig = {
     return [
       { source: "/denuncia", destination: "/reportar", permanent: true },
       { source: "/denuncias", destination: "/reportes", permanent: true },
-      { source: "/denuncias/:id", destination: "/reportes/:id", permanent: true },
+      {
+        source: "/denuncias/:id",
+        destination: "/reportes/:id",
+        permanent: true,
+      },
     ];
   },
   async headers() {
@@ -23,8 +28,7 @@ const config: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'",
+            value: `default-src 'self'; script-src 'self' 'unsafe-inline'${development ? " 'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self'${development ? " ws://localhost:3100" : ""}; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`,
           },
         ],
       },

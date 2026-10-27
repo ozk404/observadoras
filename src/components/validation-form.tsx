@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
 import { categoryKeys, categoryLabels } from "@/lib/ai-contract";
@@ -10,6 +10,8 @@ export function ValidationForm({
   id: string;
   version: number;
 }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const [confirmed, setConfirmed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -30,6 +32,7 @@ export function ValidationForm({
         aprobar una versión pública por separado.
       </p>
       <form
+        method="post"
         className="form-stack"
         onSubmit={async (event) => {
           event.preventDefault();
@@ -61,7 +64,7 @@ export function ValidationForm({
             {error}
           </p>
         )}
-        <fieldset className="category-choices">
+        <fieldset className="category-choices" disabled={!ready}>
           <legend>Clasificación de la revisora</legend>
           <p className="help">
             Elige hasta cuatro categorías orientativas. Se guardan como tu
@@ -91,6 +94,7 @@ export function ValidationForm({
             Observación interna de la revisora <span>(opcional)</span>
           </label>
           <textarea
+            disabled={!ready}
             id="review-observation"
             value={observation}
             maxLength={2000}
@@ -109,12 +113,13 @@ export function ValidationForm({
           <input
             type="checkbox"
             required
+            disabled={!ready}
             checked={confirmed}
             onChange={(event) => setConfirmed(event.target.checked)}
           />
           <span>Revisé la información y confirmo esta validación interna.</span>
         </label>
-        <button className="button" disabled={busy || !confirmed}>
+        <button className="button" disabled={!ready || busy || !confirmed}>
           {busy ? "Validando…" : "Validar sin publicar"}
         </button>
       </form>

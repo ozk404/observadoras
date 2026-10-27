@@ -279,13 +279,13 @@
 .page :global(.field-error):empty {
   display: none;
 }
-:global(body:has(.reportar-v2) .site-header nav a) {
+:global(body):has(.page) :global(.site-header nav a) {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
   font-size: 14px;
 }
-:global(body:has(.reportar-v2) .site-footer) {
+:global(body):has(.page) :global(.site-footer) {
   font-size: 13px;
 }
 @media (max-width: 600px) {
@@ -343,7 +343,7 @@
   .context h2 {
     font-size: 23px;
   }
-  :global(body:has(.reportar-v2) .site-header nav) {
+  :global(body):has(.page) :global(.site-header nav) {
     flex-wrap: wrap;
   }
 }

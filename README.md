@@ -65,23 +65,16 @@ Solicitudes JSON de hasta 26 KB; contenido hasta 6000 caracteres. Se valida Orig
 docker compose exec -T app npx tsx scripts/cleanup.ts
 ```
 
-## Verificación
+## Desarrollo y verificación
+
+Para iterar sin reconstruir imágenes:
 
 ```powershell
-npm ci
-npm run typecheck
-npm test
-npm run build
-npx playwright install chromium
-# Provisionar cuentas ficticias test-reviewer (reviewer), test-participant y test-other
-# (participant), test-disabled (participant, luego disable), con la misma contraseña de prueba.
-# Asignar TEST_PASSWORD solo en el entorno temporal de pruebas.
-npm run test:e2e
+node scripts/dev.mjs up
+node scripts/dev.mjs ui
 ```
 
-También puedes ejecutar `node scripts/test-e2e.mjs` con Compose activo: provisiona cuentas ficticias con nombres y contraseña aleatorios, ejecuta Playwright y deshabilita las cuentas al terminar. Usa solo una base de pruebas; las publicaciones ficticias generadas permanecen hasta retirarlas expresamente. No hay cuentas de demostración habilitadas por defecto.
-
-Ejecutar E2E solo en un entorno de prueba aislado: crea registros y publicaciones ficticias; nunca usa información real. Para ejecuciones repetidas, esperar el vencimiento de límites o limpiar contadores exclusivamente en esa base de pruebas. Capturas y resultados se ignoran en Git; no compartir capturas de datos reales.
+Abre http://localhost:3100: datos ficticios, base propia, recarga automática y OpenAI simulado. La versión empaquetada permanece en 3000. Ver [Desarrollo y validación](docs/DESARROLLO_Y_VALIDACION.md) para pruebas proporcionales, perfiles de cuentas, worker de prueba y build final. No ejecutar pruebas con datos reales ni contra la base principal.
 
 ## Organización
 

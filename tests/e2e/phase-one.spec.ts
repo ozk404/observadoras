@@ -36,6 +36,9 @@ test("public intake → private human review → separately approved public vers
     .fill("https://example.test/fuente-privada");
   await page.getByLabel("Descripción de lo ocurrido").fill(privateText);
   await page.getByRole("checkbox", { name: /Acepto el/ }).check();
+  await expect(
+    page.getByRole("button", { name: "Enviar a revisión" }),
+  ).toBeEnabled();
   await page.waitForTimeout(1600);
   await page.getByRole("button", { name: "Enviar a revisión" }).click();
   await expect(
@@ -322,4 +325,33 @@ test("mobile layout and keyboard reachability", async ({ page }) => {
   await page.getByLabel("URL de la publicación o fuente").focus();
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Descripción de lo ocurrido")).toBeFocused();
+});
+
+test("private forms cannot submit before JavaScript is ready", async ({
+  page,
+  browser,
+}) => {
+  await login(page, "test-participant");
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    storageState: await page.context().storageState(),
+  });
+  const draft = await context.newPage();
+  await draft.goto("/equipo/nuevo");
+  await expect(draft.getByLabel("Título breve")).toBeDisabled();
+  await expect(draft.getByLabel("Descripción")).toBeDisabled();
+  await expect(
+    draft.getByRole("button", { name: "Guardar borrador" }),
+  ).toBeDisabled();
+  await expect(draft.locator("form")).toHaveAttribute("method", "post");
+  await context.close();
+  const anonymous = await browser.newContext({ javaScriptEnabled: false });
+  const entry = await anonymous.newPage();
+  await entry.goto("/ingreso");
+  await expect(entry.getByLabel("Contraseña")).toBeDisabled();
+  await expect(
+    entry.getByRole("button", { name: "Ingresar al área privada" }),
+  ).toBeDisabled();
+  await expect(entry.locator("form")).toHaveAttribute("method", "post");
+  await anonymous.close();
 });

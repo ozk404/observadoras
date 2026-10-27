@@ -3,12 +3,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
 import { Arrow } from "./icons";
+function useFormReady() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
+  return ready;
+}
 export function LoginForm() {
+  const ready = useFormReady();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const router = useRouter();
   return (
     <form
+      method="post"
       className="form-stack"
       onSubmit={async (e) => {
         e.preventDefault();
@@ -34,6 +41,7 @@ export function LoginForm() {
       <div>
         <label htmlFor="username">Nombre de usuario</label>
         <input
+          disabled={!ready}
           id="username"
           name="username"
           required
@@ -44,6 +52,7 @@ export function LoginForm() {
       <div>
         <label htmlFor="password">Contraseña</label>
         <input
+          disabled={!ready}
           id="password"
           name="password"
           type="password"
@@ -52,7 +61,7 @@ export function LoginForm() {
           maxLength={128}
         />
       </div>
-      <button className="button" disabled={busy}>
+      <button className="button" disabled={busy || !ready}>
         {busy ? "Ingresando…" : "Ingresar al área privada"} <Arrow />
       </button>
     </form>
@@ -86,11 +95,13 @@ export function DraftForm({
   report?: { id: string; title: string; description: string; version: number };
   corrections?: boolean;
 }) {
+  const ready = useFormReady();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const router = useRouter();
   return (
     <form
+      method="post"
       className="form-stack"
       onSubmit={async (e) => {
         e.preventDefault();
@@ -140,6 +151,7 @@ export function DraftForm({
       <div>
         <label htmlFor="title">Título breve</label>
         <input
+          disabled={!ready}
           id="title"
           name="title"
           required
@@ -155,6 +167,7 @@ export function DraftForm({
             : "Evita datos identificables innecesarios. Puedes completar el relato después."}
         </p>
         <textarea
+          disabled={!ready}
           id="description"
           name="description"
           rows={8}
@@ -164,10 +177,14 @@ export function DraftForm({
         />
       </div>
       <div className="form-actions">
-        <button className="button secondary" value="draft" disabled={busy}>
+        <button
+          className="button secondary"
+          value="draft"
+          disabled={busy || !ready}
+        >
           {corrections ? "Guardar correcciones" : "Guardar borrador"}
         </button>
-        <button className="button" value="submit" disabled={busy}>
+        <button className="button" value="submit" disabled={busy || !ready}>
           {corrections ? "Reenviar a revisión" : "Enviar a revisión"} <Arrow />
         </button>
       </div>
@@ -185,6 +202,7 @@ export function PublicationForm({
   initialBody?: string;
   bodyRevision?: number;
 }) {
+  const ready = useFormReady();
   const [body, setBody] = useState(initialBody);
   const [privacyConfirmed, setPrivacyConfirmed] = useState(false);
   const [publicationConfirmed, setPublicationConfirmed] = useState(false);
@@ -198,6 +216,7 @@ export function PublicationForm({
   const router = useRouter();
   return (
     <form
+      method="post"
       className="form-stack"
       onSubmit={async (e) => {
         e.preventDefault();
@@ -234,6 +253,7 @@ export function PublicationForm({
       <div>
         <label htmlFor="publicTitle">Título público</label>
         <input
+          disabled={!ready}
           id="publicTitle"
           name="publicTitle"
           onChange={() => {
@@ -253,6 +273,7 @@ export function PublicationForm({
           copies el relato original sin revisarlo.
         </p>
         <textarea
+          disabled={!ready}
           id="publicBody"
           name="publicBody"
           value={body}
@@ -270,6 +291,7 @@ export function PublicationForm({
       </div>
       <label className="checkbox">
         <input
+          disabled={!ready}
           name="privacy"
           type="checkbox"
           required
@@ -283,6 +305,7 @@ export function PublicationForm({
       </label>
       <label className="checkbox">
         <input
+          disabled={!ready}
           name="publish"
           type="checkbox"
           required
@@ -294,7 +317,7 @@ export function PublicationForm({
           no constituye una determinación judicial.
         </span>
       </label>
-      <button className="button" disabled={busy}>
+      <button className="button" disabled={busy || !ready}>
         {busy ? "Publicando…" : "Aprobar y publicar esta versión"} <Arrow />
       </button>
     </form>

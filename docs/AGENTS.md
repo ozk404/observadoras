@@ -63,6 +63,12 @@ Trabajas en **Observadoras Digitales**, una plataforma piloto de monitoreo ciuda
 - En cuestiones sensibles —escala de riesgo, tratamiento de datos reales, permisos amplios, adjuntos sensibles, publicaciones, servicios externos— no inventar una política: registrar el bloqueo en `DECISIONES_PENDIENTES.md` y solicitar definición concreta.
 - No eliminar ni reemplazar trabajo existente para “simplificar” sin revisar impactos.
 
+## Flujo eficiente aprobado (26-10-2026)
+
+Aplicar `DESARROLLO_Y_VALIDACION.md`. Iterar en Docker de desarrollo aislado 3100 con recarga, sin build/up por edición. 3000 conserva la versión empaquetada. Pruebas visuales sin cuentas; interacción con recorridos focalizados; API/permisos/datos con integración del flujo afectado. Usar perfil core de cuatro cuentas solo para phase-one; otros flujos requieren perfiles adecuados. Nunca usar datos reales en desarrollo/pruebas.
+
+Resolver la revisión visual antes de un único build final del incremento. Para frontend, recrear solo app sin dependencias; migraciones/worker únicamente si el alcance lo exige. No repetir suites ni conteos de la base por rutina cuando no cambia almacenamiento. No reconstruir producción por cambios exclusivamente documentales o de tests. Reservar especificaciones/revisiones extensas para decisiones nuevas: no reiniciar brainstorming ni generar un documento por cada microajuste dentro de diseño ya aprobado. Esto aplica la instrucción expresa del usuario de reducir esperas y documentación desproporcionada. Conservar revisión inicial de Git, comprobaciones necesarias y reporte honesto de límites.
+
 ## Definición de terminado para un incremento
 
 El flujo acordado funciona; se comprobaron permisos y protección de datos involucrados; no se introdujeron funcionalidades ajenas; es usable en móvil/escritorio cuando aplica; están documentados los límites; existe una forma clara de verificarlo.
