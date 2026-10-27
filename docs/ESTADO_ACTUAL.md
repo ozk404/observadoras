@@ -43,6 +43,8 @@ Ficha individual modernizada (27-10-2026): retícula de dos columnas para origin
 
 Validación focalizada de ficha: 29 recorridos seleccionados completados en ejecuciones de flujos afectados, con repeticiones de fallos resueltas (recepción/revisión/publicación, IA, ajustes, seguimiento, alertas y capturas). PostgreSQL de desarrollo y proveedor simulado, solo fixtures; revisión visual pendiente/validado/publicado y sin overflow en 320/390/768/1440. TypeScript aprobado. Se recuperó un ENOMEM de Next reiniciando solo app de desarrollo; cuentas de la ejecución interrumpida deshabilitadas. Único build final aprobado (b96330d4dfc3); actualizada solo app, sin migraciones ni reinicio del worker. Smoke empaquetado: health200, detalle redirige sin sesión y captura401. No se ejecutó toda la suite unitaria de servidor. Safari, dispositivos físicos y aceptación visual humana pendientes.
 
+Comparación de reporte/IA ajustada: en escritorio ambos paneles tienen altura común adaptable al viewport (500–720 px) y scroll independiente solo cuando desbordan, con foco de teclado y barras nativas. En móvil/tableta vuelven al flujo normal, sin scroll interno. Así la longitud de la IA no aleja la revisión humana ni deja un hueco bajo la captura. Pruebas focalizadas de ficha y desplazamiento aprobadas: contenidos corto/largo, independencia por teclado, ampliación, estados y cuatro anchos; TypeScript aprobado. Único build final aprobado (18506ef9d936); app actualizada, worker intacto y smoke empaquetado health200/acceso privado protegido. No se repitieron suites de datos sin cambios.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

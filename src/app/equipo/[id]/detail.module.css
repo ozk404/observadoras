@@ -492,3 +492,18 @@
       border-color 0.16s;
   }
 }
+
+@media (min-width: 901px) {
+  .overview:has(> :global(.intake-panel)) {
+    height: clamp(500px, 68dvh, 720px);
+    align-items: stretch;
+  }
+  .overview:has(> :global(.intake-panel)) > section {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
+    scrollbar-color: #b593c5 #f7f2fa;
+  }
+}

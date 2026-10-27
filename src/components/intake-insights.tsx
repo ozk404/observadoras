@@ -60,8 +60,12 @@ export function IntakeInsights({
   }, [id, refresh]);
   const result = analysis?.result;
   return (
-    <section className="form-panel intake-panel">
-      <h2>Análisis inicial de IA</h2>
+    <section
+      className="form-panel intake-panel"
+      tabIndex={0}
+      aria-labelledby="intake-heading"
+    >
+      <h2 id="intake-heading">Análisis inicial de IA</h2>
       <p className="help">
         Sugerencias sobre la descripción y la captura. No verifican los hechos.
       </p>

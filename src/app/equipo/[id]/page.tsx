@@ -133,6 +133,7 @@ export default async function Detail({
             <section
               className={styles.original}
               aria-labelledby="original-title"
+              tabIndex={0}
             >
               <div className={styles.panelHeading}>
                 <h2 id="original-title">Reporte recibido</h2>
