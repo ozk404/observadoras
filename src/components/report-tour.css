@@ -1,0 +1,139 @@
+.report-tour-launch {
+  text-align: center;
+  margin-bottom: -8px;
+}
+.report-tour-launch > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  color: #69088b;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.report-tour-launch > button svg {
+  width: 22px;
+  height: 22px;
+}
+.report-tour-launch > button:hover {
+  background: #fcf8fe;
+  border-color: #69088b;
+}
+.report-tour-launch > button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.report-tour-launch > p {
+  font-size: 14px;
+  color: #675d6e;
+}
+.driver-popover.report-tour-popover {
+  --driver-popover-font-family: "Manrope Variable", sans-serif;
+  box-sizing: border-box;
+  width: 360px;
+  min-width: 0;
+  max-width: calc(100vw - 32px);
+  padding: 28px 24px 20px;
+  border-radius: 12px;
+  border-top: 8px solid #69088b;
+  background: white;
+  color: #271b30;
+  box-shadow: 0 16px 64px #271b3033;
+}
+.report-tour-popover .driver-popover-title {
+  font-family: "Archivo Reportar", sans-serif;
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+  font-weight: 800;
+  padding-right: 24px;
+}
+.report-tour-popover .driver-popover-description {
+  font-family: "Manrope Variable", sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #675d6e;
+}
+.report-tour-popover .driver-popover-title + .driver-popover-description {
+  margin-top: 14px;
+}
+.report-tour-popover .driver-popover-close-btn {
+  width: 44px;
+  height: 44px;
+  top: 4px;
+  right: 4px;
+  color: #69088b;
+  font-size: 26px;
+}
+.report-tour-popover .driver-popover-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eadcf2;
+}
+.report-tour-popover .driver-popover-progress-text {
+  font:
+    750 13px "Manrope Variable",
+    sans-serif;
+  color: #69088b;
+  white-space: nowrap;
+}
+.report-tour-popover .driver-popover-navigation-btns {
+  gap: 8px;
+}
+.report-tour-popover .driver-popover-footer-btn {
+  font:
+    700 14px "Manrope Variable",
+    sans-serif;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+  text-shadow: none;
+  text-align: center;
+  margin: 0;
+  color: #69088b;
+}
+.report-tour-popover .driver-popover-next-btn {
+  background: #69088b;
+  border-color: #69088b;
+  color: white;
+}
+.report-tour-popover .driver-popover-next-btn:hover,
+.report-tour-popover .driver-popover-next-btn:focus {
+  background: #51076b;
+  color: white;
+}
+.report-tour-popover button:focus-visible {
+  outline: 3px solid #69088b;
+  outline-offset: 3px;
+}
+.report-tour-popover .driver-popover-navigation-btns button + button {
+  margin-left: 0;
+}
+@media (max-width: 380px) {
+  .driver-popover.report-tour-popover {
+    padding: 24px 20px 16px;
+  }
+  .report-tour-popover .driver-popover-progress-text {
+    flex-basis: 100%;
+  }
+  .report-tour-popover .driver-popover-footer {
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .report-tour-popover,
+  .report-tour-popover * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

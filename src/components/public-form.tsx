@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MAX_EVIDENCE_BYTES, EVIDENCE_TYPES } from "@/lib/evidence";
 import { Arrow } from "./icons";
+import { ReportTour } from "./report-tour";
 export function PublicForm() {
   const [token, setToken] = useState("");
   const [failure, setFailure] = useState("");
@@ -128,6 +129,7 @@ export function PublicForm() {
       className="form-stack"
       encType="multipart/form-data"
     >
+      <ReportTour disabled={busy} />
       {failure && (
         <div role="alert" tabIndex={-1} ref={feedback} className="error">
           {failure}
@@ -138,6 +140,7 @@ export function PublicForm() {
           Captura o imagen <span>(obligatoria)</span>
         </label>
         <div
+          data-report-tour="capture"
           className={`capture-surface${dragging ? " is-dragging" : ""}${preview ? " has-image" : ""}`}
           onDragEnter={(event) => {
             event.preventDefault();
@@ -265,7 +268,7 @@ export function PublicForm() {
           {uploadError || fields.evidence?.[0]}
         </p>
       </div>
-      <div>
+      <div data-report-tour="url">
         <label htmlFor="sourceUrl">
           URL de la publicación o fuente <span>(opcional)</span>
         </label>
@@ -280,7 +283,7 @@ export function PublicForm() {
         />
         <FieldError name="sourceUrl" fields={fields} />
       </div>
-      <div>
+      <div data-report-tour="description">
         <label htmlFor="description">
           Descripción de lo ocurrido <span>(obligatoria)</span>
         </label>
@@ -312,7 +315,7 @@ export function PublicForm() {
           defaultValue=""
         />
       </div>
-      <label className="checkbox">
+      <label className="checkbox" data-report-tour="consent">
         <input type="checkbox" name="consent" required />
         <span>
           Acepto el{" "}
@@ -325,7 +328,11 @@ export function PublicForm() {
         </span>
       </label>
       <div className="form-actions">
-        <button className="button" disabled={busy || !token}>
+        <button
+          className="button"
+          data-report-tour="submit"
+          disabled={busy || !token}
+        >
           {busy ? "Enviando…" : "Enviar a revisión"} <Arrow />
         </button>
       </div>
