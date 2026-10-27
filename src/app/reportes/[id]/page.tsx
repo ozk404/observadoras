@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { publication } from "@/server/reports";
+import { PublicImage } from "@/components/public-image";
 import { Arrow } from "@/components/icons";
 import styles from "./publication.module.css";
 export const dynamic = "force-dynamic";
@@ -28,6 +29,12 @@ export default async function PublicDetail({
         </div>
         <h1>{row.title}</h1>
       </header>
+      {row.image_asset_id && (
+        <PublicImage
+          assetId={row.image_asset_id}
+          description={row.image_description || "Imagen pública revisada"}
+        />
+      )}
       <div className={styles.body}>{row.body}</div>
       <footer className={styles.footer}>
         <p>Esta publicación no constituye una determinación judicial.</p>

@@ -73,4 +73,15 @@ Validación focalizada: catálogo → publicación por teclado → catálogo, au
 
 ## Trazabilidad
 
-Migraciones 001–011 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
+Migraciones 001–012 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
+
+
+## Imágenes públicas aprobadas (27-10-2026)
+
+La publicación admite una imagen opcional, preparada fuera de la plataforma y autorizada expresamente por una revisora. En una ficha publicada, «Imagen pública» permite añadir, reemplazar o retirar esa copia. El catálogo muestra una miniatura y el detalle permite ampliarla conservando sus proporciones. Los reportes anteriores no reciben imágenes automáticamente.
+
+La copia tiene almacenamiento, identificador y aprobación separados del original privado. Requiere descripción y confirmación de privacidad/autorización; el consentimiento de análisis con IA no autoriza publicación. Se normaliza a WebP sin metadatos, con límites de 5 MiB y 20 megapíxeles. Reemplazar o retirar invalida la URL anterior; las copias descargadas por terceros no se pueden recuperar. No se incluye un editor de ocultamiento de datos.
+
+La migración 012 es aditiva. La primera imagen se guarda atómicamente con la publicación; los cambios posteriores usan versión propia y auditoría, sin modificar el original ni la versión del reporte. Ver `docs/superpowers/specs/2026-10-27-public-images-design.md`.
+
+Validación focalizada con datos ficticios: publicación con imagen, catálogo/detalle/ampliación, reemplazo y retirada; originales intactos, permisos, entradas inválidas, versiones y concurrencia. Compatibilidad con publicación sin imagen y validación humana aprobadas. Revisión visual en 320/390/1440 y TypeScript aprobados. Único build final aprobado (9390973b5eed); migración 012 aplicada y solo app recreada. Smoke empaquetado aprobado: health/catálogo/detalle público y ficha/API privada autenticadas200; imagen inexistente404 y original sin sesión401. Sesión temporal eliminada, app healthy y worker intacto. Safari, dispositivos físicos y aceptación institucional pendientes.

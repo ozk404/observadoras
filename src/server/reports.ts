@@ -1,3 +1,4 @@
+import { insertPublicationImage } from "./publication-images";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { db } from "./db";
@@ -352,13 +353,27 @@ export async function validateReport(user: User, id: string, input: unknown) {
     );
   return result.rows[0];
 }
-export async function publishReport(user: User, id: string, input: unknown) {
+export async function publishReport(
+  user: User,
+  id: string,
+  input: unknown,
+  image?: import("./publication-images").ApprovedImage,
+) {
   if (user.role !== "reviewer")
     throw new HttpError(403, "No tienes permiso para publicar.");
   const data = publicationInput.parse(input);
   const client = await db.connect();
   try {
     await client.query("BEGIN");
+    if (
+      !(
+        await client.query(
+          "SELECT id FROM users WHERE id=$1 AND enabled AND role='reviewer' FOR SHARE",
+          [user.id],
+        )
+      ).rowCount
+    )
+      throw new HttpError(403, "Tu cuenta no puede publicar.");
     const result = await client.query(
       `UPDATE reports SET status='published',version=version+1,updated_at=now()
       WHERE id=$1 AND status='validated' AND version=$2
@@ -375,6 +390,13 @@ export async function publishReport(user: User, id: string, input: unknown) {
       "INSERT INTO publications(id,report_id,title,body,published_by) VALUES($1,$2,$3,$4,$5)",
       [publicationId, id, data.title, data.body, user.id],
     );
+    if (image) {
+      await client.query(
+        "UPDATE publications SET image_version=1 WHERE id=$1",
+        [publicationId],
+      );
+      await insertPublicationImage(client, publicationId, user.id, image, 1);
+    }
     await client.query(
       "INSERT INTO report_events(id,report_id,actor_id,action) VALUES($1,$2,$3,$4)",
       [randomUUID(), id, user.id, "published"],
@@ -396,8 +418,10 @@ export async function publications(page = 1) {
       title: string;
       body: string;
       published_at: Date;
+      image_asset_id: string | null;
+      image_description: string | null;
     }>(
-      "SELECT id,title,body,published_at FROM publications ORDER BY published_at DESC,id LIMIT 13 OFFSET $1",
+      "SELECT p.id,p.title,p.body,p.published_at,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id ORDER BY p.published_at DESC,p.id LIMIT 13 OFFSET $1",
       [(page - 1) * 12],
     )
   ).rows;
@@ -411,9 +435,12 @@ export async function publication(id: string) {
         title: string;
         body: string;
         published_at: Date;
-      }>("SELECT id,title,body,published_at FROM publications WHERE id=$1", [
-        id,
-      ])
+        image_asset_id: string | null;
+        image_description: string | null;
+      }>(
+        "SELECT p.id,p.title,p.body,p.published_at,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.id=$1",
+        [id],
+      )
     ).rows[0] ?? null
   );
 }

@@ -207,3 +207,12 @@ Dimensiones a cubrir cuando existan los datos: categoría; territorio; població
 ## 11. Decisiones no resueltas
 
 Antes de cerrar reglas de negocio permanentes, confirmar con Fundación: matriz de roles, ficha oficial, taxonomía, escala de riesgo, evidencias, estados de seguimiento, visibilidad del dashboard, criterios de agregación/anonimización y condiciones para usar servicios externos de IA. Ver `DECISIONES_PENDIENTES.md`.
+
+
+## Imágenes públicas aprobadas (27-10-2026)
+
+La publicación admite una imagen opcional, preparada fuera de la plataforma y autorizada expresamente por una revisora. En una ficha publicada, «Imagen pública» permite añadir, reemplazar o retirar esa copia. El catálogo muestra una miniatura y el detalle permite ampliarla conservando sus proporciones. Los reportes anteriores no reciben imágenes automáticamente.
+
+La copia tiene almacenamiento, identificador y aprobación separados del original privado. Requiere descripción y confirmación de privacidad/autorización; el consentimiento de análisis con IA no autoriza publicación. Se normaliza a WebP sin metadatos, con límites de 5 MiB y 20 megapíxeles. Reemplazar o retirar invalida la URL anterior; las copias descargadas por terceros no se pueden recuperar. No se incluye un editor de ocultamiento de datos.
+
+La migración 012 es aditiva. La primera imagen se guarda atómicamente con la publicación; los cambios posteriores usan versión propia y auditoría, sin modificar el original ni la versión del reporte. Ver `docs/superpowers/specs/2026-10-27-public-images-design.md`.

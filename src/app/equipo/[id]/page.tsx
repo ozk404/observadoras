@@ -17,6 +17,8 @@ import { FollowupPanel } from "@/components/followup-panel";
 import { getAlertContext } from "@/server/alert-drafts";
 import { AlertDraftForm } from "@/components/alert-draft-form";
 import { EvidencePreview } from "@/components/evidence-preview";
+import { publicImageContext } from "@/server/publication-images";
+import { PublicImagePanel } from "@/components/public-image-panel";
 import styles from "./detail.module.css";
 export default async function Detail({
   params,
@@ -45,6 +47,10 @@ export default async function Detail({
   const alertContext = canFollowup
     ? await getAlertContext(user, report.id)
     : null;
+  const imageContext =
+    user.role === "reviewer" && report.status === "published"
+      ? await publicImageContext(report.id)
+      : null;
   const date = new Intl.DateTimeFormat("es-GT", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -246,6 +252,11 @@ export default async function Detail({
                   canPublish={report.status === "validated"}
                 />
               </div>
+              {imageContext && (
+                <div className={styles.publication}>
+                  <PublicImagePanel id={report.id} context={imageContext} />
+                </div>
+              )}
               {canFollowup && (
                 <div className={styles.operations}>
                   <div id="seguimiento">

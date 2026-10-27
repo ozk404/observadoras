@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
+import { PublicImagePicker } from "./public-image-picker";
 import { Arrow } from "./icons";
 function useFormReady() {
   const [ready, setReady] = useState(false);
@@ -225,6 +226,9 @@ export function PublicationForm({
   bodyRevision?: number;
 }) {
   const ready = useFormReady();
+  const [image, setImage] = useState<File | null>(null);
+  const [imageDescription, setImageDescription] = useState("");
+  const [imageConfirmed, setImageConfirmed] = useState(false);
   const [body, setBody] = useState(initialBody);
   const [privacyConfirmed, setPrivacyConfirmed] = useState(false);
   const [publicationConfirmed, setPublicationConfirmed] = useState(false);
@@ -244,7 +248,7 @@ export function PublicationForm({
         e.preventDefault();
         if (
           !window.confirm(
-            "¿Publicar esta versión revisada? Su título y texto serán visibles para cualquier persona.",
+            "¿Publicar esta versión revisada? El título, el texto y la imagen seleccionada serán visibles para cualquier persona.",
           )
         )
           return;
@@ -252,13 +256,30 @@ export function PublicationForm({
         setError("");
         const data = new FormData(e.currentTarget);
         try {
-          await send(`/api/privado/registros/${id}/publicacion`, {
+          const input = {
             title: data.get("publicTitle"),
             body: data.get("publicBody"),
             privacyConfirmed: data.get("privacy") === "on",
             publicationConfirmed: data.get("publish") === "on",
             version,
-          });
+          };
+          if (image) {
+            if (!imageConfirmed)
+              throw Error("Confirma la revisión de la imagen pública.");
+            const form = new FormData();
+            for (const [key, value] of Object.entries(input))
+              form.set(key, String(value));
+            form.set("image", image);
+            form.set("imageDescription", imageDescription);
+            form.set("imageConfirmed", String(imageConfirmed));
+            const response = await fetch(
+              `/api/privado/registros/${id}/publicacion`,
+              { method: "POST", body: form },
+            );
+            const result = await response.json();
+            if (!response.ok)
+              throw Error(result.error || "No se pudo publicar.");
+          } else await send(`/api/privado/registros/${id}/publicacion`, input);
           router.refresh();
         } catch (error) {
           setError((error as Error).message);
@@ -275,7 +296,7 @@ export function PublicationForm({
       <div>
         <label htmlFor="publicTitle">Título público</label>
         <input
-          disabled={!ready}
+          disabled={!ready || busy}
           id="publicTitle"
           name="publicTitle"
           onChange={() => {
@@ -295,7 +316,7 @@ export function PublicationForm({
           copies el relato original sin revisarlo.
         </p>
         <textarea
-          disabled={!ready}
+          disabled={!ready || busy}
           id="publicBody"
           name="publicBody"
           value={body}
@@ -311,9 +332,18 @@ export function PublicationForm({
           aria-describedby="public-help"
         />
       </div>
+      <PublicImagePicker
+        file={image}
+        onFile={setImage}
+        description={imageDescription}
+        onDescription={setImageDescription}
+        confirmed={imageConfirmed}
+        onConfirmed={setImageConfirmed}
+        disabled={!ready || busy}
+      />
       <label className="checkbox">
         <input
-          disabled={!ready}
+          disabled={!ready || busy}
           name="privacy"
           type="checkbox"
           required
@@ -327,7 +357,7 @@ export function PublicationForm({
       </label>
       <label className="checkbox">
         <input
-          disabled={!ready}
+          disabled={!ready || busy}
           name="publish"
           type="checkbox"
           required

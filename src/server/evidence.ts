@@ -10,8 +10,7 @@ export type Evidence = {
 };
 let processing = 0;
 export async function normalizeEvidence(file: File): Promise<Evidence> {
-  if (!file.size)
-    throw new HttpError(400, "Adjunta una captura o imagen.");
+  if (!file.size) throw new HttpError(400, "Adjunta una captura o imagen.");
   if (file.size > MAX_EVIDENCE_BYTES)
     throw new HttpError(413, "La imagen debe pesar como máximo 5 MB.");
   if (!EVIDENCE_TYPES.includes(file.type))
@@ -72,13 +71,13 @@ export async function normalizeEvidence(file: File): Promise<Evidence> {
     processing--;
   }
 }
-export async function readEvidenceForm(request: Request) {
+export async function readEvidenceForm(
+  request: Request,
+  allowedFields?: readonly string[],
+) {
   const contentType = request.headers.get("content-type");
   if (!contentType?.startsWith("multipart/form-data;"))
-    throw new HttpError(
-      415,
-      "Envía la descripción y la imagen desde el formulario.",
-    );
+    throw new HttpError(415, "Envía el formulario con la imagen.");
   const maximum = 6 * 1024 * 1024;
   if (Number(request.headers.get("content-length")) > maximum)
     throw new HttpError(
@@ -110,7 +109,7 @@ export async function readEvidenceForm(request: Request) {
       "No pudimos leer el formulario. Inténtalo de nuevo.",
     );
   }
-  const allowed = [
+  const allowed = allowedFields ?? [
     "description",
     "sourceUrl",
     "consent",

@@ -138,3 +138,12 @@ No es necesario que cada función sea una ruta o pantalla separada.
 **Incremento autorizado 26-10-2026:** nuevas denuncias públicas declaradas ficticias reciben análisis automático de descripción y captura. La revisora ve categorías, pertinencia, observaciones y faltantes. Cola persistente y campos de decisión humana separados. No se certifica verdad, no se analizan registros previos ni se publica automáticamente. Ver `IA-INICIAL-DISENO.md`.
 
 **Actualización autorizada 26-10-2026:** la interfaz adopta «reporte». Se retira el requisito de contenido ficticio y el usuario autoriza descripción y captura reales para OpenAI con consentimiento explícito, fecha y versión del aviso. Rutas `/reportar` y `/reportes`, con redirecciones de enlaces anteriores. Originales privados y publicación humana independiente. No se reinterpretan consentimientos históricos; las pruebas técnicas siguen usando fixtures ficticios. Ver `superpowers/specs/2026-10-26-real-reports-design.md`.
+
+
+## Imágenes públicas aprobadas (27-10-2026)
+
+La publicación admite una imagen opcional, preparada fuera de la plataforma y autorizada expresamente por una revisora. En una ficha publicada, «Imagen pública» permite añadir, reemplazar o retirar esa copia. El catálogo muestra una miniatura y el detalle permite ampliarla conservando sus proporciones. Los reportes anteriores no reciben imágenes automáticamente.
+
+La copia tiene almacenamiento, identificador y aprobación separados del original privado. Requiere descripción y confirmación de privacidad/autorización; el consentimiento de análisis con IA no autoriza publicación. Se normaliza a WebP sin metadatos, con límites de 5 MiB y 20 megapíxeles. Reemplazar o retirar invalida la URL anterior; las copias descargadas por terceros no se pueden recuperar. No se incluye un editor de ocultamiento de datos.
+
+La migración 012 es aditiva. La primera imagen se guarda atómicamente con la publicación; los cambios posteriores usan versión propia y auditoría, sin modificar el original ni la versión del reporte. Ver `docs/superpowers/specs/2026-10-27-public-images-design.md`.

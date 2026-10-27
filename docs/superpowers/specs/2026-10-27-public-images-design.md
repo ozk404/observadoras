@@ -1,0 +1,13 @@
+# Imagen pública opcional y revisada
+
+Autorización: usuario aprueba imagen pública opcional preparada y aprobada por una revisora, separada del original. No publicar automáticamente imágenes existentes ni interpretar consentimiento de IA como permiso de publicación.
+
+- Revisora sube una copia ya preparada con datos sensibles ocultos; no se implementa un editor gráfico. Interfaz explica este paso y exige descripción accesible y confirmación explícita de privacidad/autorización antes de publicar. No hay botón de copiar original ni fallback.
+- Publicación nueva: imagen opcional mediante multipart; título/texto/imagen aprobados e insertados atómicamente. JSON sin imagen conserva compatibilidad. Sin imagen, no se exigen campos de imagen.
+- Publicación existente: cargar, reemplazar o retirar copia mediante endpoint privado para revisoras. Control optimista de versión propia de imagen; no modifica versión/contenido original, estado humano, seguimiento ni alertas. Roles/cuenta activa comprobados otra vez en transacción.
+- Almacenamiento separado `publication_images`, FK a publicación y UUID de asset independiente. Tabla de eventos de imagen guarda actor/fecha/acción/versión, sin cuerpos. Original `report_evidence` intacto. Versionado propio en publications para conflictos y retirada/recreación.
+- Normalización existente PNG/JPG/WebP <=5MiB/20MP estática y sin metadatos, formulario acotado y campos estrictos/no duplicados. Sin análisis IA ni envío a servicios externos.
+- GET público por UUID de asset consulta exclusivamente copia pública unida a publicación; miniatura opcional fija. Cache-Control no-store, nosniff; jamás usa IDs de reportes para servir originales. Reemplazo rota UUID y retirada elimina el asset: URLs antiguas devuelven404; no se promete borrar copias que otras personas hayan guardado.
+- Catálogo muestra miniatura solo si existe; detalle ofrece imagen completa con proporción conservada y ampliación. No inventar imágenes para publicaciones sin copia.
+- Aviso de privacidad y copy distinguen captura original privada/copia pública expresamente autorizada; consentimientos históricos no se reinterpretan. No cambia versión del aviso de IA porque no cambia su tratamiento; autorización de copia registrada aparte con su versión.
+- Pruebas aisladas: original privado401/404, publicación sin imagen, confirmaciones faltantes, campos/tipos/tamaño, permisos, versión y concurrencia, atomicidad, retirada/URL antigua404, conservación hash original, recodificación, proporciones y uso en catálogo/detalle. Migración aditiva y un build final; worker no requiere reinicio.

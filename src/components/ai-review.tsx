@@ -230,8 +230,8 @@ export function AiReview({
         <section className="form-panel">
           <h2>Preparar versión pública</h2>
           <p>
-            Solo el título y el texto que apruebes serán públicos. La captura y
-            el original permanecen privados.
+            Aprueba el título, el texto y, si la incluyes, una copia pública de
+            la imagen. El original permanece privado.
           </p>
           <PublicationForm
             id={id}

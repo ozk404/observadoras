@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { publications } from "@/server/reports";
 import { Arrow } from "@/components/icons";
+import { PublicImageThumbnail } from "@/components/public-image-thumbnail";
 import styles from "./catalog.module.css";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Reportes revisados" };
@@ -26,8 +27,9 @@ export default async function Catalog({
         <div>
           <h1>Reportes revisados</h1>
           <p>
-            Publicaciones aprobadas por el equipo del observatorio. Las capturas
-            y los originales permanecen privados.
+            Publicaciones aprobadas por el equipo del observatorio. Los
+            originales permanecen privados; las imágenes públicas se revisan por
+            separado.
           </p>
         </div>
         <Link href="/reportar" className={styles.report}>
@@ -38,6 +40,15 @@ export default async function Catalog({
         <section className={styles.grid} aria-label="Publicaciones revisadas">
           {rows.slice(0, 12).map((row) => (
             <article className={styles.card} key={row.id}>
+              {row.image_asset_id && (
+                <PublicImageThumbnail
+                  className={styles.image}
+                  assetId={row.image_asset_id}
+                  description={
+                    row.image_description || "Imagen pública revisada"
+                  }
+                />
+              )}
               <time dateTime={row.published_at.toISOString()}>
                 {date.format(row.published_at)}
               </time>
