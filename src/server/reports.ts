@@ -163,7 +163,33 @@ export async function createReport(
     client.release();
   }
 }
-export async function listReports(user: User, page = 1) {
+export const reportStatuses = [
+  "draft",
+  "pending",
+  "needs_adjustments",
+  "validated",
+  "published",
+] as const;
+export type ReportStatus = (typeof reportStatuses)[number];
+
+export async function reportQueueCounts(user: User) {
+  const counts: Record<ReportStatus, number> = {
+    draft: 0,
+    pending: 0,
+    needs_adjustments: 0,
+    validated: 0,
+    published: 0,
+  };
+  const result = await db.query<{ status: ReportStatus; total: string }>(
+    `SELECT status,count(*) AS total FROM reports
+     WHERE author_id=$1 OR ($2='reviewer' AND status<>'draft') GROUP BY status`,
+    [user.id, user.role],
+  );
+  for (const row of result.rows) counts[row.status] = Number(row.total);
+  return counts;
+}
+
+export async function listReports(user: User, page = 1, status?: ReportStatus) {
   return (
     await db.query<
       Pick<
@@ -178,8 +204,9 @@ export async function listReports(user: User, page = 1) {
       >
     >(
       `SELECT id,title,description,author_id,status,version,created_at FROM reports
-    WHERE author_id=$1 OR ($2='reviewer' AND status<>'draft') ORDER BY created_at DESC,id LIMIT 21 OFFSET $3`,
-      [user.id, user.role, (page - 1) * 20],
+    WHERE (author_id=$1 OR ($2='reviewer' AND status<>'draft'))
+    AND ($4::text IS NULL OR status=$4) ORDER BY created_at DESC,id LIMIT 21 OFFSET $3`,
+      [user.id, user.role, (page - 1) * 20, status ?? null],
     )
   ).rows;
 }

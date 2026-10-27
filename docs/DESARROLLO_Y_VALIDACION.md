@@ -45,6 +45,7 @@ node scripts/dev.mjs ui home-v2.spec.ts
 node scripts/dev.mjs ui --grep "welcome"
 # Flujo principal: cuatro cuentas temporales, deshabilitadas al terminar
 node scripts/dev.mjs auth --fixtures=core phase-one.spec.ts
+node scripts/dev.mjs auth --fixtures=core team-queue.spec.ts
 # Integración que necesita worker y simulación de IA
 node scripts/dev.mjs auth --ai --fixtures=all intake.spec.ts
 ```

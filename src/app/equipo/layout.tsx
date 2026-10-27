@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { currentUser } from "@/server/auth";
 import { Logout } from "@/components/private-forms";
+import { TeamNavigation } from "@/components/team-navigation";
 export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Área privada",
@@ -26,12 +27,7 @@ export default async function TeamLayout({
           <Logout />
         </div>
       </div>
-      {user.role === "reviewer" && (
-        <nav className="private-nav" aria-label="Área de revisión">
-          <Link href="/equipo">Reportes</Link>
-          <Link href="/equipo/dashboard">Resumen</Link>
-        </nav>
-      )}
+      {user.role === "reviewer" && <TeamNavigation />}
       {children}
     </div>
   );

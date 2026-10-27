@@ -1,0 +1,405 @@
+@font-face {
+  font-family: "Archivo Equipo";
+  src: url("../fonts/archivo-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+.page {
+  color: #271b30;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.heading h1 {
+  font-family: "Archivo Equipo", sans-serif;
+  font-size: clamp(32px, 3.2vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -1.4px;
+  font-weight: 800;
+  margin: 0;
+}
+.heading :global(.button) {
+  min-height: 52px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  background: #69088b;
+  color: white;
+  font-size: 14px;
+}
+.filters {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.filters a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  min-height: 52px;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #675d6e;
+}
+.filters a span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  min-height: 26px;
+  padding-inline: 5px;
+  border-radius: 6px;
+  background: #f4edf7;
+  color: #69088b;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.filters a:hover {
+  background: #fcf8fe;
+  border-color: #69088b;
+}
+.filters a[aria-current] {
+  background: #69088b;
+  color: white;
+  border-color: #69088b;
+}
+.filters a[aria-current] span {
+  color: white;
+  background: #ffffff26;
+}
+.records {
+  border: 1px solid #d9ccdf;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.columns,
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 208px 128px 112px 20px;
+  gap: 24px;
+  align-items: center;
+  padding: 16px 24px;
+}
+.columns {
+  background: #fcfafd;
+  border-bottom: 1px solid #d9ccdf;
+  font-size: 12px;
+  font-weight: 750;
+  color: #675d6e;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.list li + li {
+  border-top: 1px solid #eadcf2;
+}
+.row {
+  min-height: 100px;
+  padding-block: 24px;
+  text-decoration: none;
+  color: #271b30;
+}
+.row:hover {
+  background: #fcf8fe;
+}
+.row h2 {
+  font-size: 17px;
+  line-height: 1.5;
+  font-weight: 750;
+  letter-spacing: -0.25px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.row > svg {
+  color: #69088b;
+}
+.origin,
+.date {
+  font-size: 13px;
+  color: #675d6e;
+  line-height: 1.6;
+}
+.state :global(.status) {
+  font-size: 12px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  line-height: 1.4;
+}
+.state :global(.status.draft) {
+  background: #f0edf2;
+  color: #675d6e;
+}
+.state :global(.status.validated) {
+  background: #eadcf2;
+  color: #69088b;
+}
+.state :global(.status.needs_adjustments) {
+  background: #fff0e5;
+  color: #85431a;
+}
+.empty {
+  padding: 64px 24px;
+  text-align: center;
+}
+.empty > div {
+  width: 64px;
+  height: 64px;
+  background: #fcf8fe;
+  border-radius: 12px;
+  color: #69088b;
+  padding: 8px;
+  margin: 0 auto 24px;
+}
+.empty svg {
+  width: 100%;
+  height: 100%;
+}
+.empty h2 {
+  font-family: "Archivo Equipo", sans-serif;
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.empty a {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 14px;
+  color: #69088b;
+  font-weight: 700;
+}
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+  color: #675d6e;
+}
+.pagination > div {
+  display: flex;
+  gap: 12px;
+}
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #69088b;
+  font-weight: 700;
+}
+.page a:focus-visible {
+  outline: 3px solid #69088b;
+  outline-offset: 3px;
+}
+.row:focus-visible {
+  outline-offset: -3px;
+  background: #fcf8fe;
+}
+:global(body):has(.page) :global(main > .wrap.page-space) {
+  width: min(1280px, calc(100% - 64px));
+  padding-block: 32px 64px;
+}
+:global(body):has(.page) :global(.private-bar) {
+  margin-bottom: 16px;
+  padding-bottom: 0;
+  border: 0;
+  align-items: center;
+  font-size: 13px;
+}
+:global(body):has(.page) :global(.private-bar > div) {
+  align-items: center;
+  gap: 20px;
+}
+:global(body):has(.page) :global(.private-bar a),
+:global(body):has(.page) :global(.private-bar button) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+:global(body):has(.page) :global(.private-nav) {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  background: #69088b;
+  border: 0;
+  border-radius: 10px;
+  padding: 6px;
+  gap: 6px;
+  margin: 0 0 32px;
+}
+:global(body):has(.page) :global(.private-nav a) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+:global(body):has(.page) :global(.private-nav a[aria-current]) {
+  background: white;
+  color: #69088b;
+}
+:global(body):has(.page) :global(.site-header nav a) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+:global(body):has(.page) :global(.wordmark > span) {
+  font-family: "Archivo Equipo", sans-serif;
+  font-weight: 800;
+}
+:global(body):has(.page) :global(.site-footer) {
+  font-size: 13px;
+}
+@media (max-width: 1100px) {
+  .columns,
+  .row {
+    grid-template-columns: minmax(0, 1fr) 192px 112px 96px 20px;
+    gap: 16px;
+    padding-inline: 20px;
+  }
+  .filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 900px) {
+  .columns {
+    display: none;
+  }
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "title arrow" "state state" "origin date";
+    gap: 12px 16px;
+    padding: 20px;
+  }
+  .row h2 {
+    grid-area: title;
+  }
+  .state {
+    grid-area: state;
+  }
+  .origin {
+    grid-area: origin;
+  }
+  .date {
+    grid-area: date;
+    text-align: right;
+  }
+  .row > svg {
+    grid-area: arrow;
+    align-self: start;
+    margin-top: 3px;
+  }
+}
+@media (max-width: 600px) {
+  :global(body):has(.page) :global(main > .wrap.page-space) {
+    width: calc(100% - 40px);
+    padding-top: 20px;
+  }
+  .heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  .heading :global(.button) {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .filters a {
+    padding: 10px;
+    font-size: 13px;
+  }
+  .row h2 {
+    font-size: 16px;
+  }
+  .row {
+    padding: 20px 16px;
+  }
+  :global(body):has(.page) :global(.private-bar) {
+    flex-wrap: wrap;
+    gap: 0 16px;
+  }
+  :global(body):has(.page) :global(.private-bar > div) {
+    justify-content: space-between;
+    width: 100%;
+  }
+  :global(body):has(.page) :global(.private-nav) {
+    width: 100%;
+    margin-bottom: 28px;
+  }
+  :global(body):has(.page) :global(.private-nav a) {
+    justify-content: center;
+    flex: 1;
+    padding-inline: 12px;
+  }
+  :global(body):has(.page) :global(.site-header nav) {
+    flex-wrap: wrap;
+  }
+  .pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .pagination > div {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+:global(body):has(.page) :global(.private-bar > div > span) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:global(body):has(.page) :global(.private-bar > div > div) {
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  :global(body):has(.page) :global(.site-header .header-inner) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px;
+    padding-block: 18px;
+  }
+  :global(body):has(.page) :global(.site-header nav) {
+    width: auto;
+    flex-shrink: 0;
+    margin: 0;
+  }
+  :global(body):has(.page) :global(.site-header nav a[href="/reportar"]),
+  :global(body):has(.page) :global(.site-header nav a[href="/ingreso"]) {
+    display: none;
+  }
+  :global(body):has(.page) :global(.private-bar > a) {
+    display: none;
+  }
+}

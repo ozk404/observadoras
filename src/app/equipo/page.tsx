@@ -1,79 +1,161 @@
 import Link from "next/link";
 import { requireUser } from "@/server/auth";
-import { listReports } from "@/server/reports";
+import {
+  listReports,
+  reportQueueCounts,
+  reportStatuses,
+  type ReportStatus,
+} from "@/server/reports";
 import { Arrow } from "@/components/icons";
 import { Status } from "@/components/status";
+import styles from "./queue.module.css";
+export const metadata = { title: "Reportes del equipo" };
+const filterLabels: Record<ReportStatus, string> = {
+  draft: "Borradores",
+  pending: "Pendientes",
+  needs_adjustments: "Por ajustar",
+  validated: "Validados",
+  published: "Publicados",
+};
+function queueUrl(page = 1, status?: ReportStatus) {
+  const params = new URLSearchParams();
+  if (status) params.set("estado", status);
+  if (page > 1) params.set("pagina", String(page));
+  return `/equipo${params.size ? `?${params}` : ""}`;
+}
 export default async function Queue({
   searchParams,
 }: {
-  searchParams: Promise<{ pagina?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const user = await requireUser();
   const params = await searchParams;
   const page = Math.max(
     1,
-    Math.min(10000, Number.parseInt(params.pagina ?? "1") || 1),
+    Math.min(
+      10000,
+      Number.parseInt(
+        typeof params.pagina === "string" ? params.pagina : "1",
+      ) || 1,
+    ),
   );
-  const reports = await listReports(user, page);
+  const status = reportStatuses.find((status) => status === params.estado);
+  const [reports, counts] = await Promise.all([
+    listReports(user, page, status),
+    reportQueueCounts(user),
+  ]);
+  const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+  const rows = reports.slice(0, 20);
+  const date = new Intl.DateTimeFormat("es-GT", {
+    dateStyle: "medium",
+    timeZone: "America/Guatemala",
+  });
   return (
-    <>
-      <div className="queue-heading">
-        <div>
-          <span className="eyebrow">Información restringida</span>
-          <h1>
-            {user.role === "reviewer"
-              ? "Registros y revisión"
-              : "Mis registros"}
-          </h1>
-          <p>
-            {user.role === "reviewer"
-              ? "Revisa los envíos recibidos. Los borradores de otras personas permanecen privados."
-              : "Guarda un borrador o envía tu registro al equipo del observatorio."}
-          </p>
-        </div>
+    <div className={styles.page}>
+      <header className={styles.heading}>
+        <h1>{user.role === "reviewer" ? "Reportes" : "Mis reportes"}</h1>
         <Link className="button" href="/equipo/nuevo">
           Nuevo registro <Arrow />
         </Link>
-      </div>
-      {reports.length ? (
-        <div className="report-list">
-          {reports.slice(0, 20).map((report) => (
-            <Link
-              className="report-row"
-              key={report.id}
-              href={`/equipo/${report.id}`}
-            >
-              <div>
-                <Status status={report.status} />
-                <h2>{report.title}</h2>
-                <span className="help">
-                  {report.author_id ? "Registro interno" : "Envío sin cuenta"} ·{" "}
-                  {new Intl.DateTimeFormat("es-GT", {
-                    dateStyle: "medium",
-                    timeZone: "America/Guatemala",
-                  }).format(report.created_at)}
-                </span>
-              </div>
-              <Arrow />
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="empty-state">
-          <h2>No hay registros en esta página.</h2>
-          <p>
-            Los registros que tengas permiso para consultar aparecerán aquí.
-          </p>
-        </div>
+      </header>
+      <nav className={styles.filters} aria-label="Filtrar reportes por estado">
+        <Link href={queueUrl()} aria-current={!status ? "page" : undefined}>
+          Todos <span>{total}</span>
+        </Link>
+        {reportStatuses.map((value) => (
+          <Link
+            key={value}
+            href={queueUrl(1, value)}
+            aria-current={status === value ? "page" : undefined}
+          >
+            {filterLabels[value]} <span>{counts[value]}</span>
+          </Link>
+        ))}
+      </nav>
+      <section className={styles.records} aria-label="Listado de reportes">
+        {rows.length ? (
+          <>
+            <div className={styles.columns} aria-hidden="true">
+              <span>Reporte</span>
+              <span>Estado</span>
+              <span>Origen</span>
+              <span>Fecha</span>
+              <span />
+            </div>
+            <ol className={styles.list}>
+              {rows.map((report) => (
+                <li key={report.id}>
+                  <Link className={styles.row} href={`/equipo/${report.id}`}>
+                    <h2>{report.title}</h2>
+                    <div className={styles.state}>
+                      <Status status={report.status} />
+                    </div>
+                    <span className={styles.origin}>
+                      {report.author_id
+                        ? "Registro interno"
+                        : "Envío sin cuenta"}
+                    </span>
+                    <time
+                      className={styles.date}
+                      dateTime={report.created_at.toISOString()}
+                    >
+                      {date.format(report.created_at)}
+                    </time>
+                    <Arrow />
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          </>
+        ) : (
+          <div className={styles.empty}>
+            <div aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none">
+                <rect
+                  x="11"
+                  y="7"
+                  width="26"
+                  height="34"
+                  rx="4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M18 17h12M18 24h12M18 31h7"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <h2>
+              {page > 1
+                ? "No hay reportes en esta página."
+                : status
+                  ? "No hay reportes en este estado."
+                  : "Aún no hay reportes."}
+            </h2>
+            {page > 1 && (
+              <Link href={queueUrl()}>
+                Ver todos los reportes <Arrow />
+              </Link>
+            )}
+          </div>
+        )}
+      </section>
+      {(page > 1 || reports.length > 20) && (
+        <nav className={styles.pagination} aria-label="Paginación de reportes">
+          <span>Página {page}</span>
+          <div>
+            {page > 1 && (
+              <Link href={queueUrl(page - 1, status)}>← Anterior</Link>
+            )}
+            {reports.length > 20 && (
+              <Link href={queueUrl(page + 1, status)}>Siguiente →</Link>
+            )}
+          </div>
+        </nav>
       )}
-      <div className="pagination">
-        {page > 1 && (
-          <Link href={`/equipo?pagina=${page - 1}`}>← Anterior</Link>
-        )}
-        {reports.length > 20 && (
-          <Link href={`/equipo?pagina=${page + 1}`}>Siguiente →</Link>
-        )}
-      </div>
-    </>
+    </div>
   );
 }
