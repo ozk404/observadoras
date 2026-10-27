@@ -32,6 +32,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.art} aria-hidden="true">
+          <div className={styles.artInset} />
           <Image
             src={heroIllustration}
             alt=""
