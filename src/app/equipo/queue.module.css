@@ -443,3 +443,49 @@
     grid-area: auto;
   }
 }
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.heading .headerActions :global(.private-nav) {
+  margin: 0;
+  padding: 4px;
+  border-radius: 8px;
+}
+.heading .headerActions :global(.private-nav a) {
+  padding: 8px 20px;
+  min-height: 44px;
+  font-size: 14px;
+}
+.headerActions :global(.report-tour-launch > button) {
+  background: transparent;
+  border-color: transparent;
+  font-weight: 650;
+  padding-inline: 8px;
+}
+.headerActions :global(.report-tour-launch > button:hover) {
+  border-color: #d9ccdf;
+  background: #fcf8fe;
+}
+@media (max-width: 700px) {
+  .heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .headerActions {
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .heading .headerActions :global(.private-nav) {
+    width: auto;
+    flex: 0 1 auto;
+  }
+  .heading .headerActions :global(.private-nav a) {
+    padding-inline: 10px;
+    font-size: 13px;
+  }
+}

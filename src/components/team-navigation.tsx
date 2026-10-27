@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-export function TeamNavigation() {
+export function TeamNavigation({ inHeader = false }: { inHeader?: boolean }) {
   const path = usePathname();
+  if (!inHeader && path === "/equipo") return null;
   return (
     <nav className="private-nav" aria-label="Área de revisión">
       <Link

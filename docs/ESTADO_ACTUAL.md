@@ -37,6 +37,8 @@ Cuenta del área privada integrada en la cabecera principal: nombre enlazado a E
 
 Tutorial voluntario de Equipo con Driver.js y ADN existente: filtros, listado, captura y apertura de ficha cuando existen, y resumen solo para revisoras. Acceso «Ver tutorial» y `/equipo#tutorial`, conservando query de filtros/paginación al cerrar. Sin datos ficticios visibles ni mutaciones; interacción de fondo bloqueada durante el recorrido, foco restaurado y movimiento reducido respetado. Prueba focalizada aprobada: recorrido, hash, Escape, teclado, pantalla vacía, salida de ruta y móvil de 320 px. TypeScript y único build final aprobados (7c7926e33b78); solo app actualizada, worker intacto. Smoke empaquetado health200 y acceso privado protegido. No se repitieron suites de datos ajenas; Safari/dispositivos físicos pendientes.
 
+Cabecera de la bandeja compactada: título, navegación Reportes/Resumen y tutorial en una fila de escritorio; título y controles en dos filas en móvil. Tutorial como acción secundaria y navegación sin duplicado en el layout. Conservada la navegación de ficha y dashboard. Dos recorridos focalizados (bandeja + tutorial) y TypeScript aprobados; revisión visual en 1440/320 y comprobación de overflow en cuatro anchos. Único build final aprobado (e3e69a0bb9d7), app actualizada y worker intacto; health200 y acceso privado protegido en el empaquetado.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

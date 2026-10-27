@@ -8,6 +8,7 @@ import {
 } from "@/server/reports";
 import { Arrow } from "@/components/icons";
 import { Status } from "@/components/status";
+import { TeamNavigation } from "@/components/team-navigation";
 import { TeamTour } from "@/components/team-tour";
 import { EvidencePreview } from "@/components/evidence-preview";
 import styles from "./queue.module.css";
@@ -56,7 +57,10 @@ export default async function Queue({
     <div className={styles.page}>
       <header className={styles.heading}>
         <h1>{user.role === "reviewer" ? "Reportes" : "Mis reportes"}</h1>
-        <TeamTour reviewer={user.role === "reviewer"} />
+        <div className={styles.headerActions}>
+          {user.role === "reviewer" && <TeamNavigation inHeader />}
+          <TeamTour reviewer={user.role === "reviewer"} />
+        </div>
       </header>
       <nav
         data-team-tour="filters"
