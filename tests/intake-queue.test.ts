@@ -7,7 +7,7 @@ import { runIntakeOnce } from "../src/server/intake";
 import { aiConfiguration } from "../src/server/openai";
 
 test(
-  "expired leases recover once and concurrent claims do not duplicate completed results",
+  "consented names do not block intake; expired leases recover without duplicate results",
   {
     skip:
       process.env.TEST_DATABASE_MIGRATIONS !== "true" ||
@@ -22,7 +22,7 @@ test(
         .webp()
         .toBuffer();
       await db.query(
-        "INSERT INTO reports(id,title,description,status) VALUES($1,'Fixture de recuperación','relato ficticio de desinformación para revisar participación política sin identificadores.','pending')",
+        "INSERT INTO reports(id,title,description,status) VALUES($1,'Fixture de recuperación','relato ficticio de María Ejemplo sobre desinformación para revisar participación política.','pending')",
         [id],
       );
       await db.query(

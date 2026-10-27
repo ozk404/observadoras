@@ -88,3 +88,6 @@ Validación focalizada con datos ficticios: publicación con imagen, catálogo/d
 
 
 Hero de Inicio integrado con `public/illustrations/hero.webp`: ilustración transparente integrada sobre el fondo lavanda, curvas, contorno y acento morado originales, escala adaptable y carga prioritaria mediante Next Image. Conservados textos y acciones. TypeScript, recorrido responsive existente y revisión visual 1440/768/390 aprobados; build edf576d91616 y solo app actualizada. Smoke Inicio/imagen/health200. Sin cambios de datos ni worker.
+
+
+Corrección autorizada (27-10-2026): el análisis inicial deja de bloquear descripciones o respuestas por heurísticas de nombres/identificadores. Se mantienen consentimiento vigente, acceso privado, instrucciones al proveedor para omitir identificadores y validación del contrato. Cuatro pruebas focalizadas aprobadas, incluida descripción ficticia con nombre compuesto. No se reabren reportes ya validados ni se reenvían históricos automáticamente.

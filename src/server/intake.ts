@@ -5,7 +5,6 @@ import {
   ProviderError,
   requestIntakeSuggestion,
 } from "./openai";
-import { sensitiveSignals } from "../lib/privacy";
 import { getReport } from "./reports";
 import { HttpError, limit } from "./security";
 import type { User } from "./auth";
@@ -147,8 +146,7 @@ export async function runIntakeOnce() {
     if (
       !job.ai_consent ||
       job.consent_version !== AI_CONSENT_VERSION ||
-      !job.consented_at ||
-      sensitiveSignals(source.description).length
+      !job.consented_at
     ) {
       await endJob(job, "blocked", "privacy");
       return true;
@@ -184,19 +182,6 @@ export async function runIntakeOnce() {
         endpoint: config.endpoint,
       },
     );
-    if (
-      sensitiveSignals(
-        [
-          result.summary,
-          result.limitations,
-          result.assessmentReason,
-          result.evidenceNotes,
-          ...result.observations,
-          ...result.missingInformation,
-        ].join("\n"),
-      ).length
-    )
-      throw new ProviderError("invalid_response");
     await endJob(job, "completed", null, result);
   } catch (error) {
     const code = error instanceof ProviderError ? error.code : "unavailable";
