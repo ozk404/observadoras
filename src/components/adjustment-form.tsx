@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
 export function AdjustmentForm({
@@ -9,12 +9,13 @@ export function AdjustmentForm({
   id: string;
   version: number;
 }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   return (
     <section className="form-panel">
-      <span className="eyebrow">Completar la información</span>
       <h2>Solicitar ajustes</h2>
       <p>
         Indica a la autora qué necesita aclarar o corregir. La observación será
@@ -59,6 +60,7 @@ export function AdjustmentForm({
             identificables innecesarios.
           </p>
           <textarea
+            disabled={!ready || busy}
             id="adjustment-note"
             name="note"
             required
@@ -69,13 +71,18 @@ export function AdjustmentForm({
           />
         </div>
         <label className="checkbox">
-          <input name="confirmed" type="checkbox" required />
+          <input
+            name="confirmed"
+            type="checkbox"
+            required
+            disabled={!ready || busy}
+          />
           <span>
             Confirmo que el registro necesita correcciones de su autora antes de
             continuar la revisión.
           </span>
         </label>
-        <button className="button secondary" disabled={busy}>
+        <button className="button secondary" disabled={!ready || busy}>
           {busy ? "Devolviendo…" : "Devolver para ajustes"}
         </button>
       </form>

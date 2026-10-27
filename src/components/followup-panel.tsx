@@ -23,6 +23,9 @@ export function FollowupPanel({
   return (
     <section className="form-panel" aria-labelledby="followup-heading">
       <h2 id="followup-heading">Seguimiento</h2>
+      <p className="help">
+        Las notas son privadas. Cerrar conserva la publicación.
+      </p>
       {closed && <span className="status">Cerrado</span>}
       {entries.map((entry) => (
         <article className="adjustment-entry" key={entry.id}>

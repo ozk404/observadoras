@@ -1,4 +1,4 @@
-# Estado actual — 26-10-2026
+# Estado actual — 27-10-2026
 
 Este resumen prevalece para conocer el estado técnico vigente. Los diseños y verificaciones anteriores conservan el alcance de su fecha, incluidos pendientes que luego se resolvieron.
 
@@ -38,6 +38,10 @@ Cuenta del área privada integrada en la cabecera principal: nombre enlazado a E
 Tutorial voluntario de Equipo con Driver.js y ADN existente: filtros, listado, captura y apertura de ficha cuando existen, y resumen solo para revisoras. Acceso «Ver tutorial» y `/equipo#tutorial`, conservando query de filtros/paginación al cerrar. Sin datos ficticios visibles ni mutaciones; interacción de fondo bloqueada durante el recorrido, foco restaurado y movimiento reducido respetado. Prueba focalizada aprobada: recorrido, hash, Escape, teclado, pantalla vacía, salida de ruta y móvil de 320 px. TypeScript y único build final aprobados (7c7926e33b78); solo app actualizada, worker intacto. Smoke empaquetado health200 y acceso privado protegido. No se repitieron suites de datos ajenas; Safari/dispositivos físicos pendientes.
 
 Cabecera de la bandeja compactada: título, navegación Reportes/Resumen y tutorial en una fila de escritorio; título y controles en dos filas en móvil. Tutorial como acción secundaria y navegación sin duplicado en el layout. Conservada la navegación de ficha y dashboard. Dos recorridos focalizados (bandeja + tutorial) y TypeScript aprobados; revisión visual en 1440/320 y comprobación de overflow en cuatro anchos. Único build final aprobado (e3e69a0bb9d7), app actualizada y worker intacto; health200 y acceso privado protegido en el empaquetado.
+
+Ficha individual modernizada (27-10-2026): retícula de dos columnas para original/captura y análisis inicial de IA; estado, fecha/origen y accesos a secciones. Validación humana en bloque independiente, clasificación en retícula, ajustes y análisis adicional plegados. Publicación tras validar; seguimiento y alerta diferenciados con alcance privado explícito. Captura ampliable sin salir, ajuste/tamaño real y fallback de carga con proporción conservada. Modelos de IA retirados de la interfaz; auditoría y procesamiento conservados. Sin cambios de API, permisos, esquema, estados ni separación original/publicación. Formularios de ajustes/alerta esperan hidratación antes de permitir edición.
+
+Validación focalizada de ficha: 29 recorridos seleccionados completados en ejecuciones de flujos afectados, con repeticiones de fallos resueltas (recepción/revisión/publicación, IA, ajustes, seguimiento, alertas y capturas). PostgreSQL de desarrollo y proveedor simulado, solo fixtures; revisión visual pendiente/validado/publicado y sin overflow en 320/390/768/1440. TypeScript aprobado. Se recuperó un ENOMEM de Next reiniciando solo app de desarrollo; cuentas de la ejecución interrumpida deshabilitadas. Único build final aprobado (b96330d4dfc3); actualizada solo app, sin migraciones ni reinicio del worker. Smoke empaquetado: health200, detalle redirige sin sesión y captura401. No se ejecutó toda la suite unitaria de servidor. Safari, dispositivos físicos y aceptación visual humana pendientes.
 
 ## Pendiente
 

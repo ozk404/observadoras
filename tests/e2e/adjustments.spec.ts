@@ -5,7 +5,9 @@ const prefix = process.env.TEST_PREFIX ?? "test";
 async function login(page: Page, role: string) {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-${role}`);
-  await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
+  await page
+    .getByLabel("Contraseña", { exact: true })
+    .fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }
@@ -39,12 +41,23 @@ test("author saves and resubmits corrections; private history survives repeated 
   await reviewer.goto(`/equipo/${id}`);
   const note =
     "Aclara el contexto ficticio y distingue el hecho de las interpretaciones, sin datos personales.";
+  await reviewer
+    .getByText("Solicitar correcciones a la autora", { exact: true })
+    .click();
   await reviewer.getByLabel("¿Qué debe corregirse?").fill(note);
   await reviewer
     .getByRole("checkbox", { name: /Confirmo que el registro necesita/ })
     .check();
   reviewer.once("dialog", (d) => d.accept());
+  const returned = reviewer.waitForResponse(
+    (response) =>
+      response.url().endsWith(`/api/privado/registros/${id}/ajustes`) &&
+      response.request().method() === "POST",
+  );
   await reviewer.getByRole("button", { name: "Devolver para ajustes" }).click();
+  const sent = await returned;
+  expect(sent.status()).toBe(200);
+  expect(await sent.json()).toMatchObject({ id, version: 2 });
   await expect(
     reviewer.getByText("Requiere ajustes", { exact: true }),
   ).toBeVisible();

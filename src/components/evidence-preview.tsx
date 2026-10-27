@@ -2,10 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./evidence-preview.module.css";
 
-function EmptyCapture({ failed = false }: { failed?: boolean }) {
+function EmptyCapture({
+  failed = false,
+  large = false,
+}: {
+  failed?: boolean;
+  large?: boolean;
+}) {
   return (
     <span
-      className={styles.placeholder}
+      className={`${styles.placeholder}${large ? ` ${styles.large}` : ""}`}
       role={failed ? "img" : undefined}
       aria-label={failed ? "Captura no disponible" : undefined}
       aria-hidden={!failed ? true : undefined}
@@ -34,10 +40,12 @@ export function EvidencePreview({
   id,
   title,
   available,
+  large = false,
 }: {
   id: string;
   title: string;
   available: boolean;
+  large?: boolean;
 }) {
   const [ready, setReady] = useState(false);
   const thumbnailImage = useRef<HTMLImageElement>(null);
@@ -59,21 +67,24 @@ export function EvidencePreview({
     const overflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     node.showModal();
-    node.querySelector<HTMLButtonElement>("[aria-label='Cerrar captura']")?.focus();
+    node
+      .querySelector<HTMLButtonElement>("[aria-label='Cerrar captura']")
+      ?.focus();
     return () => {
       node.close();
       document.documentElement.style.overflow = overflow;
       trigger.current?.focus({ preventScroll: true });
     };
   }, [open]);
-  if (!available || failed) return <EmptyCapture failed={failed} />;
+  if (!available || failed)
+    return <EmptyCapture failed={failed} large={large} />;
   return (
     <>
       <button
         ref={trigger}
         type="button"
         disabled={!ready}
-        className={styles.thumbnail}
+        className={`${styles.thumbnail}${large ? ` ${styles.large}` : ""}`}
         aria-label={`Ampliar captura de ${title}`}
         onClick={() => {
           setFullFailed(false);
@@ -83,8 +94,8 @@ export function EvidencePreview({
       >
         <img
           ref={thumbnailImage}
-          src={`${source}?vista=miniatura`}
-          alt=""
+          src={large ? source : `${source}?vista=miniatura`}
+          alt={large ? "Imagen adjunta al reporte" : ""}
           width={256}
           height={192}
           loading="lazy"

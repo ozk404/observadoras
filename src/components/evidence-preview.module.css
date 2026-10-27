@@ -61,7 +61,7 @@
   border-bottom: 1px solid #d9ccdf;
 }
 .panel header h2 {
-  font-family: "Archivo Equipo", sans-serif;
+  font-family: "Archivo Ficha", "Archivo Equipo", sans-serif;
   font-size: 22px;
   font-weight: 750;
   margin: 0;
@@ -153,5 +153,20 @@
   }
   .canvas img {
     max-height: calc(100dvh - 204px);
+  }
+}
+
+.thumbnail.large,
+.placeholder.large {
+  width: 100%;
+  height: 360px;
+  flex-basis: auto;
+  border-radius: 10px;
+  padding: 16px;
+}
+@media (max-width: 600px) {
+  .thumbnail.large,
+  .placeholder.large {
+    height: 280px;
   }
 }

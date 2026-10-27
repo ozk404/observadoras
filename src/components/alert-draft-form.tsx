@@ -20,6 +20,8 @@ export function AlertDraftForm({
   aiReady: boolean;
 }) {
   const router = useRouter();
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const [baseReportVersion, setBaseReportVersion] = useState(reportVersion);
   const [draft, setDraft] = useState(context.draft);
   const [title, setTitle] = useState(context.draft?.title ?? "");
@@ -31,7 +33,7 @@ export function AlertDraftForm({
   const [generating, setGenerating] = useState(false);
   const [refreshing, startTransition] = useTransition();
   const [error, setError] = useState("");
-  const busy = writing || refreshing || generating;
+  const busy = !ready || writing || refreshing || generating;
   const unchanged =
     !!draft &&
     title === draft.title &&
@@ -49,6 +51,7 @@ export function AlertDraftForm({
   return (
     <section className="form-panel" aria-labelledby="alert-draft-heading">
       <h2 id="alert-draft-heading">Borrador de alerta</h2>
+      <p className="help">Documento interno; no se envía ni se publica.</p>
       {draft && (
         <p className="help">
           {draft.editor_username} ·{" "}

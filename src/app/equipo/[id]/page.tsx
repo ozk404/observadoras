@@ -16,6 +16,8 @@ import { listFollowup } from "@/server/followup";
 import { FollowupPanel } from "@/components/followup-panel";
 import { getAlertContext } from "@/server/alert-drafts";
 import { AlertDraftForm } from "@/components/alert-draft-form";
+import { EvidencePreview } from "@/components/evidence-preview";
+import styles from "./detail.module.css";
 export default async function Detail({
   params,
 }: {
@@ -43,22 +45,59 @@ export default async function Detail({
   const alertContext = canFollowup
     ? await getAlertContext(user, report.id)
     : null;
+  const date = new Intl.DateTimeFormat("es-GT", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "America/Guatemala",
+  });
+  const editable =
+    ["draft", "needs_adjustments"].includes(report.status) &&
+    report.author_id === user.id;
   return (
-    <>
-      <Link href="/equipo" className="back-link">
-        ← Volver a los registros
+    <div className={styles.page}>
+      <Link href="/equipo" className={styles.back}>
+        ← Reportes
       </Link>
-      <div className="page-heading">
-        <Status status={report.status} />
+      <header className={styles.header}>
+        <div className={styles.meta}>
+          <Status status={report.status} />
+          <span>
+            {report.author_id ? "Registro interno" : "Envío sin cuenta"}
+          </span>
+          <time dateTime={report.created_at.toISOString()}>
+            {date.format(report.created_at)}
+          </time>
+        </div>
         <h1>{report.title}</h1>
-        <p>
-          Registro original privado. Su contenido no aparece automáticamente en
-          el catálogo.
-        </p>
-      </div>
+      </header>
+      <nav className={styles.sections} aria-label="Secciones del reporte">
+        <a href="#reporte">Reporte</a>
+        {user.role === "reviewer" &&
+          !editable &&
+          (report.status === "pending" || report.validated_at) && (
+            <a href="#revision">
+              {report.status === "pending"
+                ? "Revisión"
+                : "Resultado de revisión"}
+            </a>
+          )}
+        {report.status === "validated" && user.role === "reviewer" && (
+          <a href="#publicacion">Publicación</a>
+        )}
+        {adjustments.length > 0 && <a href="#ajustes">Ajustes</a>}
+        {canFollowup && (
+          <>
+            <a href="#seguimiento">Seguimiento</a>
+            <a href="#alerta">Alerta</a>
+          </>
+        )}
+      </nav>
       {adjustments.length > 0 && (
-        <section className="form-panel adjustment-history">
-          <span className="eyebrow">Comunicación privada del registro</span>
+        <section
+          className={styles.history}
+          id="ajustes"
+          aria-label="Ajustes solicitados"
+        >
           <h2>Ajustes solicitados</h2>
           {adjustments.map((adjustment) => (
             <article className="adjustment-entry" key={adjustment.id}>
@@ -69,204 +108,168 @@ export default async function Detail({
               </span>
               <p className="help">
                 Por {adjustment.requester_username} ·{" "}
-                {new Intl.DateTimeFormat("es-GT", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                  timeZone: "America/Guatemala",
-                }).format(adjustment.requested_at)}
+                {date.format(adjustment.requested_at)}
               </p>
               <p className="report-body">{adjustment.note}</p>
               {adjustment.resolved_at && (
                 <p className="help">
-                  Reenvío:{" "}
-                  {new Intl.DateTimeFormat("es-GT", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                    timeZone: "America/Guatemala",
-                  }).format(adjustment.resolved_at)}
-                  . No implica aprobación del ajuste.
+                  Reenvío: {date.format(adjustment.resolved_at)}. Pendiente de
+                  revisión del ajuste.
                 </p>
               )}
             </article>
           ))}
-          <p className="help">
-            Se muestran como máximo las 10 solicitudes más recientes. Las
-            observaciones no se publican.
-          </p>
         </section>
       )}
-      {["draft", "needs_adjustments"].includes(report.status) &&
-      report.author_id === user.id ? (
-        <section className="form-panel reading">
-          {corrections && (
-            <>
-              <h2>Corregir y reenviar</h2>
-              <p>
-                Atiende la observación del equipo. Guardar conserva este estado;
-                reenviar devuelve el registro a revisión sin validarlo ni
-                publicarlo.
-              </p>
-            </>
-          )}
+      {editable ? (
+        <section id="reporte" className={styles.editPanel}>
+          <h2>{corrections ? "Corregir y reenviar" : "Editar borrador"}</h2>
+          {corrections && <p>Al reenviar, el reporte vuelve a revisión.</p>}
           <DraftForm report={report} corrections={corrections} />
         </section>
       ) : (
-        <div className="review-layout">
-          <section className="form-panel">
-            <span className="eyebrow">
-              Relato original · Acceso restringido
-            </span>
-            <h2>Información recibida</h2>
-            <div className="report-body">{report.description}</div>
-            {(report.has_evidence || report.source_url) && (
-              <section className="private-evidence">
-                <h3>Imagen recibida · Privada</h3>
-                {report.has_evidence && (
-                  <>
-                    <p className="help">
-                      Esta imagen es privada. Con el consentimiento del envío, OpenAI
-                      la analiza junto con la descripción.
-                    </p>
-                    <a
-                      href={`/api/privado/registros/${report.id}/evidencia`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="evidence-preview"
-                        src={`/api/privado/registros/${report.id}/evidencia`}
-                        alt="Imagen adjunta al reporte"
-                      />
-                    </a>
-                    <a
-                      className="inline-link"
-                      href={`/api/privado/registros/${report.id}/evidencia`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Abrir imagen ↗
-                    </a>
-                  </>
-                )}
-                {report.source_url && (
-                  <p>
-                    <a
-                      href={report.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                    >
-                      Abrir URL de la fuente ↗
-                    </a>
-                    <span className="help source-url">{report.source_url}</span>
-                  </p>
-                )}
-              </section>
-            )}
-            {report.validated_at && (
-              <aside className="notice">
-                <strong>
-                  {report.validation_source === "legacy_publication"
-                    ? "Revisión humana registrada al publicar"
-                    : "Validación interna registrada"}
-                </strong>
-                <p>
-                  Por {report.validator_username} ·{" "}
-                  {new Intl.DateTimeFormat("es-GT", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                    timeZone: "America/Guatemala",
-                  }).format(report.validated_at)}
-                </p>
-                <span>
-                  Esta revisión no equivale a una determinación judicial.
-                </span>
-                {report.reviewed_categories.length > 0 && (
-                  <p>
-                    Clasificación de la revisora:{" "}
-                    {report.reviewed_categories
-                      .map(
-                        (key) =>
-                          categoryLabels[key as keyof typeof categoryLabels] ??
-                          key,
-                      )
-                      .join(" · ")}
-                  </p>
-                )}
-                {report.review_observation && (
-                  <p className="report-body">
-                    Observación interna: {report.review_observation}
-                  </p>
-                )}
-              </aside>
-            )}
-          </section>
-          {user.role === "reviewer" ? (
-            <div className="review-assistance">
+        <>
+          <div className={styles.overview} id="reporte">
+            <section
+              className={styles.original}
+              aria-labelledby="original-title"
+            >
+              <div className={styles.panelHeading}>
+                <h2 id="original-title">Reporte recibido</h2>
+                <span className={styles.private}>Privado</span>
+              </div>
+              {report.has_evidence && (
+                <EvidencePreview
+                  id={report.id}
+                  title={report.title}
+                  available
+                  large
+                />
+              )}
+              <div className={styles.description}>
+                <h3>Descripción</h3>
+                <div className="report-body">{report.description}</div>
+              </div>
+              {report.source_url && (
+                <a
+                  className={styles.source}
+                  href={report.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                >
+                  Ver publicación original ↗<span>{report.source_url}</span>
+                </a>
+              )}
+            </section>
+            {user.role === "reviewer" ? (
               <IntakeInsights
                 id={report.id}
                 version={report.version}
                 canRetry={report.status === "pending"}
               />
+            ) : (
+              <aside className={styles.participant}>
+                <h2>Estado del reporte</h2>
+                <p>
+                  {report.status === "published"
+                    ? "Se aprobó una versión pública de este reporte."
+                    : report.status === "validated"
+                      ? "La revisión interna terminó. El original sigue privado."
+                      : "El equipo está revisando este reporte."}
+                </p>
+              </aside>
+            )}
+          </div>
+          {report.validated_at && (
+            <section
+              className={styles.reviewResult}
+              id="revision"
+              aria-labelledby="decision-title"
+            >
+              <div>
+                <span className={styles.kicker}>Revisión humana</span>
+                <h2 id="decision-title">
+                  {report.validation_source === "legacy_publication"
+                    ? "Revisión registrada al publicar"
+                    : "Validación interna registrada"}
+                </h2>
+                <p>
+                  Por {report.validator_username} ·{" "}
+                  {date.format(report.validated_at)}
+                </p>
+              </div>
+              <div>
+                {report.reviewed_categories.length > 0 && (
+                  <div className={styles.tags}>
+                    {report.reviewed_categories.map((key) => (
+                      <span key={key}>
+                        {categoryLabels[key as keyof typeof categoryLabels] ??
+                          key}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {report.review_observation && (
+                  <p className="report-body">{report.review_observation}</p>
+                )}
+              </div>
+            </section>
+          )}
+          {user.role === "reviewer" && (
+            <>
               {report.status === "pending" && (
-                <ValidationForm id={report.id} version={report.version} />
+                <div className={styles.decision} id="revision">
+                  <ValidationForm id={report.id} version={report.version} />
+                  {report.author_id && (
+                    <details className={styles.disclosure}>
+                      <summary>Solicitar correcciones a la autora</summary>
+                      <AdjustmentForm id={report.id} version={report.version} />
+                    </details>
+                  )}
+                </div>
               )}
-              {report.status === "pending" &&
-                (report.author_id ? (
-                  <AdjustmentForm id={report.id} version={report.version} />
-                ) : (
-                  <p className="notice">
-                    Este envío no tiene una cuenta asociada. No se pueden
-                    solicitar ajustes a su autora desde la plataforma.
-                  </p>
-                ))}
               {corrections && (
                 <p className="notice">
-                  El registro espera correcciones de su autora. No se puede
-                  validar ni publicar hasta que vuelva a enviarlo a revisión.
+                  La autora debe reenviar sus correcciones antes de continuar la
+                  revisión.
                 </p>
               )}
-              {canFollowup && (
-                <FollowupPanel
+              <div id="publicacion" className={styles.publication}>
+                <AiReview
                   id={report.id}
                   version={report.version}
-                  entries={followup}
+                  analyses={analyses}
+                  ready={ready}
+                  simulation={simulation}
+                  editable={report.status === "pending"}
+                  canPublish={report.status === "validated"}
                 />
+              </div>
+              {canFollowup && (
+                <div className={styles.operations}>
+                  <div id="seguimiento">
+                    <FollowupPanel
+                      id={report.id}
+                      version={report.version}
+                      entries={followup}
+                    />
+                  </div>
+                  {alertContext && (
+                    <div id="alerta">
+                      <AlertDraftForm
+                        id={report.id}
+                        reportVersion={report.version}
+                        context={alertContext}
+                        aiReady={ready}
+                      />
+                    </div>
+                  )}
+                </div>
               )}
-              {alertContext && (
-                <AlertDraftForm
-                  id={report.id}
-                  reportVersion={report.version}
-                  context={alertContext}
-                  aiReady={ready}
-                />
-              )}
-              <AiReview
-                id={report.id}
-                version={report.version}
-                analyses={analyses}
-                ready={ready}
-                simulation={simulation}
-                editable={report.status === "pending"}
-                canPublish={report.status === "validated"}
-              />
-              {report.status === "pending" && (
-                <p className="notice">
-                  La versión pública se prepara después de validar internamente.
-                  Validar no publica el registro.
-                </p>
-              )}
-            </div>
-          ) : (
-            <aside className="notice">
-              {report.status === "published"
-                ? "Una versión revisada de este registro fue aprobada para publicación."
-                : report.status === "validated"
-                  ? "El equipo completó la validación interna. El registro continúa privado hasta aprobar una versión pública."
-                  : "Este registro está pendiente de revisión. Solo el equipo autorizado puede prepararlo para publicación."}
-            </aside>
+            </>
           )}
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }

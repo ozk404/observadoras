@@ -20,17 +20,9 @@ export function ValidationForm({
   const [observation, setObservation] = useState("");
   return (
     <section className="form-panel">
-      <span className="eyebrow">Revisión humana</span>
+      <span className="eyebrow">Decisión humana</span>
       <h2>Validar internamente</h2>
-      <p>
-        Confirma que revisaste el contexto del registro. Esta decisión deja
-        constancia de la revisión interna y no acredita judicialmente los
-        hechos.
-      </p>
-      <p className="notice">
-        Validar mantiene el registro privado. La publicación requiere preparar y
-        aprobar una versión pública por separado.
-      </p>
+      <p>Registra tu revisión y clasificación. El reporte sigue privado.</p>
       <form
         method="post"
         className="form-stack"
@@ -67,8 +59,7 @@ export function ValidationForm({
         <fieldset className="category-choices" disabled={!ready}>
           <legend>Clasificación de la revisora</legend>
           <p className="help">
-            Elige hasta cuatro categorías orientativas. Se guardan como tu
-            decisión, separadas de las sugerencias de IA.
+            Hasta cuatro categorías. Tu decisión es independiente de la IA.
           </p>
           {categoryKeys.map((key) => (
             <label className="checkbox" key={key}>
@@ -104,10 +95,7 @@ export function ValidationForm({
               setConfirmed(false);
             }}
           />
-          <p className="help">
-            Indica tu valoración sin datos personales innecesarios. No se
-            publica.
-          </p>
+          <p className="help">Evita datos personales innecesarios.</p>
         </div>
         <label className="checkbox">
           <input

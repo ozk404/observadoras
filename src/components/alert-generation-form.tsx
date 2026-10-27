@@ -162,7 +162,6 @@ export function AlertGenerationForm({
                 {job.transport === "simulation"
                   ? "Proveedor simulado"
                   : "OpenAI"}{" "}
-                · {job.model}
               </p>
               <h4>{job.result.title}</h4>
               <p className="report-body">{job.result.body}</p>

@@ -88,7 +88,7 @@ test("public intake → private human review → separately approved public vers
     page.getByRole("img", { name: "Imagen adjunta al reporte" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Abrir URL de la fuente" }),
+    page.getByRole("link", { name: /Ver publicación original/ }),
   ).toHaveAttribute("href", "https://example.test/fuente-privada");
   const otherContext = await browser.newContext();
   const other = await otherContext.newPage();
@@ -177,7 +177,7 @@ test("public intake → private human review → separately approved public vers
     }),
   ).toHaveCount(0);
   await expect(
-    publicPage.getByRole("link", { name: "Abrir URL de la fuente" }),
+    publicPage.getByRole("link", { name: /Ver publicación original/ }),
   ).toHaveCount(0);
   expect(
     (

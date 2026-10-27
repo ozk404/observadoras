@@ -8,7 +8,9 @@ test.skip(
 async function login(page: Page, role = "reviewer") {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-${role}`);
-  await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
+  await page
+    .getByLabel("Contraseña", { exact: true })
+    .fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }
@@ -29,7 +31,6 @@ const input = (text: string) => ({
   text,
   version: 1,
   privacyConfirmed: true,
-
 });
 async function validate(page: Page) {
   await page
@@ -48,6 +49,9 @@ test("prepared input only; suggestions persist; human edits and approvals remain
   await login(page);
   const id = await createPending(page, "sugerencia");
   await page.goto(`/equipo/${id}`);
+  const extra = page.locator("details.extra-analysis");
+  if ((await extra.count()) && (await extra.getAttribute("open")) === null)
+    await extra.locator("summary").first().click();
   await expect(page.getByLabel("Texto preparado para IA")).toHaveValue("");
   await page
     .getByLabel("Texto preparado para IA")
@@ -235,6 +239,9 @@ test("provider failure and invalid response preserve the original and manual pub
     true,
   );
   await page.goto(`/equipo/${id}`);
+  const extra = page.locator("details.extra-analysis");
+  if ((await extra.count()) && (await extra.getAttribute("open")) === null)
+    await extra.locator("summary").first().click();
   await expect(
     page.getByText(
       "No se recibió una sugerencia válida. Puedes continuar manualmente.",

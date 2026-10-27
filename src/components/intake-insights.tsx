@@ -61,11 +61,9 @@ export function IntakeInsights({
   const result = analysis?.result;
   return (
     <section className="form-panel intake-panel">
-      <span className="eyebrow">Preparado al recibir el reporte</span>
       <h2>Análisis inicial de IA</h2>
       <p className="help">
-        Evaluación preliminar de descripción y captura. No demuestra veracidad
-        ni autenticidad y no sustituye tu revisión.
+        Sugerencias sobre la descripción y la captura. No verifican los hechos.
       </p>
       <div aria-live="polite">
         {error && (
@@ -82,17 +80,9 @@ export function IntakeInsights({
             >
               {intakeStateLabels[analysis.state]}
             </span>
-            {analysis.model && (
-              <p className="help">
-                {analysis.transport === "simulation"
-                  ? "Proveedor simulado"
-                  : "OpenAI"}{" "}
-                · {analysis.model}
-              </p>
-            )}
             {result && analysis.state === "completed" ? (
               <>
-                <h3>Pertinencia preliminar</h3>
+                <h3>¿Corresponde al observatorio?</h3>
                 <p>
                   <strong>{assessmentLabels[result.assessment]}</strong>
                 </p>
@@ -103,34 +93,30 @@ export function IntakeInsights({
                     .map((key) => categoryLabels[key])
                     .join(" · ")}
                 </p>
-                <p className="help">
-                  Categorías orientativas. La clasificación humana se registra
-                  al validar.
-                </p>
                 <h3>Resumen inicial</h3>
                 <p>{result.summary}</p>
                 <h3>Observaciones sobre la captura</h3>
                 <p>{result.evidenceNotes}</p>
-                <h3>Puntos para la revisora</h3>
+                <h3>Qué revisar</h3>
                 <ul>
                   {result.observations.map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>
-                <h3>Información que falta</h3>
-                {result.missingInformation.length ? (
-                  <ul>
-                    {result.missingInformation.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>
-                    No se señalaron faltantes; esto no significa que el relato
-                    esté verificado.
-                  </p>
+                {result.missingInformation.length > 0 && (
+                  <>
+                    <h3>Información que falta</h3>
+                    <ul>
+                      {result.missingInformation.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </>
                 )}
-                <p className="notice">{result.limitations}</p>
+                <details className="analysis-limits">
+                  <summary>Límites del análisis</summary>
+                  <p>{result.limitations}</p>
+                </details>
               </>
             ) : (
               analysis.error_code && (
@@ -166,8 +152,8 @@ export function IntakeInsights({
           </>
         ) : (
           <p className="notice">
-            Este registro no tiene un análisis automático inicial. Los registros
-            anteriores conservan su revisión manual.
+            No hay análisis inicial disponible. Puedes continuar la revisión
+            manual.
           </p>
         )}
       </div>
