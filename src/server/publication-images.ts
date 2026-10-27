@@ -148,3 +148,18 @@ export async function changePublicationImage(
     client.release();
   }
 }
+
+// Call only after authorizing access to this report.
+export async function originalPublicationEvidence(
+  reportId: string,
+): Promise<Evidence> {
+  const row = (
+    await db.query(
+      "SELECT content,width,height,sha256 FROM report_evidence WHERE report_id=$1",
+      [reportId],
+    )
+  ).rows[0];
+  if (!row)
+    throw new HttpError(404, "El reporte no tiene una captura disponible.");
+  return row;
+}

@@ -129,7 +129,7 @@ test("reviewer explicitly publishes a prepared image atomically; public views ne
     .getByLabel("Versión pública revisada", { exact: true })
     .fill(textData.body);
   await page
-    .getByLabel("Seleccionar copia pública", { exact: true })
+    .getByLabel("Subir otra imagen", { exact: true })
     .setInputFiles(file);
   await page
     .getByLabel("Descripción de la imagen pública", { exact: true })
@@ -249,9 +249,9 @@ test("reviewer explicitly publishes a prepared image atomically; public views ne
     name: "Imagen pública",
     exact: true,
   });
-  await expect(panel.getByLabel("Seleccionar copia pública")).toBeEnabled();
+  await expect(panel.getByLabel("Subir otra imagen")).toBeEnabled();
   await panel
-    .getByLabel("Seleccionar copia pública")
+    .getByLabel("Subir otra imagen")
     .setInputFiles(await copy(1200, 400));
   await panel
     .getByLabel("Descripción de la imagen pública")
@@ -428,5 +428,118 @@ test("public copies reject unauthorized, invalid and stale changes; concurrent a
     ).status(),
   ).toBe(404);
   await other.close();
+  await visitor.close();
+});
+
+test("reviewer includes stored original with explicit approval and no reupload", async ({
+  page,
+  browser,
+}) => {
+  await login(page.request);
+  const id = await received(page);
+  const source = `/api/privado/registros/${id}/evidencia`;
+  const original = await (await page.request.get(source)).body();
+  await validate(page.request, id);
+  const fields = {
+    ...Object.fromEntries(
+      Object.entries(textData).map(([key, value]) => [key, String(value)]),
+    ),
+    imageSource: "original",
+    imageDescription: "Captura ficticia revisada",
+    imageConfirmed: "false",
+  };
+  expect(
+    (
+      await page.request.post(`/api/privado/registros/${id}/publicacion`, {
+        headers: { origin },
+        multipart: fields,
+      })
+    ).status(),
+  ).toBe(400);
+  expect(await context(page.request, id)).toBeNull();
+  const participant = await browser.newContext();
+  await login(participant.request, "participant");
+  expect(
+    (
+      await participant.request.post(
+        `/api/privado/registros/${id}/publicacion`,
+        {
+          headers: { origin },
+          multipart: { ...fields, imageConfirmed: "true" },
+        },
+      )
+    ).status(),
+  ).toBe(403);
+  await participant.close();
+  await page.reload();
+  await page
+    .getByLabel("Título público", { exact: true })
+    .fill(textData.title + " original");
+  await page
+    .getByLabel("Versión pública revisada", { exact: true })
+    .fill(textData.body);
+  await page
+    .getByRole("checkbox", { name: "Incluir captura original" })
+    .check();
+  const preview = page.getByAltText("Vista previa de la imagen pública");
+  await expect(preview).toHaveAttribute("src", source);
+  await expect(preview).toBeVisible();
+  await page
+    .getByLabel("Descripción de la imagen pública", { exact: true })
+    .fill("Captura ficticia revisada");
+  await page
+    .getByRole("checkbox", { name: /Revisé los datos visibles/ })
+    .check();
+  await page.getByRole("checkbox", { name: /Revisé los hechos/ }).check();
+  await page.getByRole("checkbox", { name: /Apruebo explícitamente/ }).check();
+  await page.screenshot({
+    path: "artifacts/public-original-picker.png",
+    fullPage: true,
+  });
+  const response = page.waitForResponse(
+    (r) =>
+      r.url().endsWith(`/api/privado/registros/${id}/publicacion`) &&
+      r.request().method() === "POST",
+  );
+  page.once("dialog", (d) => d.accept());
+  await page
+    .getByRole("button", {
+      name: "Aprobar y publicar esta versión",
+      exact: true,
+    })
+    .click();
+  expect((await response).status()).toBe(201);
+  const approved = await context(page.request, id);
+  expect(approved.image_version).toBe(1);
+  const visitor = await browser.newContext();
+  expect(
+    await (
+      await visitor.request.get(`/api/imagenes-publicas/${approved.asset_id}`)
+    ).body(),
+  ).toEqual(original);
+  expect((await visitor.request.get(source)).status()).toBe(401);
+  expect(await (await page.request.get(source)).body()).toEqual(original);
+  expect(
+    (
+      await page.request.put(endpoint(id), {
+        headers: { origin },
+        multipart: {
+          version: "1",
+          imageSource: "original",
+          description: "Otra aprobación ficticia",
+          confirmed: "true",
+        },
+      })
+    ).status(),
+  ).toBe(200);
+  const replaced = await context(page.request, id);
+  expect(replaced.image_version).toBe(2);
+  expect(replaced.asset_id).not.toBe(approved.asset_id);
+  expect(
+    (
+      await visitor.request.get(`/api/imagenes-publicas/${approved.asset_id}`)
+    ).status(),
+  ).toBe(404);
+  expect(await (await page.request.get(source)).body()).toEqual(original);
   await visitor.close();
 });

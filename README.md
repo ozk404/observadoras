@@ -169,3 +169,6 @@ La publicación admite una imagen opcional, preparada fuera de la plataforma y a
 La copia tiene almacenamiento, identificador y aprobación separados del original privado. Requiere descripción y confirmación de privacidad/autorización; el consentimiento de análisis con IA no autoriza publicación. Se normaliza a WebP sin metadatos, con límites de 5 MiB y 20 megapíxeles. Reemplazar o retirar invalida la URL anterior; las copias descargadas por terceros no se pueden recuperar. No se incluye un editor de ocultamiento de datos.
 
 La migración 012 es aditiva. La primera imagen se guarda atómicamente con la publicación; los cambios posteriores usan versión propia y auditoría, sin modificar el original ni la versión del reporte. Ver `docs/superpowers/specs/2026-10-27-public-images-design.md`.
+
+
+Actualización autorizada (27-10-2026): «Incluir captura original» permite aprobar la captura existente sin descargarla ni volver a subirla, con vista previa privada, descripción y confirmación explícita. Disponible al publicar y en publicaciones existentes; «Subir otra imagen» sigue siendo alternativa. El servidor toma únicamente la evidencia del reporte autorizado y crea una copia pública independiente; no admite identificadores arbitrarios de evidencia ni cambia el original. Sustituye el requisito previo de preparar siempre un archivo externo. Sin migraciones.

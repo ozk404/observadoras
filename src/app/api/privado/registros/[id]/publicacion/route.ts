@@ -2,7 +2,11 @@ import { requireUser } from "@/server/auth";
 import { getReport, publishReport } from "@/server/reports";
 import { apiError, checkOrigin, readJson, HttpError } from "@/server/security";
 import { readEvidenceForm, normalizeEvidence } from "@/server/evidence";
-import { imageApproval, type ApprovedImage } from "@/server/publication-images";
+import {
+  originalPublicationEvidence,
+  imageApproval,
+  type ApprovedImage,
+} from "@/server/publication-images";
 export async function POST(
   request: Request,
   context: { params: Promise<{ id: string }> },
@@ -29,6 +33,7 @@ export async function POST(
         "publicationConfirmed",
         "version",
         "image",
+        "imageSource",
         "imageDescription",
         "imageConfirmed",
       ]);
@@ -36,12 +41,14 @@ export async function POST(
         description: form.get("imageDescription"),
         confirmed: form.get("imageConfirmed") === "true",
       });
+      const source = form.get("imageSource");
       const file = form.get("image");
-      if (!(file instanceof File))
-        throw new HttpError(
-          400,
-          "Selecciona la copia pública que quieres publicar.",
-        );
+      if (source !== null && source !== "original" && source !== "upload")
+        throw new HttpError(400, "Selecciona una imagen válida.");
+      if (source === "original" && file !== null)
+        throw new HttpError(400, "Selecciona solo una fuente de imagen.");
+      if (source !== "original" && !(file instanceof File))
+        throw new HttpError(400, "Selecciona una imagen pública.");
       input = {
         title: form.get("title"),
         body: form.get("body"),
@@ -49,7 +56,13 @@ export async function POST(
         publicationConfirmed: form.get("publicationConfirmed") === "true",
         version: Number(form.get("version")),
       };
-      image = { ...approval, evidence: await normalizeEvidence(file) };
+      image = {
+        ...approval,
+        evidence:
+          source === "original"
+            ? await originalPublicationEvidence(id)
+            : await normalizeEvidence(file as File),
+      };
     } else input = await readJson(request);
     return Response.json(
       { id: await publishReport(user, id, input, image) },

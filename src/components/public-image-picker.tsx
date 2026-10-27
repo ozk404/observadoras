@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { EVIDENCE_TYPES, MAX_EVIDENCE_BYTES } from "@/lib/evidence";
 import styles from "./public-image.module.css";
 export function PublicImagePicker({
+  originalUrl,
+  useOriginal,
+  onOriginal,
   file,
   onFile,
   description,
@@ -11,6 +14,9 @@ export function PublicImagePicker({
   onConfirmed,
   disabled = false,
 }: {
+  originalUrl: string;
+  useOriginal: boolean;
+  onOriginal: (value: boolean) => void;
   file: File | null;
   onFile: (file: File | null) => void;
   description: string;
@@ -35,11 +41,20 @@ export function PublicImagePicker({
   return (
     <fieldset className={styles.picker} disabled={disabled}>
       <legend>Imagen pública (opcional)</legend>
-      <p>
-        Sube una copia preparada, con los datos sensibles ocultos. El original
-        permanece privado.
-      </p>
-      <label htmlFor="public-image-file">Seleccionar copia pública</label>
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={useOriginal}
+          onChange={(event) => {
+            onOriginal(event.target.checked);
+            onFile(null);
+            onDescription("");
+            onConfirmed(false);
+          }}
+        />
+        <span>Incluir captura original</span>
+      </label>
+      <label htmlFor="public-image-file">Subir otra imagen</label>
       <input
         ref={input}
         id="public-image-file"
@@ -48,6 +63,7 @@ export function PublicImagePicker({
         onChange={(event) => {
           const chosen = event.target.files?.[0];
           if (!chosen) return;
+          onOriginal(false);
           setError("");
           onConfirmed(false);
           onDescription("");
@@ -70,12 +86,12 @@ export function PublicImagePicker({
           {error}
         </p>
       )}
-      {file && (
+      {(file || useOriginal) && (
         <>
-          {preview && (
+          {(preview || useOriginal) && (
             <img
               className={styles.preview}
-              src={preview}
+              src={useOriginal ? originalUrl : preview}
               alt="Vista previa de la imagen pública"
             />
           )}
@@ -83,6 +99,7 @@ export function PublicImagePicker({
             type="button"
             className="button secondary"
             onClick={() => {
+              onOriginal(false);
               onFile(null);
               onDescription("");
               onConfirmed(false);

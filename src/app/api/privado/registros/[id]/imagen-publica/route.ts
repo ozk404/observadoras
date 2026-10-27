@@ -4,6 +4,7 @@ import { getReport } from "@/server/reports";
 import { apiError, checkOrigin, readJson, HttpError } from "@/server/security";
 import { readEvidenceForm, normalizeEvidence } from "@/server/evidence";
 import {
+  originalPublicationEvidence,
   imageApproval,
   changePublicationImage,
   publicImageContext,
@@ -43,6 +44,7 @@ export async function PUT(request: Request, context: Context) {
     const form = await readEvidenceForm(request, [
       "version",
       "image",
+      "imageSource",
       "description",
       "confirmed",
     ]);
@@ -57,12 +59,20 @@ export async function PUT(request: Request, context: Context) {
       confirmed: form.get("confirmed") === "true",
     });
     const file = form.get("image");
-    if (!(file instanceof File))
+    const source = form.get("imageSource");
+    if (source !== null && source !== "original" && source !== "upload")
+      throw new HttpError(400, "Selecciona una imagen válida.");
+    if (source === "original" && file !== null)
+      throw new HttpError(400, "Selecciona solo una fuente de imagen.");
+    if (source !== "original" && !(file instanceof File))
       throw new HttpError(400, "Selecciona una copia pública.");
     return reply(
       await changePublicationImage(user, id, version, {
         ...approval,
-        evidence: await normalizeEvidence(file),
+        evidence:
+          source === "original"
+            ? await originalPublicationEvidence(id)
+            : await normalizeEvidence(file as File),
       }),
     );
   } catch (error) {

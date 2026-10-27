@@ -226,6 +226,7 @@ export function PublicationForm({
   bodyRevision?: number;
 }) {
   const ready = useFormReady();
+  const [useOriginal, setUseOriginal] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageDescription, setImageDescription] = useState("");
   const [imageConfirmed, setImageConfirmed] = useState(false);
@@ -263,13 +264,14 @@ export function PublicationForm({
             publicationConfirmed: data.get("publish") === "on",
             version,
           };
-          if (image) {
+          if (image || useOriginal) {
             if (!imageConfirmed)
               throw Error("Confirma la revisión de la imagen pública.");
             const form = new FormData();
             for (const [key, value] of Object.entries(input))
               form.set(key, String(value));
-            form.set("image", image);
+            if (useOriginal) form.set("imageSource", "original");
+            else if (image) form.set("image", image);
             form.set("imageDescription", imageDescription);
             form.set("imageConfirmed", String(imageConfirmed));
             const response = await fetch(
@@ -333,6 +335,9 @@ export function PublicationForm({
         />
       </div>
       <PublicImagePicker
+        originalUrl={`/api/privado/registros/${id}/evidencia`}
+        useOriginal={useOriginal}
+        onOriginal={setUseOriginal}
         file={image}
         onFile={setImage}
         description={imageDescription}

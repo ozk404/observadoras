@@ -15,6 +15,7 @@ export function PublicImagePanel({
   };
 }) {
   const router = useRouter();
+  const [useOriginal, setUseOriginal] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState("");
   const [confirmed, setConfirmed] = useState(false);
@@ -81,7 +82,7 @@ export function PublicImagePanel({
         className="form-stack"
         onSubmit={async (event) => {
           event.preventDefault();
-          if (!file || !confirmed || busy) return;
+          if ((!file && !useOriginal) || !confirmed || busy) return;
           if (
             !window.confirm(
               "¿Publicar esta copia revisada? La imagen y su descripción serán públicas.",
@@ -93,7 +94,8 @@ export function PublicImagePanel({
           try {
             const form = new FormData();
             form.set("version", String(context.image_version));
-            form.set("image", file);
+            if (useOriginal) form.set("imageSource", "original");
+            else if (file) form.set("image", file);
             form.set("description", description);
             form.set("confirmed", String(confirmed));
             const response = await fetch(
@@ -103,6 +105,7 @@ export function PublicImagePanel({
             const result = await response.json();
             if (!response.ok)
               throw Error(result.error || "No se pudo publicar la imagen.");
+            setUseOriginal(false);
             setFile(null);
             setDescription("");
             setConfirmed(false);
@@ -115,6 +118,9 @@ export function PublicImagePanel({
         }}
       >
         <PublicImagePicker
+          originalUrl={`/api/privado/registros/${id}/evidencia`}
+          useOriginal={useOriginal}
+          onOriginal={setUseOriginal}
           file={file}
           onFile={setFile}
           description={description}
@@ -123,7 +129,10 @@ export function PublicImagePanel({
           onConfirmed={setConfirmed}
           disabled={busy}
         />
-        <button className="button" disabled={busy || !file || !confirmed}>
+        <button
+          className="button"
+          disabled={busy || (!file && !useOriginal) || !confirmed}
+        >
           {busy
             ? "Guardando…"
             : context.asset_id

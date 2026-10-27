@@ -91,3 +91,8 @@ Hero de Inicio integrado con `public/illustrations/hero.webp`: ilustración tran
 
 
 Corrección autorizada (27-10-2026): el análisis inicial deja de bloquear descripciones o respuestas por heurísticas de nombres/identificadores. Se mantienen consentimiento vigente, acceso privado, instrucciones al proveedor para omitir identificadores y validación del contrato. Cuatro pruebas focalizadas aprobadas, incluida descripción ficticia con nombre compuesto. No se reabren reportes ya validados ni se reenvían históricos automáticamente.
+
+
+Actualización autorizada (27-10-2026): «Incluir captura original» permite aprobar la captura existente sin descargarla ni volver a subirla, con vista previa privada, descripción y confirmación explícita. Disponible al publicar y en publicaciones existentes; «Subir otra imagen» sigue siendo alternativa. El servidor toma únicamente la evidencia del reporte autorizado y crea una copia pública independiente; no admite identificadores arbitrarios de evidencia ni cambia el original. Sustituye el requisito previo de preparar siempre un archivo externo. Sin migraciones.
+
+Validación: TypeScript y dos recorridos focalizados aprobados (nueva selección desde servidor, aprobación obligatoria, permisos, bytes del original intactos, copia pública, reemplazo, URL retirada y concurrencia). Disponible en desarrollo3100; sin build ni actualización del empaquetado3000 en este incremento.
