@@ -8,6 +8,10 @@ export function PublicForm() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [preview, setPreview] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState("");
+  const [dragging, setDragging] = useState(false);
+  const dragDepth = useRef(0);
   useEffect(
     () => () => {
       if (preview) URL.revokeObjectURL(preview);
@@ -33,6 +37,39 @@ export function PublicForm() {
   useEffect(() => {
     if (failure || done) feedback.current?.focus();
   }, [failure, done]);
+  function synchronizeFile(file: File | null) {
+    if (!evidenceInput.current) return;
+    const transfer = new DataTransfer();
+    if (file) transfer.items.add(file);
+    evidenceInput.current.files = transfer.files;
+  }
+  function selectImage(files: FileList | null) {
+    if (busy) return;
+    if (!files?.length) {
+      synchronizeFile(image);
+      return;
+    }
+    const candidate = files[0];
+    if (files.length !== 1) {
+      setUploadError("Adjunta una sola imagen.");
+      synchronizeFile(image);
+      return;
+    }
+    if (
+      candidate.size > MAX_EVIDENCE_BYTES ||
+      !EVIDENCE_TYPES.includes(candidate.type) ||
+      !candidate.size
+    ) {
+      setUploadError("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
+      synchronizeFile(image);
+      return;
+    }
+    synchronizeFile(candidate);
+    setImage(candidate);
+    setPreview(URL.createObjectURL(candidate));
+    setUploadError("");
+    setFields((previous) => ({ ...previous, evidence: [] }));
+  }
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
@@ -97,69 +134,136 @@ export function PublicForm() {
         </div>
       )}
       <div className="evidence-upload">
-        <label htmlFor="evidence">
+        <label htmlFor="evidence" className="capture-label">
           Captura o imagen <span>(obligatoria)</span>
         </label>
-        <p id="evidence-help" className="help">
-          Oculta datos personales innecesarios. PNG, JPG o WebP, hasta 5 MB y 20
-          megapíxeles.
-        </p>
-        <div className="file-picker">
-          <span aria-hidden="true">
-            {preview ? "Cambiar captura" : "Adjuntar captura"} <Arrow />
-          </span>
-          <input
-            ref={evidenceInput}
-            id="evidence"
-            name="evidence"
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            required
-            aria-describedby="evidence-help evidence-error"
-            aria-invalid={!!fields.evidence}
-            disabled={busy}
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              setPreview("");
-              if (file) {
-                if (
-                  file.size > MAX_EVIDENCE_BYTES ||
-                  !EVIDENCE_TYPES.includes(file.type)
-                ) {
-                  setFailure("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
-                  event.target.value = "";
-                } else {
-                  setFailure("");
-                  setPreview(URL.createObjectURL(file));
-                }
-              }
-            }}
-          />
-        </div>
-        <FieldError name="evidence" fields={fields} />
-        {preview && (
-          <div>
-            <img
-              className="evidence-preview"
-              src={preview}
-              alt="Vista previa de la imagen que vas a enviar"
-            />
-            <button
-              type="button"
-              className="remove-evidence"
-              disabled={busy}
-              onClick={() => {
-                if (evidenceInput.current) {
-                  evidenceInput.current.value = "";
-                  evidenceInput.current.focus();
-                }
-                setPreview("");
-              }}
-            >
-              Quitar imagen
-            </button>
+        <div
+          className={`capture-surface${dragging ? " is-dragging" : ""}${preview ? " has-image" : ""}`}
+          onDragEnter={(event) => {
+            event.preventDefault();
+            if (!busy) {
+              dragDepth.current++;
+              setDragging(true);
+            }
+          }}
+          onDragOver={(event) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = busy ? "none" : "copy";
+          }}
+          onDragLeave={(event) => {
+            event.preventDefault();
+            dragDepth.current = Math.max(0, dragDepth.current - 1);
+            if (!dragDepth.current) setDragging(false);
+          }}
+          onDrop={(event) => {
+            event.preventDefault();
+            dragDepth.current = 0;
+            setDragging(false);
+            selectImage(event.dataTransfer.files);
+          }}
+        >
+          {preview ? (
+            <div className="capture-preview">
+              <img
+                src={preview}
+                alt="Vista previa de la imagen que vas a enviar"
+              />
+            </div>
+          ) : (
+            <>
+              <div className="capture-symbol" aria-hidden="true">
+                <svg viewBox="0 0 80 80" fill="none">
+                  <rect
+                    x="13"
+                    y="10"
+                    width="50"
+                    height="58"
+                    rx="8"
+                    fill="white"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  />
+                  <rect
+                    x="23"
+                    y="20"
+                    width="30"
+                    height="25"
+                    rx="4"
+                    fill="#EADCF2"
+                  />
+                  <circle cx="32" cy="28" r="3" fill="currentColor" />
+                  <path
+                    d="m25 40 8-8 7 7 5-5 6 6M24 54h20M24 60h13"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="61" cy="59" r="16" fill="currentColor" />
+                  <path
+                    d="M61 67V51m-6 6 6-6 6 6"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <h2>Comparte una captura de lo ocurrido</h2>
+              <p className="drop-instruction">
+                Arrastra tu imagen aquí o selecciónala desde tu dispositivo.
+              </p>
+            </>
+          )}
+          <div className="capture-controls">
+            <div className="file-picker">
+              <span aria-hidden="true">
+                {preview ? "Cambiar imagen" : "Seleccionar imagen"} <Arrow />
+              </span>
+              <input
+                ref={evidenceInput}
+                id="evidence"
+                name="evidence"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                required
+                aria-describedby="evidence-help evidence-error"
+                aria-invalid={!!uploadError || !!fields.evidence?.length}
+                disabled={busy}
+                onChange={(event) => selectImage(event.target.files)}
+              />
+            </div>
+            {preview && (
+              <button
+                type="button"
+                className="remove-evidence"
+                disabled={busy}
+                onClick={() => {
+                  synchronizeFile(null);
+                  setImage(null);
+                  setPreview("");
+                  setUploadError("");
+                  evidenceInput.current?.focus();
+                }}
+              >
+                Quitar imagen
+              </button>
+            )}
           </div>
-        )}
+          <p className="capture-limits">
+            PNG, JPG o WebP · Hasta 5 MB · Máximo 20 megapíxeles
+          </p>
+        </div>
+        <p id="evidence-help" className="help capture-help">
+          Oculta datos personales innecesarios antes de adjuntarla.
+        </p>
+        <p
+          id="evidence-error"
+          className="field-error"
+          role={uploadError ? "alert" : undefined}
+        >
+          {uploadError || fields.evidence?.[0]}
+        </p>
       </div>
       <div>
         <label htmlFor="sourceUrl">

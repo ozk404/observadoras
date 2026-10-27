@@ -20,12 +20,10 @@ export default function Reportar() {
         <aside className={styles.context}>
           <Shield />
           <h2>Tu reporte comienza en privado.</h2>
-          <p>No pedimos tu nombre ni datos de contacto.</p>
-          <div className={styles.divider} />
           <p>
-            El equipo revisa el original. Solo una versión aprobada por una
-            persona autorizada puede publicarse; la captura y el enlace
-            permanecen privados.
+            No pedimos tu nombre ni datos de contacto. La captura y el enlace
+            permanecen privados; solo una versión revisada y aprobada por el
+            equipo puede publicarse.
           </p>
           <p className={styles.notice}>
             Este envío informa al observatorio; no presenta una denuncia penal

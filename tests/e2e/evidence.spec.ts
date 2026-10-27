@@ -13,6 +13,16 @@ test("public form requires an image, accepts a private preview and works on mobi
   await expect(
     page.getByLabel("URL de la publicación o fuente"),
   ).not.toHaveAttribute("required");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({
+    path: "artifacts/reportar-captura-vacia-desktop.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: "artifacts/reportar-captura-vacia-mobile.png",
+    fullPage: true,
+  });
   await page.getByLabel("Captura o imagen").setInputFiles(await imageFixture());
   await expect(
     page.getByRole("img", {
@@ -55,6 +65,68 @@ test("public form requires an image, accepts a private preview and works on mobi
     path: "artifacts/reportar-evidencia-desktop.png",
     fullPage: true,
   });
+});
+test("capture drop keeps valid files when replacement is invalid or cancelled", async ({
+  page,
+}) => {
+  await page.goto("/reportar");
+  const fixture = await imageFixture();
+  const zone = page.locator(".capture-surface");
+  const transfer = await page.evaluateHandle(
+    ({ bytes, name, type }) => {
+      const data = new DataTransfer();
+      data.items.add(new File([new Uint8Array(bytes)], name, { type }));
+      return data;
+    },
+    {
+      bytes: Array.from(fixture.buffer),
+      name: fixture.name,
+      type: fixture.mimeType,
+    },
+  );
+  await zone.dispatchEvent("dragenter", { dataTransfer: transfer });
+  await expect(zone).toHaveClass(/is-dragging/);
+  await zone.dispatchEvent("drop", { dataTransfer: transfer });
+  await expect(zone).not.toHaveClass(/is-dragging/);
+  await expect(
+    page.getByRole("img", {
+      name: "Vista previa de la imagen que vas a enviar",
+    }),
+  ).toBeVisible();
+  const input = page.getByLabel("Captura o imagen");
+  expect(
+    await input.evaluate((el: HTMLInputElement) => el.files?.[0]?.name),
+  ).toBe(fixture.name);
+  const invalid = await page.evaluateHandle(() => {
+    const data = new DataTransfer();
+    data.items.add(new File(["text"], "invalid.txt", { type: "text/plain" }));
+    return data;
+  });
+  await zone.dispatchEvent("drop", { dataTransfer: invalid });
+  await expect(page.locator("#evidence-error")).toHaveText(/PNG, JPG o WebP/);
+  expect(
+    await input.evaluate((el: HTMLInputElement) => el.files?.[0]?.name),
+  ).toBe(fixture.name);
+  const multiple = await page.evaluateHandle(() => {
+    const data = new DataTransfer();
+    data.items.add(new File(["one"], "one.png", { type: "image/png" }));
+    data.items.add(new File(["two"], "two.png", { type: "image/png" }));
+    return data;
+  });
+  await zone.dispatchEvent("drop", { dataTransfer: multiple });
+  await expect(page.locator("#evidence-error")).toHaveText("Adjunta una sola imagen.");
+  await input.setInputFiles([]);
+  expect(
+    await input.evaluate((el: HTMLInputElement) => el.files?.[0]?.name),
+  ).toBe(fixture.name);
+  await page.getByRole("button", { name: "Quitar imagen" }).click();
+  expect(
+    await input.evaluate((el: HTMLInputElement) => el.validity.valueMissing),
+  ).toBe(true);
+  await expect(input).toBeFocused();
+  await transfer.dispose();
+  await invalid.dispose();
+  await multiple.dispose();
 });
 test("server rejects missing, corrupt or forged evidence and unsafe source URLs", async ({
   page,
