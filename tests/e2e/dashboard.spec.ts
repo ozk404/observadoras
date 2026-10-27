@@ -1,10 +1,12 @@
 import { test, expect, type Page } from "@playwright/test";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";
-async function login(page: Page, role = "dashboard-reviewer") {
+async function login(page: Page, role = "reviewer") {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-${role}`);
-  await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
+  await page
+    .getByLabel("Contraseña", { exact: true })
+    .fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }
@@ -16,10 +18,16 @@ test("private summary uses human validation, consistent chart/table data and wor
     await page.request.get("/api/privado/dashboard")
   ).json();
   await page.getByRole("link", { name: "Resumen", exact: true }).click();
-  await expect(page.getByTestId("dashboard-total")).toHaveText(String(initial.total));
+  await expect(page.getByTestId("dashboard-total")).toHaveText(
+    initial.total.toLocaleString("es-GT"),
+  );
   if (initial.total === 0) {
-    await expect(page.getByText("Sin reportes validados en este período.")).toBeVisible();
-    await expect(page.getByRole("table").getByText("Sin datos para este período.")).toBeVisible();
+    await expect(
+      page.getByText("Sin reportes validados en este período."),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("table").getByText("Sin datos para este período."),
+    ).toBeVisible();
     expect(await page.locator("body").innerText()).not.toMatch(/NaN|Infinity/);
   }
   await page.goto("/equipo");
@@ -83,20 +91,19 @@ test("private summary uses human validation, consistent chart/table data and wor
   expect(JSON.stringify(data)).not.toContain(secret);
   await page.getByRole("link", { name: "Resumen", exact: true }).click();
   await expect(page.getByTestId("dashboard-total")).toHaveText(
-    String(data.total),
+    data.total.toLocaleString("es-GT"),
   );
   expect(await page.locator("body").innerText()).not.toContain(secret);
   const table = page.getByRole("table");
   for (const row of data.rows) {
-    const tr = table
-      .getByRole("row")
-      .filter({
-        has: page.getByRole("rowheader", { name: row.label, exact: true }),
-      });
+    const tr = table.getByRole("row").filter({
+      has: page.getByRole("rowheader", { name: row.label, exact: true }),
+    });
     await expect(tr.getByRole("cell").first()).toHaveText(String(row.count));
     await expect(
       page
-        .locator(".dashboard-bars li")
+        .getByRole("region", { name: "Clasificación humana", exact: true })
+        .getByRole("listitem")
         .filter({ hasText: row.label })
         .locator("strong"),
     ).toHaveText(String(row.count));
@@ -118,25 +125,32 @@ test("private summary uses human validation, consistent chart/table data and wor
     states.rows.reduce((n: number, r: { count: number }) => n + r.count, 0),
   ).toBe(states.total);
   await expect(page.getByTestId("dashboard-total")).toHaveText(
-    String(states.total),
+    states.total.toLocaleString("es-GT"),
   );
   await page.getByRole("link", { name: "Restablecer", exact: true }).click();
   await expect(page).toHaveURL(/\/equipo\/dashboard$/);
   await expect(page.getByLabel("Fecha de validación")).toHaveValue("30");
+  await expect(
+    page
+      .getByRole("banner")
+      .getByRole("link", { name: `Cuenta: ${prefix}-reviewer` }),
+  ).toBeVisible();
   await page.screenshot({
     path: "artifacts/dashboard-desktop.png",
     fullPage: true,
   });
-  await page.setViewportSize({ width: 390, height: 844 });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
-  await page.screenshot({
-    path: "artifacts/dashboard-mobile.png",
-    fullPage: true,
-  });
+  for (const width of [1440, 768, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page.screenshot({
+      path: `artifacts/resumen-${width}.png`,
+      fullPage: true,
+    });
+  }
 });
 test("summary rejects visitors, participants and invalid or duplicate filters", async ({
   page,
@@ -168,7 +182,9 @@ test("summary rejects visitors, participants and invalid or duplicate filters", 
     expect(response.headers()["cache-control"]).toContain("no-store");
     expect(await response.text()).not.toContain("rows");
     await reviewer.goto(`/equipo/dashboard?${query}`);
-    await expect(reviewer.getByText("Filtros no válidos.", {exact:true})).toBeVisible();
+    await expect(
+      reviewer.getByText("Filtros no válidos.", { exact: true }),
+    ).toBeVisible();
     await expect(reviewer.getByTestId("dashboard-total")).toHaveCount(0);
   }
   await context.close();

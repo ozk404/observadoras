@@ -11,7 +11,12 @@ export function TeamNavigation({
   canManageUsers?: boolean;
 }) {
   const path = usePathname();
-  if (!inHeader && (path === "/equipo" || path === "/equipo/usuarios"))
+  if (
+    !inHeader &&
+    (path === "/equipo" ||
+      path === "/equipo/usuarios" ||
+      path === "/equipo/dashboard")
+  )
     return null;
   return (
     <nav className="private-nav" aria-label="Área de revisión">
