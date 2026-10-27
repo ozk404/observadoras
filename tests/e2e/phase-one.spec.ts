@@ -203,13 +203,18 @@ test("draft persists; another participant and reviewer cannot access it; partici
   browser,
 }) => {
   await login(page, "test-participant");
-  await page.getByRole("link", { name: "Nuevo registro" }).click();
   const title = `Borrador ficticio ${prefix}`;
-  await page.getByLabel("Título breve").fill(title);
-  await page
-    .getByLabel("Descripción")
-    .fill("Relato ficticio conservado en un borrador privado.");
-  await page.getByRole("button", { name: "Guardar borrador" }).click();
+  const created = await page.request.post("/api/privado/registros", {
+    headers: { origin },
+    data: {
+      title,
+      description: "Relato ficticio conservado en un borrador privado.",
+      submit: false,
+    },
+  });
+  expect(created.status()).toBe(201);
+  const draftId = (await created.json()).id;
+  await page.goto(`/equipo/${draftId}`);
   await expect(page.getByRole("heading", { name: title })).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Título breve")).toHaveValue(title);
@@ -337,7 +342,16 @@ test("private forms cannot submit before JavaScript is ready", async ({
     storageState: await page.context().storageState(),
   });
   const draft = await context.newPage();
-  await draft.goto("/equipo/nuevo");
+  const created = await page.request.post("/api/privado/registros", {
+    headers: { origin },
+    data: {
+      title: `Borrador previo ${prefix}`,
+      description: "",
+      submit: false,
+    },
+  });
+  expect(created.status()).toBe(201);
+  await draft.goto(`/equipo/${(await created.json()).id}`);
   await expect(draft.getByLabel("Título breve")).toBeDisabled();
   await expect(draft.getByLabel("Descripción")).toBeDisabled();
   await expect(

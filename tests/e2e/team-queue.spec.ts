@@ -37,7 +37,12 @@ test("team queue filters, counts and pagination respect both roles and fit the A
   await page.goto("/equipo");
   await expect(page).toHaveURL(/\/ingreso$/);
   await authenticate(page.context(), "reviewer");
+  await page.goto("/equipo/nuevo");
+  await expect(page).toHaveURL("/reportar");
   await page.goto("/equipo");
+  await expect(page.getByRole("link", { name: "Nuevo registro" })).toHaveCount(
+    0,
+  );
   const baseline = {
     total: await count(page, "Todos"),
     pending: await count(page, "Pendientes"),

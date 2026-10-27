@@ -31,6 +31,8 @@ Incremento de capturas en Equipo: se conservan filas con miniaturas privadas de 
 
 Validación focalizada: bandeja y recorrido de evidencia aprobados con datos ficticios (horizontal, vertical, cuadrada y larga), permisos 401/404, proporciones/tamaño, apertura/cierre/foco/Escape, carga fallida y ausencia de overflow en 320/390/768/1440. TypeScript y único build final aprobados (bc5ff793a5f5); actualizada solo app, worker intacto. Smoke empaquetado: health200, redirección de equipo sin sesión y miniatura401 privada. No se repitieron suites ajenas; Safari y dispositivos físicos pendientes.
 
+Simplificación autorizada: retirada la pantalla de creación interna y su botón «Nuevo registro». `/equipo/nuevo` redirige a `/reportar`, único formulario de recepción visible. No se añade otra modalidad de envío ni borradores al formulario público. Los registros/borradores previos y sus permisos se conservan; la API interna permanece por compatibilidad. La ruta antigua exige sesión por el layout privado y después redirige al formulario público. Validación: 6/6 recorridos phase-one/team-queue, TypeScript y build aprobados; solo app actualizada (b4e43fc4f583), worker intacto. Smoke empaquetado: health/reportar200 y protección de acceso sin sesión.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

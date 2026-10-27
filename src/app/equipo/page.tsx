@@ -55,9 +55,6 @@ export default async function Queue({
     <div className={styles.page}>
       <header className={styles.heading}>
         <h1>{user.role === "reviewer" ? "Reportes" : "Mis reportes"}</h1>
-        <Link className="button" href="/equipo/nuevo">
-          Nuevo registro <Arrow />
-        </Link>
       </header>
       <nav className={styles.filters} aria-label="Filtrar reportes por estado">
         <Link href={queueUrl()} aria-current={!status ? "page" : undefined}>
