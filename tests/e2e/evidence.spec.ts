@@ -6,20 +6,40 @@ test("public form requires an image, accepts a private preview and works on mobi
 }) => {
   await page.goto("/reportar");
   await expect(page.getByLabel("Título breve")).toHaveCount(0);
-  await expect(
-    page.getByLabel("Captura o imagen"),
-  ).toHaveAttribute("required", "");
+  await expect(page.getByLabel("Captura o imagen")).toHaveAttribute(
+    "required",
+    "",
+  );
   await expect(
     page.getByLabel("URL de la publicación o fuente"),
   ).not.toHaveAttribute("required");
-  await page
-    .getByLabel("Captura o imagen")
-    .setInputFiles(await imageFixture());
+  await page.getByLabel("Captura o imagen").setInputFiles(await imageFixture());
   await expect(
     page.getByRole("img", {
       name: "Vista previa de la imagen que vas a enviar",
     }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Quitar imagen" }).click();
+  await expect(
+    page.getByRole("img", {
+      name: "Vista previa de la imagen que vas a enviar",
+    }),
+  ).toHaveCount(0);
+  expect(
+    await page
+      .getByLabel("Captura o imagen")
+      .evaluate((input: HTMLInputElement) => input.files?.length),
+  ).toBe(0);
+  await expect(page.getByLabel("Captura o imagen")).toBeFocused();
+  await page.getByLabel("Captura o imagen").setInputFiles(await imageFixture());
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(

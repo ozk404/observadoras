@@ -17,6 +17,7 @@ export function PublicForm() {
   const [fields, setFields] = useState<Record<string, string[]>>({});
   const key = useRef("");
   const feedback = useRef<HTMLDivElement>(null);
+  const evidenceInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     key.current = crypto.randomUUID();
     fetch("/api/form-token", { cache: "no-store" })
@@ -73,12 +74,10 @@ export function PublicForm() {
   if (done)
     return (
       <div className="confirmation" ref={feedback} tabIndex={-1}>
-        <span className="eyebrow">Envío completado</span>
         <h2>Tu reporte fue recibido.</h2>
         <p>
-          El equipo del observatorio podrá revisarla junto con un análisis
-          preliminar de IA de la descripción y la captura, cuando esté
-          disponible. El envío no publica tu relato.
+          El equipo del observatorio revisará el reporte. El original permanece
+          privado; enviarlo no lo publica.
         </p>
         <p>No hay seguimiento público individual en esta etapa.</p>
         <a className="button" href="/">
@@ -102,57 +101,77 @@ export function PublicForm() {
           Captura o imagen <span>(obligatoria)</span>
         </label>
         <p id="evidence-help" className="help">
-          Adjunta una captura de pantalla o imagen que documente lo ocurrido.
-          Oculta datos personales innecesarios antes de enviarla. PNG, JPG o
-          WebP, hasta 5 MB y 20 megapíxeles.
+          Oculta datos personales innecesarios. PNG, JPG o WebP, hasta 5 MB y 20
+          megapíxeles.
         </p>
-        <input
-          id="evidence"
-          name="evidence"
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          required
-          aria-describedby="evidence-help"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            setPreview("");
-            if (file) {
-              if (
-                file.size > MAX_EVIDENCE_BYTES ||
-                !EVIDENCE_TYPES.includes(file.type)
-              ) {
-                setFailure("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
-                event.target.value = "";
-              } else {
-                setFailure("");
-                setPreview(URL.createObjectURL(file));
+        <div className="file-picker">
+          <span aria-hidden="true">
+            {preview ? "Cambiar captura" : "Adjuntar captura"} <Arrow />
+          </span>
+          <input
+            ref={evidenceInput}
+            id="evidence"
+            name="evidence"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            required
+            aria-describedby="evidence-help evidence-error"
+            aria-invalid={!!fields.evidence}
+            disabled={busy}
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              setPreview("");
+              if (file) {
+                if (
+                  file.size > MAX_EVIDENCE_BYTES ||
+                  !EVIDENCE_TYPES.includes(file.type)
+                ) {
+                  setFailure("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
+                  event.target.value = "";
+                } else {
+                  setFailure("");
+                  setPreview(URL.createObjectURL(file));
+                }
               }
-            }
-          }}
-        />
-        {preview && (
-          <img
-            className="evidence-preview"
-            src={preview}
-            alt="Vista previa de la imagen que vas a enviar"
+            }}
           />
+        </div>
+        <FieldError name="evidence" fields={fields} />
+        {preview && (
+          <div>
+            <img
+              className="evidence-preview"
+              src={preview}
+              alt="Vista previa de la imagen que vas a enviar"
+            />
+            <button
+              type="button"
+              className="remove-evidence"
+              disabled={busy}
+              onClick={() => {
+                if (evidenceInput.current) {
+                  evidenceInput.current.value = "";
+                  evidenceInput.current.focus();
+                }
+                setPreview("");
+              }}
+            >
+              Quitar imagen
+            </button>
+          </div>
         )}
       </div>
       <div>
         <label htmlFor="sourceUrl">
           URL de la publicación o fuente <span>(opcional)</span>
         </label>
-        <p id="url-help" className="help">
-          Pega el enlace completo, si está disponible. Quedará privado para
-          revisión.
-        </p>
         <input
           id="sourceUrl"
           name="sourceUrl"
           type="url"
           maxLength={2048}
           placeholder="https://…"
-          aria-describedby="url-help sourceUrl-error"
+          aria-describedby="sourceUrl-error"
           aria-invalid={!!fields.sourceUrl}
         />
         <FieldError name="sourceUrl" fields={fields} />
@@ -171,7 +190,7 @@ export function PublicForm() {
           required
           minLength={20}
           maxLength={6000}
-          rows={8}
+          rows={6}
           aria-describedby="description-help description-error"
           aria-invalid={!!fields.description}
           placeholder="Describe los hechos que deseas compartir con el observatorio…"
@@ -197,14 +216,14 @@ export function PublicForm() {
             aviso de tratamiento de información
           </a>
           . Autorizo el análisis de la descripción y la captura con OpenAI para
-          apoyar la revisión del equipo. El original y la imagen permanecen privados.
+          apoyar la revisión del equipo. El original y la imagen permanecen
+          privados.
         </span>
       </label>
       <div className="form-actions">
         <button className="button" disabled={busy || !token}>
           {busy ? "Enviando…" : "Enviar a revisión"} <Arrow />
         </button>
-        <span className="help">No necesitas crear una cuenta.</span>
       </div>
     </form>
   );
