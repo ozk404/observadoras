@@ -12,6 +12,10 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
   const unavailable = useRef(disabled);
   const pending = useRef(false);
   const restoreForm = useRef<(() => void) | null>(null);
+  const finishCurrent = useRef<(() => void) | null>(null);
+  const startFromHash = useRef<((manual?: boolean) => Promise<void>) | null>(
+    null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [returnFocus, setReturnFocus] = useState(false);
@@ -22,12 +26,14 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
     return () => {
       alive.current = false;
       tour.current?.destroy();
+      finishCurrent.current?.();
       restoreForm.current?.();
     };
   }, []);
   useEffect(() => {
     if (disabled) {
       tour.current?.destroy();
+      finishCurrent.current?.();
       restoreForm.current?.();
       tour.current = null;
     }
@@ -39,15 +45,43 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
     }
   }, [returnFocus, loading, disabled]);
 
-  async function start() {
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === "#tutorial") {
+        void startFromHash.current?.(false);
+      } else {
+        tour.current?.destroy();
+        finishCurrent.current?.();
+      }
+    };
+    const frame = requestAnimationFrame(handleHash);
+    window.addEventListener("hashchange", handleHash);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", handleHash);
+    };
+  }, []);
+
+  async function start(manual = true) {
     if (pending.current || unavailable.current || tour.current?.isActive())
       return;
+    const requestedUrl = window.location.href;
+    const pageAddress = window.location.pathname + window.location.search;
+    const previousHash =
+      manual && window.location.hash !== "#tutorial"
+        ? window.location.hash
+        : "";
     pending.current = true;
     setLoading(true);
     setError("");
     try {
       const { driver } = await import("driver.js");
-      if (!alive.current || unavailable.current) return;
+      if (
+        !alive.current ||
+        unavailable.current ||
+        window.location.href !== requestedUrl
+      )
+        return;
       const form = trigger.current?.form;
       if (!form) return;
       const wasInert = form.inert;
@@ -56,11 +90,26 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
         restoreForm.current = null;
       };
       const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let finished = false;
       const finishTour = () => {
+        if (finished) return;
+        finished = true;
         restoreForm.current?.();
         tour.current = null;
+        finishCurrent.current = null;
+        if (
+          window.location.pathname + window.location.search === pageAddress &&
+          window.location.hash === "#tutorial"
+        ) {
+          window.history.replaceState(
+            window.history.state,
+            "",
+            pageAddress + previousHash,
+          );
+        }
         if (alive.current && !unavailable.current) setReturnFocus(true);
       };
+      finishCurrent.current = finishTour;
       const instance = driver({
         popoverClass: "report-tour-popover",
         animate: !reduced,
@@ -164,10 +213,18 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
         ],
       });
       tour.current = instance;
+      if (window.location.hash !== "#tutorial") {
+        window.history.replaceState(
+          window.history.state,
+          "",
+          pageAddress + "#tutorial",
+        );
+      }
       form.inert = true;
       instance.drive();
     } catch {
       tour.current?.destroy();
+      finishCurrent.current?.();
       restoreForm.current?.();
       if (alive.current)
         setError(
@@ -179,12 +236,14 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
     }
   }
 
+  startFromHash.current = start;
+
   return (
     <div className="report-tour-launch">
       <button
         type="button"
         ref={trigger}
-        onClick={start}
+        onClick={() => void start()}
         disabled={disabled || loading}
       >
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">

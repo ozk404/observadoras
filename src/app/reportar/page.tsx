@@ -6,16 +6,19 @@ export const metadata: Metadata = { title: "Enviar reporte" };
 export default function Reportar() {
   return (
     <div className={`${styles.page} reportar-v2`}>
-      <header className={styles.heading}>
-        <h1>Enviar un reporte</h1>
-        <p>
-          Violencia política digital, desinformación y barreras a la
-          participación política de las mujeres.
-        </p>
-      </header>
       <div className={styles.layout}>
         <section className={styles.form} aria-label="Formulario de reporte">
-          <PublicForm />
+          <PublicForm
+            heading={
+              <header className={styles.heading}>
+                <h1>Enviar un reporte</h1>
+                <p>
+                  Violencia política digital, desinformación y barreras a la
+                  participación política de las mujeres.
+                </p>
+              </header>
+            }
+          />
         </section>
         <aside className={styles.context}>
           <Shield />

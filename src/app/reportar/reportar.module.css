@@ -6,15 +6,15 @@
   font-display: swap;
 }
 .page {
-  max-width: 944px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 56px 32px 80px;
   color: #271b30;
 }
 .heading {
   max-width: 680px;
-  margin: 0 auto 36px;
-  text-align: center;
+  margin: 0;
+  text-align: left;
 }
 .heading h1 {
   font-family: "Archivo Reportar", sans-serif;
@@ -293,7 +293,7 @@
     padding: 36px 20px 56px;
   }
   .heading {
-    margin-bottom: 28px;
+    margin: 0;
   }
   .heading h1 {
     font-size: 36px;
@@ -351,4 +351,90 @@
   .page :global(.capture-surface) {
     transition: none;
   }
+}
+
+.page :global(.report-form-heading) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  border-bottom: 1px solid #d9ccdf;
+  padding-bottom: 28px;
+}
+.page :global(.report-fields) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: stretch;
+}
+.page :global(.evidence-upload) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.page :global(.capture-surface) {
+  flex: 1;
+  min-height: 400px;
+  padding: 32px 24px;
+}
+.page :global(.report-details) {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+}
+.page :global(.report-description) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.page :global(.report-description) textarea {
+  flex: 1;
+  min-height: 220px;
+}
+.page :global(.report-description > .help) {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+.page :global(.report-submit-row) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 32px;
+  padding: 24px;
+  border: 1px solid #eadcf2;
+  border-radius: 12px;
+  background: #fcf8fe;
+}
+.page :global(.report-submit-row .checkbox) {
+  padding: 0;
+  background: transparent;
+}
+@media (max-width: 800px) {
+  .page :global(.report-form-heading) {
+    align-items: flex-start;
+    gap: 20px;
+    flex-direction: column;
+    padding-bottom: 24px;
+  }
+  .page :global(.report-fields) {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .page :global(.report-submit-row) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 20px;
+  }
+  .page :global(.report-submit-row .button) {
+    width: 100%;
+    justify-content: center;
+  }
+  .page :global(.capture-surface) {
+    min-height: 340px;
+  }
+}
+
+.page :global(.report-description > p.help) {
+  margin: 0 0 12px;
 }

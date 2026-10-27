@@ -19,6 +19,8 @@ Este resumen prevalece para conocer el estado técnico vigente. Los diseños y v
 
 ADN v2 aprobado con blanco dominante, bloques protagonistas de morado `#69088B` y copy verificable sin obviedades o lemas morales. Inicio desarrollado como landing informativa: ámbitos, finalidad del monitoreo/incidencia, herramientas, Paridad 2026 y alcance territorial, sin flujo de trámite; ilustración pendiente de producción por el usuario con espacio sustituible. Reportar también incorpora ADN v2, captura protagonista con arrastre/vista previa y tutorial visual voluntario con Driver.js desde «Ver cómo reportar». Ver `REPORTAR-ADN-V2-VERIFICACION.md` y `REPORTAR-TUTORIAL-VERIFICACION.md`: 11/11 recorridos seleccionados aprobados tras la integración del tutorial. Las demás páginas conservan su diseño hasta su incremento. Ver `ADN_VISUAL.md`, `diseno/ADN-V2-PROPUESTA.md` e `LANDING-PROYECTO-VERIFICACION.md` (sustituye los hitos mínimos de copy y diseño anteriores). Verificación visual: cuatro recorridos seleccionados, TypeScript y build aprobados; no se repitieron pruebas de base porque no cambió lógica ni contratos.
 
+Reportar: retícula de columnas iguales en escritorio, captura y descripción alineadas, tutorial integrado en cabecera y apertura directa mediante `/reportar#tutorial`. Último pase de este incremento: 15/15 recorridos seleccionados, build y actualización local aprobados; ver `REPORTAR-RETICULA-VERIFICACION.md`. Sustituye la composición en una columna de los hitos anteriores.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.
