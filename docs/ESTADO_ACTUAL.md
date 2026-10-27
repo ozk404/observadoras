@@ -27,6 +27,10 @@ Equipo modernizado como bandeja ADN: Archivo, navegación contenida morada, fila
 
 Validación de este incremento: 6/6 (phase-one + team-queue) con fixtures y PostgreSQL de desarrollo; incluye ambos roles, conteos, 20+1 registros, filtros inválidos, vacíos, apertura de ficha y flujo de revisión/publicación separado. La prueba de bandeja usa valores basales para poder compartir cuentas con otras suites. Capturas y ausencia de overflow en 320/390/768/1440. TypeScript y único build final aprobados (deeb8cc48245); actualizada solo app, worker intacto, health200 y apertura autenticada/filtro del empaquetado correctos sin registrar contenido privado. No se repitió toda la suite de servidor; pendiente revisión humana y Safari/dispositivos físicos.
 
+Incremento de capturas en Equipo: se conservan filas con miniaturas privadas de marco uniforme y proporción completa, sin recortes. El visor permite ampliar sin salir de la bandeja, ajustar a pantalla o recorrer la captura a tamaño real. Original descargado solo al abrir; miniatura WebP de hasta 256×192, sin caché pública ni optimizador de Next. Autorización comprobada antes de generar cada variante; sin cambios de esquema ni publicaciones.
+
+Validación focalizada: bandeja y recorrido de evidencia aprobados con datos ficticios (horizontal, vertical, cuadrada y larga), permisos 401/404, proporciones/tamaño, apertura/cierre/foco/Escape, carga fallida y ausencia de overflow en 320/390/768/1440. TypeScript y único build final aprobados (bc5ff793a5f5); actualizada solo app, worker intacto. Smoke empaquetado: health200, redirección de equipo sin sesión y miniatura401 privada. No se repitieron suites ajenas; Safari y dispositivos físicos pendientes.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.

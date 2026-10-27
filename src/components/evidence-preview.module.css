@@ -1,0 +1,157 @@
+.thumbnail,
+.placeholder {
+  width: 112px;
+  height: 88px;
+  flex: 0 0 112px;
+  border-radius: 8px;
+  background: #f5f0f7;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.thumbnail {
+  position: relative;
+  z-index: 1;
+  padding: 6px;
+  border: 1px solid #d9ccdf;
+  cursor: zoom-in;
+}
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.thumbnail:hover {
+  border-color: #69088b;
+}
+.thumbnail:focus-visible,
+.dialog button:focus-visible {
+  outline: 3px solid #69088b;
+  outline-offset: 3px;
+}
+.placeholder {
+  color: #9b8fa1;
+}
+.placeholder svg {
+  width: 28px;
+  height: 28px;
+}
+.dialog {
+  padding: 0;
+  border: 1px solid #d9ccdf;
+  border-radius: 16px;
+  background: white;
+  color: #271b30;
+  width: min(1120px, calc(100vw - 40px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  box-shadow: 0 20px 80px #271b3040;
+}
+.dialog::backdrop {
+  background: #271b30b3;
+}
+.panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #d9ccdf;
+}
+.panel header h2 {
+  font-family: "Archivo Equipo", sans-serif;
+  font-size: 22px;
+  font-weight: 750;
+  margin: 0;
+  line-height: 1.3;
+}
+.panel header > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dialog button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #d9ccdf;
+  border-radius: 8px;
+  color: #69088b;
+  background: white;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+.dialog .close {
+  background: #69088b;
+  color: white;
+  border-color: #69088b;
+}
+.close span {
+  font-size: 22px;
+  line-height: 1;
+}
+.canvas {
+  overflow: auto;
+  max-height: calc(100dvh - 140px);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f0f7;
+  min-height: 160px;
+}
+.canvas img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100dvh - 184px);
+  object-fit: contain;
+  margin: 0 auto;
+}
+.canvas.zoomed {
+  display: block;
+}
+.canvas.zoomed img {
+  max-width: none;
+  max-height: none;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .thumbnail,
+  .placeholder {
+    width: 80px;
+    height: 80px;
+    flex-basis: 80px;
+  }
+  .dialog {
+    width: calc(100vw - 24px);
+  }
+  .panel header {
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 12px;
+  }
+  .panel header > div {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .panel header h2 {
+    font-size: 20px;
+  }
+  .canvas {
+    max-height: calc(100dvh - 180px);
+    padding: 12px;
+  }
+  .canvas img {
+    max-height: calc(100dvh - 204px);
+  }
+}

@@ -201,9 +201,11 @@ export async function listReports(user: User, page = 1, status?: ReportStatus) {
         | "status"
         | "version"
         | "created_at"
+        | "has_evidence"
       >
     >(
-      `SELECT id,title,description,author_id,status,version,created_at FROM reports
+      `SELECT id,title,description,author_id,status,version,created_at,
+    EXISTS(SELECT 1 FROM report_evidence e WHERE e.report_id=reports.id) AS has_evidence FROM reports
     WHERE (author_id=$1 OR ($2='reviewer' AND status<>'draft'))
     AND ($4::text IS NULL OR status=$4) ORDER BY created_at DESC,id LIMIT 21 OFFSET $3`,
       [user.id, user.role, (page - 1) * 20, status ?? null],

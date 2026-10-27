@@ -1,9 +1,10 @@
 import { requireUser } from "@/server/auth";
 import { getReport } from "@/server/reports";
 import { db } from "@/server/db";
+import { evidenceThumbnail } from "@/server/evidence-thumbnail";
 import { apiError, HttpError } from "@/server/security";
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   try {
@@ -16,12 +17,13 @@ export async function GET(
         [id],
       )
     ).rows[0];
-    if (!row)
-      throw new HttpError(
-        404,
-        "No hay imagen para este reporte.",
-      );
-    return new Response(new Uint8Array(row.content), {
+    if (!row) throw new HttpError(404, "No hay imagen para este reporte.");
+    const thumbnail =
+      new URL(request.url).searchParams.get("vista") === "miniatura";
+    const content = thumbnail
+      ? await evidenceThumbnail(row.content)
+      : row.content;
+    return new Response(new Uint8Array(content), {
       headers: {
         "Content-Type": "image/webp",
         "Content-Disposition": 'inline; filename="evidencia.webp"',

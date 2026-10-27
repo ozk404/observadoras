@@ -403,3 +403,43 @@
     display: none;
   }
 }
+
+.row {
+  position: relative;
+}
+.lead {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+.lead h2 {
+  min-width: 0;
+}
+.lead h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+.lead h2 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.row:has(h2 a:focus-visible) {
+  outline: 3px solid #69088b;
+  outline-offset: -3px;
+  background: #fcf8fe;
+}
+.lead h2 a:focus-visible {
+  outline: none;
+}
+@media (max-width: 900px) {
+  .lead {
+    grid-area: title;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .row h2 {
+    grid-area: auto;
+  }
+}

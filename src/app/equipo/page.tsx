@@ -8,6 +8,7 @@ import {
 } from "@/server/reports";
 import { Arrow } from "@/components/icons";
 import { Status } from "@/components/status";
+import { EvidencePreview } from "@/components/evidence-preview";
 import styles from "./queue.module.css";
 export const metadata = { title: "Reportes del equipo" };
 const filterLabels: Record<ReportStatus, string> = {
@@ -85,8 +86,19 @@ export default async function Queue({
             <ol className={styles.list}>
               {rows.map((report) => (
                 <li key={report.id}>
-                  <Link className={styles.row} href={`/equipo/${report.id}`}>
-                    <h2>{report.title}</h2>
+                  <div className={styles.row}>
+                    <div className={styles.lead}>
+                      <EvidencePreview
+                        id={report.id}
+                        title={report.title}
+                        available={report.has_evidence}
+                      />
+                      <h2>
+                        <Link href={`/equipo/${report.id}`}>
+                          {report.title}
+                        </Link>
+                      </h2>
+                    </div>
                     <div className={styles.state}>
                       <Status status={report.status} />
                     </div>
@@ -102,7 +114,7 @@ export default async function Queue({
                       {date.format(report.created_at)}
                     </time>
                     <Arrow />
-                  </Link>
+                  </div>
                 </li>
               ))}
             </ol>
