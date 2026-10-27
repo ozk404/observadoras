@@ -58,7 +58,13 @@ export default async function Queue({
       <header className={styles.heading}>
         <h1>{user.role === "reviewer" ? "Reportes" : "Mis reportes"}</h1>
         <div className={styles.headerActions}>
-          {user.role === "reviewer" && <TeamNavigation inHeader />}
+          {(user.role === "reviewer" || user.can_manage_users) && (
+            <TeamNavigation
+              inHeader
+              reviewer={user.role === "reviewer"}
+              canManageUsers={user.can_manage_users}
+            />
+          )}
           <TeamTour reviewer={user.role === "reviewer"} />
         </div>
       </header>

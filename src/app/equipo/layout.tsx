@@ -16,8 +16,13 @@ export default async function TeamLayout({
   if (!user) redirect("/ingreso");
   return (
     <div className="wrap page-space">
-      <HeaderAccount username={user.username} />
-      {user.role === "reviewer" && <TeamNavigation />}
+      <HeaderAccount username={user.username} fullName={user.full_name} />
+      {(user.role === "reviewer" || user.can_manage_users) && (
+        <TeamNavigation
+          reviewer={user.role === "reviewer"}
+          canManageUsers={user.can_manage_users}
+        />
+      )}
       {children}
     </div>
   );

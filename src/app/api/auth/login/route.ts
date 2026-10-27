@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         401,
         "No pudimos iniciar sesión. Revisa tus credenciales o consulta con la administración.",
       );
-    await createSession(user.id);
+    await createSession(user.id, user.password_hash);
     return Response.json({ ok: true });
   } catch (error) {
     return apiError(error);

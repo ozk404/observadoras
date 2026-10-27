@@ -22,12 +22,21 @@ Contraseñas de 14–128 caracteres por stdin; no se pasan como argumentos ni ha
 
 ```powershell
 $credential = Get-Credential -UserName revisora
-$credential.GetNetworkCredential().Password | docker compose exec -T app npm run user -- create revisora reviewer
+$credential.GetNetworkCredential().Password | docker compose exec -T app npm run user -- create revisora reviewer "Nombre completo"
 Remove-Variable credential
 docker compose exec -T app npm run user -- disable revisora
 ```
 
-Usa `participant` para cuentas que solo crean/consultan sus registros, o `reviewer` para el equipo autorizado a leer envíos y publicar. No hay rol administrativo con acceso implícito. Administrar cuentas requiere acceso operativo al contenedor.
+La gestión web está en `/equipo/usuarios`, reservada al permiso `can_manage_users`, independiente del rol de revisión. Permite crear cuentas revisoras con nombre obligatorio, editar nombres, activar/desactivar, conceder administración y restablecer contraseñas; conserva las cuentas participantes antiguas. No hay registro público ni envío de claves por correo. Desactivar, restablecer contraseña o cambiar el permiso administrativo revoca sesiones. No se permite auto-desactivarse, retirarse administración ni restablecer la propia contraseña desde el panel. Se conserva al menos una persona administradora activa.
+
+La habilitación inicial es una operación explícita; ningún username concede privilegios automáticamente:
+
+```powershell
+docker compose exec -T app npm run user -- grant-admin USUARIO
+docker compose exec -T app npm run user -- set-name USUARIO "Nombre completo"
+```
+
+Para recuperación operativa de una cuenta, usa `Get-Credential` y pasa la nueva clave por stdin a `npm run user -- reset-password USUARIO`. Nunca como argumento. Esta operación también revoca sesiones y deja auditoría. Las claves nuevas requieren 14–128 caracteres. Las cuentas anteriores sin nombre se muestran como pendientes hasta completarlo; no se inventan identidades. El historial registra actor, destinatario, origen operativo/web y campos modificados; no registra contraseñas ni hashes.
 
 ## Recorridos
 

@@ -45,14 +45,20 @@ Validación focalizada de ficha: 29 recorridos seleccionados completados en ejec
 
 Comparación de reporte/IA ajustada: en escritorio ambos paneles tienen altura común adaptable al viewport (500–720 px) y scroll independiente solo cuando desbordan, con foco de teclado y barras nativas. En móvil/tableta vuelven al flujo normal, sin scroll interno. Así la longitud de la IA no aleja la revisión humana ni deja un hueco bajo la captura. Pruebas focalizadas de ficha y desplazamiento aprobadas: contenidos corto/largo, independencia por teclado, ampliación, estados y cuatro anchos; TypeScript aprobado. Único build final aprobado (18506ef9d936); app actualizada, worker intacto y smoke empaquetado health200/acceso privado protegido. No se repitieron suites de datos sin cambios.
 
+Administración de usuarios (27-10-2026): `/equipo/usuarios` cerrado por permiso `can_manage_users`, independiente de revisión. Nombre completo obligatorio en altas web/CLI, username único e inmutable; nombres existentes nulos se completan sin inventar identidades y permiten bajas mientras están pendientes. Listado paginado con búsqueda, altas revisoras, edición, activación/desactivación, restablecimiento y auditoría acotada por cuenta. Cabecera usa nombre con fallback al usuario. No hay alta pública ni correo de contraseñas.
+
+Migración 011 aditiva y bootstrap operativo explícito; ningún username recibe privilegios automáticamente. Mutaciones transaccionales con versión, revisión de permisos vigente y bloqueo de auto-baja/auto-retirada de administración y último administrador activo. Desactivación, cambio del permiso administrativo y reset revocan sesiones. Creación de sesión compara bajo bloqueo el hash validado, impidiendo login tardío con credenciales anteriores. Recuperación propia disponible operativamente por CLI con clave en stdin. Contraseñas/hashes ausentes de respuestas administrativas, historial y logs.
+
+Validación: ocho recorridos focalizados completados entre administración, navegación y acceso, PostgreSQL aislado y datos ficticios. Incluye permisos, nombres, duplicados, campos estrictos, versiones/concurrencia, sesiones, reset web/operativo y login obsoleto, compatibilidad de cuentas sin nombre, búsqueda/paginación y UI en 320/390/768/1440. TypeScript y único build final aprobados (620a61791c82). Migración 011 aplicada en el empaquetado; bootstrap explícito de admin y nombre Administrador. Solo app recreada, worker intacto. Smoke autenticado de página/API/historial correcto; sesión temporal eliminada y sesiones existentes conservadas. No se repitió toda la suite de servidor/reportes; Safari, dispositivos físicos y aceptación humana pendientes.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.
 - Evaluación institucional de calidad de IA, taxonomía oficial y criterios de riesgo. No inventar esos criterios.
-- Búsqueda/filtros operativos del listado, si se autorizan; administración de cuentas disponible actualmente por comandos.
+- Búsqueda por texto y filtros adicionales de reportes, si se autorizan.
 - Operación institucional: conservación, canal de derechos, retirada de publicaciones, alojamiento, HTTPS, respaldo y restauración comprobada. La autorización técnica del usuario no equivale a aprobación institucional.
 - Transferencia final y prueba de aceptación con el equipo. No se declara completo el producto por tener pruebas locales.
 
 ## Trazabilidad
 
-Migraciones 001–010 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
+Migraciones 001–011 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
