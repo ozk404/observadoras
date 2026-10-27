@@ -76,6 +76,8 @@ Una frase verdadera no basta: debe aportar información específica y útil sobr
 
 La landing presenta el propósito del observatorio en el Programa Paridad 2026: documentación, análisis y seguimiento para el monitoreo ciudadano en Guatemala. No reducirla a un portal de envío/publicación. Diferenciar objetivos del programa, funciones disponibles y posibilidades futuras; no anunciar como implementados riesgo automático, identificación de patrones entre casos, atención sociojurídica o anonimización garantizada.
 
+Economía de texto no significa vaciar la landing: debe informar qué es el proyecto, qué observa, para qué se documentan los hallazgos, qué herramientas ofrece y en qué programa se enmarca. Cada sección responde una pregunta distinta y aporta contenido sustantivo. Usar listas informativas cuando ayuden a leer ámbitos o territorios; eliminar flujos triviales no implica prohibir toda lista. No sustituir la información del proyecto por una colección de accesos.
+
 ## Protagonismo del morado
 
 El blanco domina el conjunto; alternar superficies claras con bloques donde **#69088B** sea el fondo protagonista, no solo un botón o borde. Admitir bloques divididos blanco/morado y llamadas al catálogo de fondo morado con texto y acciones blancos. Separarlos con espacio blanco suficiente. No sustituir el morado principal por tonos oscuros en todos esos bloques ni volver moradas todas las pantallas de trabajo.

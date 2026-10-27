@@ -15,19 +15,41 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
     page.getByRole("link", { name: "Saltar al contenido" }),
   ).toBeFocused();
   const program = page.getByRole("region", { name: "Programa Paridad 2026" });
-  await expect(program).toContainText("instituciones estatales");
   await expect(program).toContainText("mujeres jóvenes y juventudes diversas");
-  await expect(page.getByRole("main").getByRole("list")).toHaveCount(0);
-  const analysis = page.getByRole("region", {
-    name: "Análisis asistido por IA",
+  const territory = program.getByRole("complementary", {
+    name: "Alcance territorial del programa",
   });
-  const catalog = page.getByRole("region", {
-    name: "Reportes publicados",
+  await expect(territory.getByRole("listitem")).toHaveText([
+    "Guatemala",
+    "Baja Verapaz",
+    "Quetzaltenango",
+    "Jutiapa",
+    "San Marcos",
+    "Quiché",
+  ]);
+  await expect(page.locator("main ol")).toHaveCount(0);
+  const scope = page.getByRole("region", { name: "Ámbitos de observación" });
+  for (const name of [
+    "Violencia política digital",
+    "Desinformación",
+    "Barreras a la participación",
+  ])
+    await expect(
+      scope.getByRole("heading", { name, exact: true }),
+    ).toBeVisible();
+  const tools = page.getByRole("region", {
+    name: "Herramientas del observatorio",
   });
-  await expect(analysis).toContainText(
-    "bajo revisión del equipo del observatorio",
+  await expect(tools).toContainText("sujetos a revisión humana");
+  await expect(tools).toContainText(
+    "Un panel privado reúne reportes validados",
   );
-  const contrast = await analysis.evaluate((el) => {
+  const purpose = page.getByRole("region", {
+    name: "Hallazgos para el monitoreo y la incidencia.",
+  });
+  await expect(purpose).toContainText("instituciones estatales");
+  const catalog = page.getByRole("region", { name: "Reportes publicados" });
+  const contrast = await purpose.evaluate((el) => {
     const background = getComputedStyle(el).backgroundColor;
     const foreground = getComputedStyle(el.querySelector("p")!).color;
     function luminance(color: string) {
