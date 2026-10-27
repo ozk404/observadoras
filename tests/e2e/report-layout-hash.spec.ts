@@ -63,6 +63,10 @@ test("same-page hash opens the tutorial and foreign fragments are preserved", as
   page,
 }) => {
   await page.goto("/reportar?origen=guia#contexto");
+  // Hash changes simulate an action on an already hydrated form.
+  await expect(
+    page.getByRole("button", { name: "Enviar a revisión" }),
+  ).toBeEnabled();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.evaluate(() => {
     location.hash = "tutorial";

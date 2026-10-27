@@ -22,3 +22,13 @@
 ## Límites
 
 Pruebas de navegador en Chromium. Pendiente valoración humana en dispositivo físico y comprobación con lectores de pantalla/Safari; no se atribuye esa cobertura a la emulación móvil.
+
+## Movimiento entre pasos — 26-10-2026
+
+A petición del usuario se conserva la composición aprobada. Spotlight de Driver420ms, scroll suave y entrada de tarjeta240ms (opacidad, desplazamiento8px y escala.985→1). Movimiento reducido desactiva las tres animaciones.
+
+- Build Docker con TypeScript: salida0; imagen97fd90a09934.
+- Inspección de transición mediante RAF: 27 posiciones intermedias del spotlight y animación report-tour-enter observadas en320/390/1440px. Tarjeta y control resaltado dentro del viewport al asentarse cada paso.
+- Pase inicial de tutorial/retícula/hash6/7: un caso simulaba hashchange antes de hidratar el formulario. Se espera ahora a que el formulario esté listo antes de esa acción de la prueba. Pase final7/7, salida0; incluye cierre temprano, teclado, enlace directo y movimiento reducido.
+- Docker local actualizado; app/db saludables, worker activo, health200. Datos conservados:4 reportes,1 publicación,3 evidencias. Entorno aislado detenido conservando volumen.
+- No se repitió la suite de servidor ni el envío completo: cambio limitado a movimiento. Comprobación en Chromium; valoración humana del movimiento y dispositivos físicos pendiente.

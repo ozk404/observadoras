@@ -113,8 +113,8 @@ export function ReportTour({ disabled }: { disabled: boolean }) {
       const instance = driver({
         popoverClass: "report-tour-popover",
         animate: !reduced,
-        duration: 180,
-        smoothScroll: false,
+        duration: 420,
+        smoothScroll: !reduced,
         overlayColor: "#271B30",
         overlayOpacity: 0.56,
         stagePadding: 8,

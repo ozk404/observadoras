@@ -1,0 +1,3 @@
+# Tutorial — movimiento entre pasos
+
+Solicitud autorizada: conservar composición aprobada y hacer más viva la transición entre elementos. Driver: interpolación del spotlight420ms y scroll suave, tarjeta con entrada de opacidad y desplazamiento8px/escala. Sin cambios de copy, campos, retícula, hash ni controles. prefers-reduced-motion desactiva animación y scroll suave. Mantener cierre temprano, limpieza y foco. Verificar trayectoria intermedia del spotlight en navegador, teclado/cierre y recorrido reducido, build y Docker local conservando datos. No es necesario repetir suite de servidor sin cambios de API.
