@@ -72,3 +72,8 @@ Resolver la revisión visual antes de un único build final del incremento. Para
 ## Definición de terminado para un incremento
 
 El flujo acordado funciona; se comprobaron permisos y protección de datos involucrados; no se introdujeron funcionalidades ajenas; es usable en móvil/escritorio cuando aplica; están documentados los límites; existe una forma clara de verificarlo.
+
+
+## Entorno único autorizado (27-10-2026)
+
+Sustituye la distribución anterior3100/3000: trabajar y revisar en localhost:3000 con recarga automática sobre los datos existentes. `node scripts/dev.mjs up` usa compose.yaml + compose.override.yaml; no reconstruir por ajustes visuales. El entorno3100 se reserva a pruebas aisladas bajo demanda (`test-up`, `ui`/`auth`, `test-down`), con fixtures y simulador; dejarlo detenido al terminar. Entrega empaquetada únicamente al cerrar un bloque acordado, usando `-f compose.yaml` para omitir el override. No ejecutar pruebas con fixtures sobre la base principal.

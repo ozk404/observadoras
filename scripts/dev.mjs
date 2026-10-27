@@ -3,7 +3,19 @@ import { writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 
 const [action = "up", ...args] = process.argv.slice(2);
-const actions = ["up", "down", "logs", "ui", "auth"];
+const actions = ["up", "down", "logs", "test-up", "test-down", "test-logs", "ui", "auth"];
+if (["up", "down", "logs"].includes(action)) {
+  if (args.length) throw Error("Local workspace does not accept test options.");
+  if (action === "up") {
+    run("docker", ["compose", "up", "-d", "db"]);
+    run("docker", ["compose", "run", "--rm", "--no-deps", "migrate"]);
+    run("docker", ["compose", "up", "-d", "--no-deps", "app", "ai-worker"]);
+    console.log("Workspace: http://localhost:3000 — live source; existing accounts and reports preserved.");
+  } else if (action === "down") {
+    run("docker", ["compose", "stop", "app", "ai-worker"]);
+  } else run("docker", ["compose", "logs", "-f", "app", "ai-worker"]);
+  process.exit(0);
+}
 if (!actions.includes(action)) {
   console.error(`Use: node scripts/dev.mjs ${actions.join("|")}`);
   process.exit(1);
@@ -41,7 +53,7 @@ function run(command, parameters, env = process.env) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 const compose = ["compose", "--env-file", ".env.dev", "-f", "compose.dev.yaml"];
-if (action === "up") {
+if (action === "test-up") {
   if (args.some((arg) => arg !== "--ai")) throw Error("up only accepts --ai");
   run("docker", [
     ...compose,
@@ -52,9 +64,9 @@ if (action === "up") {
   console.log(
     "Development: http://localhost:3100 — fictional data and local AI mock only.",
   );
-} else if (action === "down") {
+} else if (action === "test-down") {
   run("docker", [...compose, "--profile", "ai", "down"]);
-} else if (action === "logs") {
+} else if (action === "test-logs") {
   run("docker", [...compose, "logs", "-f", "app"]);
 } else {
   const env = {

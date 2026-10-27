@@ -1,0 +1,27 @@
+# Local workspace: live source, existing accounts and reports on port 3000.
+# Packaged delivery: docker compose -f compose.yaml up -d --build
+services:
+  migrate:
+    volumes:
+      - ./db:/app/db:ro
+      - ./scripts:/app/scripts:ro
+  app:
+    command: ["npm", "run", "dev", "--", "--webpack"]
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./src:/app/src:ro
+      - ./public:/app/public:ro
+      - ./scripts:/app/scripts:ro
+      - ./db:/app/db:ro
+      - ./next.config.ts:/app/next.config.ts:ro
+      - local_next:/app/.next
+  ai-worker:
+    command: ["node", "--watch", "--import", "tsx", "scripts/ai-worker.ts"]
+    volumes:
+      - ./src:/app/src:ro
+      - ./scripts:/app/scripts:ro
+volumes:
+  local_next:

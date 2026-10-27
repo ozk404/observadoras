@@ -4,15 +4,15 @@ Next.js, TypeScript, PostgreSQL y Docker Compose. Fase 1: recepción pública, b
 
 ## Arranque local
 
-Requisitos: Docker Engine con Compose; Node 22 para generar la configuración local.
+Requisitos: Docker Engine con Compose; Node 22 para generar la configuración local. En la primera instalación, construir la imagen una vez con `docker compose -f compose.yaml build app`.
 
 ```powershell
 node scripts/setup-env.mjs
-docker compose up --build -d
+node scripts/dev.mjs up
 docker compose ps
 ```
 
-Abre http://localhost:3000. La migración se ejecuta antes de arrancar la aplicación y puede repetirse. PostgreSQL no publica puertos; sus datos están en un volumen. El puerto de la app se enlaza a localhost. No ejecutar `down -v` si necesitas conservar información.
+Abre http://localhost:3000. Es el único entorno de trabajo visible: `compose.override.yaml` monta el código y activa recarga automática, sin reconstruir por cada edición. Las cuentas, reportes y configuración OpenAI de `.env` se conservan. Para una entrega empaquetada se omite el override explícitamente: `docker compose -f compose.yaml up -d --build`. La migración se ejecuta antes de arrancar la aplicación y puede repetirse. PostgreSQL no publica puertos; sus datos están en un volumen. El puerto de la app se enlaza a localhost. No ejecutar `down -v` si necesitas conservar información.
 
 `.env` contiene secretos aleatorios locales y no se versiona. `DATABASE_URL` apunta al servicio `db`. Revisa `.env.example`. Antes de exponer por HTTPS, establece `APP_ORIGIN` al origen exacto público y `COOKIE_SECURE=true`. Define el proxy/TLS y respaldos con la institución; Compose local no es una certificación de despliegue seguro.
 
@@ -172,3 +172,6 @@ La migración 012 es aditiva. La primera imagen se guarda atómicamente con la p
 
 
 Actualización autorizada (27-10-2026): «Incluir captura original» permite aprobar la captura existente sin descargarla ni volver a subirla, con vista previa privada, descripción y confirmación explícita. Disponible al publicar y en publicaciones existentes; «Subir otra imagen» sigue siendo alternativa. El servidor toma únicamente la evidencia del reporte autorizado y crea una copia pública independiente; no admite identificadores arbitrarios de evidencia ni cambia el original. Sustituye el requisito previo de preparar siempre un archivo externo. Sin migraciones.
+
+
+Pruebas aisladas bajo demanda: `node scripts/dev.mjs test-up` (añadir `--ai` si el flujo lo necesita), ejecutar `ui`/`auth` y finalizar con `node scripts/dev.mjs test-down`. El puerto3100 es exclusivo de pruebas con datos ficticios y proveedor simulado, no una segunda página para revisar cambios.

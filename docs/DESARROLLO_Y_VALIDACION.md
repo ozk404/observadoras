@@ -6,20 +6,24 @@
 node scripts/dev.mjs up
 ```
 
-Desarrollo: http://localhost:3100. Aplicación local empaquetada: http://localhost:3000. No cambiar de entorno sin comprobar la URL. Usa exclusivamente información ficticia en 3100.
-
-El comando genera `.env.dev` una sola vez y conserva sus secretos; no lee ni monta `.env` o `.env.review`. PostgreSQL, red, dependencias Linux y caché Next tienen volúmenes propios. OpenAI apunta al simulador local. El worker solo arranca con `node scripts/dev.mjs up --ai`.
-
-Código y recursos se montan directamente. No ejecutar Docker build/up tras cada edición. Las dependencias se instalan solo al cambiar lockfile, Node o plataforma; para cambiar paquetes usa npm de forma que package-lock.json quede actualizado y vuelve a ejecutar up. Los node_modules del host no se montan en Linux.
-
-En este Windows, Turbopack no detectó cambios de bind mounts. Se usa Webpack con polling: la prueba de CSS detectó cambios en aproximadamente 5 s. Algunos módulos CSS provocan recarga completa y pierden valores no enviados; no probar con datos reales. La primera instalación/compilación tarda más; las siguientes ediciones reutilizan dependencias y caché.
+Único entorno de trabajo: http://localhost:3000, con recarga automática mediante Webpack/polling. Usa `.env` y el volumen existente de PostgreSQL, conservando cuentas y reportes. `compose.override.yaml` monta código/recursos y una caché de desarrollo independiente. El worker también usa código montado. No reconstruir ni recrear contenedores por cambios de texto, CSS, imágenes o componentes.
 
 ```powershell
 node scripts/dev.mjs logs
 node scripts/dev.mjs down
 ```
 
-Down conserva los volúmenes. Mantener el entorno levantado durante el lote de trabajo. El puerto 3100 también lo usa compose.ai-test.yaml: detener uno antes de iniciar el otro. No usar down -v, limpiar volúmenes ni modificar límites en la base principal.
+`down` detiene app/worker sin borrar datos. La primera instalación requiere construir la imagen base una vez; nuevas dependencias sí requieren actualizar la imagen. La primera visita compila la ruta; las siguientes ediciones se reflejan en pocos segundos. Algunas ediciones causan recarga completa: guardar formularios antes de modificar código.
+
+Las pruebas de datos y permisos usan exclusivamente fixtures en una base separada. Se levantan bajo demanda y no sustituyen el entorno de trabajo:
+
+```powershell
+node scripts/dev.mjs test-up --ai
+# Ejecutar ui/auth según el flujo
+node scripts/dev.mjs test-down
+```
+
+El puerto3100 y `.env.dev` se reservan para estas pruebas, con proveedor simulado. Nunca ejecutar fixtures en3000 ni apuntar pruebas a `.env`. `test-down` conserva volúmenes. Para comprobar una entrega empaquetada, usar explícitamente `docker compose -f compose.yaml up -d --build`; volver al modo de trabajo con `node scripts/dev.mjs up`.
 
 Antes de ejecutar pruebas de navegador por primera vez en un equipo, preparar las dependencias del host una sola vez:
 
@@ -61,9 +65,9 @@ No ampliar ni repetir comprobaciones aprobadas sin cambios, fallos o riesgos pen
 Una vez terminados los ajustes y las pruebas seleccionadas:
 
 ```powershell
-docker compose build app
+docker compose -f compose.yaml build app
 # Solo para cambios de frontend, sin migraciones ni cambios del worker
-docker compose up -d --no-deps app
+docker compose -f compose.yaml up -d --no-deps app
 ```
 
 Un build final por incremento coherente. Si el cambio afecta backend/worker/migraciones, actualizar los servicios y ejecutar las comprobaciones correspondientes; no usar --no-deps para omitir una migración necesaria. Documentación/pruebas sin cambios de runtime no necesitan build ni despliegue. Comprobar salud y apertura de la ruta al actualizar, sin repetir todos los recorridos sobre el mismo artefacto.
