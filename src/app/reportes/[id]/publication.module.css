@@ -1,0 +1,135 @@
+@font-face {
+  font-family: "Archivo Publicacion";
+  src: url("../../fonts/archivo-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+.page {
+  width: min(900px, calc(100% - 64px));
+  margin: auto;
+  padding: 36px 0 64px;
+  color: #271b30;
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 28px;
+  font-size: 14px;
+  font-weight: 750;
+  text-decoration: none;
+  color: #69088b;
+}
+.heading {
+  padding-bottom: 32px;
+  margin-bottom: 36px;
+  border-bottom: 4px solid #69088b;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  font-size: 13px;
+  color: #75677e;
+  margin-bottom: 24px;
+}
+.meta > span {
+  color: #69088b;
+  background: #f4eaf9;
+  border: 1px solid #e3d1eb;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+.heading h1 {
+  font:
+    800 clamp(32px, 4.3vw, 56px)/1.14 "Archivo Publicacion",
+    sans-serif;
+  letter-spacing: -1.6px;
+  margin: 0;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    400 17px/1.95 "Manrope Variable",
+    sans-serif;
+  max-width: 780px;
+}
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #d9ccdf;
+}
+.footer p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #75677e;
+  margin: 0 0 24px;
+  max-width: 660px;
+}
+.footer nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  color: #69088b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 750;
+}
+.footer svg {
+  width: 20px;
+  height: 20px;
+}
+.page :focus-visible {
+  outline: 3px solid #69088b;
+  outline-offset: 4px;
+}
+:global(body):has(.page) :global(.wordmark > span) {
+  font-family: "Archivo Publicacion", sans-serif;
+  font-weight: 800;
+}
+@media (max-width: 600px) {
+  .page {
+    width: calc(100% - 40px);
+    padding: 24px 0 40px;
+  }
+  .back {
+    margin-bottom: 20px;
+  }
+  .heading {
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+  }
+  .heading h1 {
+    font-size: 34px;
+    letter-spacing: -0.9px;
+  }
+  .meta {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  .body {
+    font-size: 16px;
+    line-height: 1.9;
+  }
+  .footer {
+    margin-top: 36px;
+  }
+  .footer nav {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

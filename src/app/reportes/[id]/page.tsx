@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { publication } from "@/server/reports";
+import { Arrow } from "@/components/icons";
+import styles from "./publication.module.css";
 export const dynamic = "force-dynamic";
 export default async function PublicDetail({
   params,
@@ -10,24 +12,34 @@ export default async function PublicDetail({
   const row = await publication((await params).id);
   if (!row) notFound();
   return (
-    <article className="wrap page-space reading">
-      <Link className="back-link" href="/reportes">
-        ← Volver al catálogo
+    <article className={styles.page}>
+      <Link className={styles.back} href="/reportes">
+        ← Reportes revisados
       </Link>
-      <span className="eyebrow">Versión pública · Revisión humana</span>
-      <h1>{row.title}</h1>
-      <p className="help">
-        Publicado el{" "}
-        {new Intl.DateTimeFormat("es-GT", {
-          dateStyle: "long",
-          timeZone: "America/Guatemala",
-        }).format(row.published_at)}
-      </p>
-      <div className="report-body">{row.body}</div>
-      <aside className="notice">
-        Este texto es una versión preparada y aprobada para publicación por el
-        equipo. No constituye una determinación judicial.
-      </aside>
+      <header className={styles.heading}>
+        <div className={styles.meta}>
+          <span>Publicación revisada</span>
+          <time dateTime={row.published_at.toISOString()}>
+            {new Intl.DateTimeFormat("es-GT", {
+              dateStyle: "long",
+              timeZone: "America/Guatemala",
+            }).format(row.published_at)}
+          </time>
+        </div>
+        <h1>{row.title}</h1>
+      </header>
+      <div className={styles.body}>{row.body}</div>
+      <footer className={styles.footer}>
+        <p>Esta publicación no constituye una determinación judicial.</p>
+        <nav aria-label="Continuar desde el reporte">
+          <Link href="/reportes">
+            Ver más reportes <Arrow />
+          </Link>
+          <Link href="/reportar">
+            Enviar un reporte <Arrow />
+          </Link>
+        </nav>
+      </footer>
     </article>
   );
 }

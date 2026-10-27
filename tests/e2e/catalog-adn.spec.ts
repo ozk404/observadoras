@@ -95,6 +95,27 @@ test("public catalog opens approved versions, paginates and fits the ADN without
     catalog.getByRole("heading", { name: newest.title, exact: true }),
   ).toBeVisible();
   expect(await catalog.locator("main").innerText()).not.toContain(original);
+  await expect(catalog.locator("article time")).toHaveAttribute(
+    "datetime",
+    /T/,
+  );
+  await expect(catalog.locator("article img")).toHaveCount(0);
+  for (const width of [1440, 768, 390, 320]) {
+    await catalog.setViewportSize({ width, height: 1000 });
+    expect(
+      await catalog.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await catalog.screenshot({
+      path: `artifacts/publicacion-${width}.png`,
+      fullPage: true,
+    });
+  }
+  await catalog
+    .getByRole("link", { name: "← Reportes revisados", exact: true })
+    .click();
+  await expect(catalog).toHaveURL("/reportes");
   await catalog.goto("/reportes");
   await catalog
     .getByRole("navigation", { name: "Paginación de reportes públicos" })

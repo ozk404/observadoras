@@ -59,6 +59,10 @@ Catálogo público `/reportes` modernizado con ADN: cabecera morada y título fa
 
 Validación focalizada: recorrido recepción → revisión → publicación independiente y recorrido de catálogo con 14 versiones ficticias para comprobar paginación 12+1, lectura por teclado, ausencia de originales/imágenes y retorno desde página vacía. Revisión visual y sin overflow en 320/390/768/1440; TypeScript aprobado. Único build final aprobado (b80ae48060e1); solo app recreada, worker intacto. Smoke empaquetado: catálogo y página vacía200, health200. Sin cambios de SQL, permisos, almacenamiento o ficha pública individual; Safari/dispositivos físicos y aceptación humana pendientes.
 
+Detalle público `/reportes/{id}` modernizado: composición editorial con Archivo, título/fecha jerarquizados, columna de lectura, acento morado y navegación de regreso/continuación. Redundancias de revisión retiradas, manteniendo la aclaración de alcance. Solo título, texto y fecha de la publicación aprobada; sin originales, capturas, identidades ni información interna. No se modifica ni interpreta el texto aprobado.
+
+Validación focalizada: catálogo → publicación por teclado → catálogo, ausencia de original e imágenes privadas, fecha semántica y revisión visual/sin overflow en 320/390/768/1440. TypeScript aprobado; una recarga de desarrollo por CSS nuevo requirió repetir el recorrido, que pasó con la compilación estable. Único build final aprobado (c9c846ae702d), app actualizada y worker intacto. Smoke empaquetado: detalle publicado200, publicación inexistente404 y health200. Sin cambios de API, consultas o almacenamiento; no se repitieron suites ajenas. Safari/dispositivos físicos pendientes.
+
 ## Pendiente
 
 - Ampliaciones del dashboard a dimensiones institucionales adicionales requieren campos/criterios aprobados. No hay desglose demográfico ni vista pública.
