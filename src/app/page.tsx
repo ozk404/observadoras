@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import heroIllustration from "../../public/illustrations/hero.webp";
 import { Arrow } from "@/components/icons";
 import styles from "./home.module.css";
 
@@ -29,9 +31,14 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        {/* Reserved for the illustration described in docs/diseno/ADN-V2-PROPUESTA.md. */}
         <div className={styles.art} aria-hidden="true">
-          <div className={styles.artInset} />
+          <Image
+            src={heroIllustration}
+            alt=""
+            preload
+            sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1000px) 45vw, 608px"
+            className={styles.heroIllustration}
+          />
         </div>
       </section>
       <section className={styles.scope} aria-labelledby="scope-title">

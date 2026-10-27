@@ -100,39 +100,16 @@
   border-color: var(--home-ink);
 }
 .art {
-  min-height: 450px;
-  position: relative;
-  isolation: isolate;
-  background: var(--home-lavender);
-  border-radius: 160px 16px 105px 16px;
-  margin-right: 18px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.art::before {
-  content: "";
-  position: absolute;
-  inset: 28px -18px -18px 28px;
-  border: 1px solid var(--brand);
-  border-radius: inherit;
-  z-index: -1;
-}
-.art::after {
-  content: "";
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--brand);
-  top: -18px;
-  right: 30px;
-}
-.artInset {
-  position: absolute;
-  left: 15%;
-  top: 17%;
-  width: 70%;
-  height: 66%;
-  border: 1px solid #bfa4ce;
-  border-radius: 95px 10px 60px 10px;
+.heroIllustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .about {
   border: 1px solid var(--home-line);
@@ -342,10 +319,6 @@
   .hero h1 {
     font-size: 50px;
   }
-  .art {
-    min-height: 380px;
-    border-top-left-radius: 120px;
-  }
   .program {
     padding: 40px 30px;
   }
@@ -427,17 +400,8 @@
     font-size: 12px;
   }
   .art {
-    min-height: 300px;
-    border-radius: 110px 12px 70px 12px;
-    margin-right: 14px;
-  }
-  .art::before {
-    inset: 22px -14px -14px 22px;
-  }
-  .art::after {
-    height: 60px;
-    width: 60px;
-    right: 20px;
+    width: min(100%, 480px);
+    margin-inline: auto;
   }
   .about {
     grid-template-columns: 1fr;
