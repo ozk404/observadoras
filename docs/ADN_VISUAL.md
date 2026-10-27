@@ -72,6 +72,10 @@ El dashboard conserva sus tres bloques funcionales. El nuevo ADN cambia su prese
 
 Usar «reporte», «Enviar un reporte» y «Ver reportes»; preferir «captura o imagen» a «evidencia». No presentar el envío como una denuncia penal. Mantener etiquetas accesibles, errores específicos, consentimiento e información de privacidad necesaria, contextual y sin duplicaciones.
 
+Una frase verdadera no basta: debe aportar información específica y útil sobre este observatorio o permitir decidir/actuar. No agregar flujos, pasos numerados o secciones «Cómo funciona» para explicar trámites previsibles. No llenar bloques visuales con copy ni repetir títulos mediante sus descripciones. Eliminar una sección completa si no aporta valor. Mantener privacidad y consentimiento en el momento de envío; no trasladar todo el aviso a Inicio.
+
+La landing presenta el propósito del observatorio en el Programa Paridad 2026: documentación, análisis y seguimiento para el monitoreo ciudadano en Guatemala. No reducirla a un portal de envío/publicación. Diferenciar objetivos del programa, funciones disponibles y posibilidades futuras; no anunciar como implementados riesgo automático, identificación de patrones entre casos, atención sociojurídica o anonimización garantizada.
+
 ## Protagonismo del morado
 
 El blanco domina el conjunto; alternar superficies claras con bloques donde **#69088B** sea el fondo protagonista, no solo un botón o borde. Admitir bloques divididos blanco/morado y llamadas al catálogo de fondo morado con texto y acciones blancos. Separarlos con espacio blanco suficiente. No sustituir el morado principal por tonos oscuros en todos esos bloques ni volver moradas todas las pantallas de trabajo.

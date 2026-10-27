@@ -4,27 +4,32 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
 }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Reportes de violencia política digital.",
+    "Observatorio ciudadano digital.",
   );
   const content = await page.locator("body").innerText();
   expect(content).not.toMatch(
-    /mujeres cuenta|merece un espacio|Tu voz|Conocer también|Imagen por producir|Ilustración principal|Documentar\. Revisar\. Visibilizar/,
+    /mujeres cuenta|merece un espacio|Tu voz|Conocer también|Imagen por producir|Ilustración principal|Documentar\. Revisar\. Visibilizar|Envío privado|Publicación tras aprobación|Original privado|riesgo|patrones/i,
   );
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Saltar al contenido" }),
   ).toBeFocused();
-  const review = page.getByRole("region", { name: /Original privado/ });
-  const catalog = page.getByRole("region", {
-    name: "Reportes aprobados para consulta pública.",
+  const program = page.getByRole("region", { name: "Programa Paridad 2026" });
+  await expect(program).toContainText("instituciones estatales");
+  await expect(program).toContainText("mujeres jóvenes y juventudes diversas");
+  await expect(page.getByRole("main").getByRole("list")).toHaveCount(0);
+  const analysis = page.getByRole("region", {
+    name: "Análisis asistido por IA",
   });
-  await expect(review.getByRole("listitem")).toHaveCount(3);
-  await expect(
-    review.getByRole("heading", { name: "Publicación tras aprobación" }),
-  ).toBeVisible();
-  const contrast = await review.getByRole("list").evaluate((el) => {
+  const catalog = page.getByRole("region", {
+    name: "Reportes publicados",
+  });
+  await expect(analysis).toContainText(
+    "bajo revisión del equipo del observatorio",
+  );
+  const contrast = await analysis.evaluate((el) => {
     const background = getComputedStyle(el).backgroundColor;
-    const foreground = getComputedStyle(el.querySelector("h3")!).color;
+    const foreground = getComputedStyle(el.querySelector("p")!).color;
     function luminance(color: string) {
       const rgb = color
         .match(/\d+/g)!
@@ -115,7 +120,10 @@ test("Inicio ADN: links lead to real routes and its visual scope does not leak t
   await expect(page).toHaveURL(/\/reportes$/);
   await page.goto("/");
   await page
-    .getByRole("link", { name: "Tratamiento de la información", exact: true })
+    .getByRole("link", {
+      name: "Privacidad y cuidado de la información",
+      exact: true,
+    })
     .click();
   await expect(page).toHaveURL(/\/privacidad$/);
   await expect(
