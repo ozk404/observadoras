@@ -34,7 +34,8 @@ async function received(page: Page) {
           description:
             "Reporte completamente ficticio para verificar la separación entre captura original y copia pública preparada.",
           sourceUrl: "",
-          consent: "true", consentVersion: AI_CONSENT_VERSION,
+          consent: "true",
+          consentVersion: AI_CONSENT_VERSION,
           website: "",
           token,
           submissionKey: key,
@@ -479,6 +480,24 @@ test("reviewer includes stored original with explicit approval and no reupload",
   await page
     .getByLabel("Versión pública revisada", { exact: true })
     .fill(textData.body);
+  const publicFields = {
+    "Resumen público":
+      "Síntesis ficticia aprobada sobre obstáculos a la participación política.",
+    "Contexto público":
+      "Contexto ficticio preparado para publicación; no procede de notas privadas.",
+    "Hallazgos públicos":
+      "Hallazgo ficticio revisado: el mensaje busca desacreditar la participación.",
+    "Análisis público del observatorio":
+      "Análisis ficticio orientativo, revisado por una persona antes de difundirse.",
+  };
+  for (const [label, value] of Object.entries(publicFields))
+    await page.getByLabel(label, { exact: true }).fill(value);
+  await page
+    .getByLabel(/^Límites del análisis público/)
+    .fill("No se ha verificado la autenticidad del ejemplo ficticio.");
+  await page
+    .locator('input[name="public-categories"][value="desinformacion"]')
+    .check();
   await page
     .getByRole("checkbox", { name: "Incluir captura original" })
     .check();
@@ -509,7 +528,9 @@ test("reviewer includes stored original with explicit approval and no reupload",
       exact: true,
     })
     .click();
-  expect((await response).status()).toBe(201);
+  const publishedResponse = await response;
+  expect(publishedResponse.status()).toBe(201);
+  const publicId = (await publishedResponse.json()).id;
   const approved = await context(page.request, id);
   expect(approved.image_version).toBe(1);
   const visitor = await browser.newContext();
@@ -519,6 +540,39 @@ test("reviewer includes stored original with explicit approval and no reupload",
     ).body(),
   ).toEqual(original);
   expect((await visitor.request.get(source)).status()).toBe(401);
+  const publicPage = await visitor.newPage();
+  await publicPage.goto(`/reportes/${publicId}`);
+  for (const value of Object.values(publicFields))
+    await expect(publicPage.getByText(value, { exact: true })).toBeVisible();
+  await expect(
+    publicPage.getByRole("list", { name: "Categorías aprobadas" }),
+  ).toContainText("Desinformación");
+  await expect(
+    publicPage.getByText(
+      "Reporte completamente ficticio para verificar la separación entre captura original y copia pública preparada.",
+      { exact: true },
+    ),
+  ).toHaveCount(0);
+  for (const width of [1440, 768, 390, 320]) {
+    await publicPage.setViewportSize({ width, height: 1000 });
+    expect(
+      await publicPage.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await publicPage.screenshot({
+      path: `artifacts/publication-rich-${width}.png`,
+      fullPage: true,
+    });
+  }
+  await publicPage
+    .getByRole("button", { name: "Ampliar imagen pública" })
+    .click();
+  await expect(
+    publicPage.getByRole("dialog", { name: "Imagen pública", exact: true }),
+  ).toBeVisible();
+  await publicPage.keyboard.press("Escape");
+
   expect(await (await page.request.get(source)).body()).toEqual(original);
   expect(
     (

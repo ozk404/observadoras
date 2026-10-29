@@ -1,0 +1,55 @@
+.panel {
+  border: 1px solid #d9ccdf;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 0;
+  margin: 0;
+}
+.panel > legend {
+  color: #69088b;
+  font-weight: 750;
+  padding-inline: 8px;
+}
+.panel > legend span {
+  font-size: 13px;
+  font-weight: 500;
+}
+.categories {
+  border: 0;
+  padding: 0;
+  margin: 20px 0 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.categories > legend {
+  font-size: 14px;
+  font-weight: 700;
+  padding-bottom: 14px;
+}
+.categories label {
+  margin: 0;
+  align-items: flex-start;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.grid > div {
+  min-width: 0;
+}
+.grid > div:first-child {
+  grid-column: 1/-1;
+}
+@media (max-width: 720px) {
+  .panel {
+    padding: 20px 16px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

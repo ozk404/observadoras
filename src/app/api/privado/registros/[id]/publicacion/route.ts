@@ -29,6 +29,12 @@ export async function POST(
       const form = await readEvidenceForm(request, [
         "title",
         "body",
+        "categories",
+        "summary",
+        "context",
+        "findings",
+        "analysis",
+        "limitations",
         "privacyConfirmed",
         "publicationConfirmed",
         "version",
@@ -52,6 +58,12 @@ export async function POST(
       input = {
         title: form.get("title"),
         body: form.get("body"),
+        categories: parseCategories(form.get("categories")),
+        ...Object.fromEntries(
+          ["summary", "context", "findings", "analysis", "limitations"].map(
+            (key) => [key, form.get(key) ?? ""],
+          ),
+        ),
         privacyConfirmed: form.get("privacyConfirmed") === "true",
         publicationConfirmed: form.get("publicationConfirmed") === "true",
         version: Number(form.get("version")),
@@ -72,5 +84,17 @@ export async function POST(
     const response = apiError(error);
     response.headers.set("Cache-Control", "private, no-store");
     return response;
+  }
+}
+
+function parseCategories(value: FormDataEntryValue | null) {
+  if (value === null) return [];
+  try {
+    return JSON.parse(String(value));
+  } catch {
+    throw new HttpError(
+      400,
+      "Las categorías públicas no tienen un formato válido.",
+    );
   }
 }

@@ -175,3 +175,10 @@ Actualización autorizada (27-10-2026): «Incluir captura original» permite apr
 
 
 Pruebas aisladas bajo demanda: `node scripts/dev.mjs test-up` (añadir `--ai` si el flujo lo necesita), ejecutar `ui`/`auth` y finalizar con `node scripts/dev.mjs test-down`. El puerto3100 es exclusivo de pruebas con datos ficticios y proveedor simulado, no una segunda página para revisar cambios.
+
+
+## Publicaciones estructuradas aprobadas (29-10-2026)
+
+Al preparar una publicación, la revisora puede completar categorías públicas (hasta cuatro), resumen, contexto, hallazgos, análisis y límites. Son campos públicos independientes: no se copian clasificaciones internas, notas, seguimiento, borradores ni resultados IA automáticamente. Se guardan con título/texto e imagen opcional en la misma transacción y con las confirmaciones de privacidad/publicación. Incluir análisis requiere límites de al menos diez caracteres. El servidor valida categorías, unicidad, longitudes y campos estrictos tanto en JSON como multipart.
+
+Migración013 aditiva: publicaciones existentes conservan título/texto/fecha/imagen y apartados nuevos vacíos, sin inferencias ni reinterpretaciones. La ficha pública consulta únicamente publicaciones y copias de imagen aprobadas; no une notas ni análisis privados. Los apartados vacíos no se muestran. Este incremento permite completar campos al publicar; no incluye edición posterior de los apartados textuales de publicaciones ya aprobadas.

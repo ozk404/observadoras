@@ -43,7 +43,9 @@ export const publicSubmission = z
     consent: z.literal(true, {
       error: "Confirma que leíste el aviso de tratamiento.",
     }),
-    consentVersion: z.literal(AI_CONSENT_VERSION, { error: "El aviso cambió. Recarga la página y revísalo antes de enviar." }),
+    consentVersion: z.literal(AI_CONSENT_VERSION, {
+      error: "El aviso cambió. Recarga la página y revísalo antes de enviar.",
+    }),
     website: z.string().max(0),
     token: z.string().max(200),
     submissionKey: z.uuid(),
@@ -61,11 +63,26 @@ export const publicationInput = z
   .object({
     title: reportFields.shape.title,
     body: reportFields.shape.description,
+    categories: z
+      .array(z.enum(categoryKeys))
+      .max(4)
+      .refine((values) => new Set(values).size === values.length)
+      .default([]),
+    summary: z.string().trim().max(800).default(""),
+    context: z.string().trim().max(1800).default(""),
+    findings: z.string().trim().max(1800).default(""),
+    analysis: z.string().trim().max(1800).default(""),
+    limitations: z.string().trim().max(1000).default(""),
     privacyConfirmed: z.literal(true),
     publicationConfirmed: z.literal(true),
     version: z.number().int().positive(),
   })
-  .strict();
+  .strict()
+  .refine((data) => !data.analysis || data.limitations.length >= 10, {
+    path: ["limitations"],
+    message:
+      "Indica los límites del análisis público (al menos 10 caracteres).",
+  });
 export const validationInput = z
   .object({
     confirmed: z.literal(true, {
@@ -388,8 +405,20 @@ export async function publishReport(
       );
     const publicationId = randomUUID();
     await client.query(
-      "INSERT INTO publications(id,report_id,title,body,published_by) VALUES($1,$2,$3,$4,$5)",
-      [publicationId, id, data.title, data.body, user.id],
+      "INSERT INTO publications(id,report_id,title,body,published_by,categories,summary,context,findings,analysis,limitations) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)",
+      [
+        publicationId,
+        id,
+        data.title,
+        data.body,
+        user.id,
+        data.categories,
+        data.summary,
+        data.context,
+        data.findings,
+        data.analysis,
+        data.limitations,
+      ],
     );
     if (image) {
       await client.query(
@@ -438,8 +467,14 @@ export async function publication(id: string) {
         published_at: Date;
         image_asset_id: string | null;
         image_description: string | null;
+        categories: (keyof typeof import("../lib/ai-contract").categoryLabels)[];
+        summary: string;
+        context: string;
+        findings: string;
+        analysis: string;
+        limitations: string;
       }>(
-        "SELECT p.id,p.title,p.body,p.published_at,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.id=$1",
+        "SELECT p.id,p.title,p.body,p.published_at,p.categories,p.summary,p.context,p.findings,p.analysis,p.limitations,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.id=$1",
         [id],
       )
     ).rows[0] ?? null

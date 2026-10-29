@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { PublicationFields } from "./publication-fields";
+import { publicationSections } from "@/lib/publication";
 import { useRouter } from "next/navigation";
 import { send } from "./api";
 import { PublicImagePicker } from "./public-image-picker";
@@ -249,7 +251,7 @@ export function PublicationForm({
         e.preventDefault();
         if (
           !window.confirm(
-            "¿Publicar esta versión revisada? El título, el texto y la imagen seleccionada serán visibles para cualquier persona.",
+            "¿Publicar esta versión revisada? Todos los apartados completados y la imagen seleccionada serán visibles para cualquier persona.",
           )
         )
           return;
@@ -260,6 +262,13 @@ export function PublicationForm({
           const input = {
             title: data.get("publicTitle"),
             body: data.get("publicBody"),
+            categories: data.getAll("public-categories"),
+            ...Object.fromEntries(
+              publicationSections.map((field) => [
+                field.key,
+                String(data.get(`public-${field.key}`) ?? ""),
+              ]),
+            ),
             privacyConfirmed: data.get("privacy") === "on",
             publicationConfirmed: data.get("publish") === "on",
             version,
@@ -269,7 +278,10 @@ export function PublicationForm({
               throw Error("Confirma la revisión de la imagen pública.");
             const form = new FormData();
             for (const [key, value] of Object.entries(input))
-              form.set(key, String(value));
+              form.set(
+                key,
+                Array.isArray(value) ? JSON.stringify(value) : String(value),
+              );
             if (useOriginal) form.set("imageSource", "original");
             else if (image) form.set("image", image);
             form.set("imageDescription", imageDescription);
@@ -334,6 +346,13 @@ export function PublicationForm({
           aria-describedby="public-help"
         />
       </div>
+      <PublicationFields
+        disabled={!ready || busy}
+        onChange={() => {
+          setPrivacyConfirmed(false);
+          setPublicationConfirmed(false);
+        }}
+      />
       <PublicImagePicker
         originalUrl={`/api/privado/registros/${id}/evidencia`}
         useOriginal={useOriginal}
@@ -357,7 +376,7 @@ export function PublicationForm({
         />
         <span>
           Revisé los hechos y el riesgo de identificación de personas en este
-          título y texto.
+          título, texto, categorías y apartados adicionales.
         </span>
       </label>
       <label className="checkbox">

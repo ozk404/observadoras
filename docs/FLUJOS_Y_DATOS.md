@@ -219,3 +219,10 @@ La migración 012 es aditiva. La primera imagen se guarda atómicamente con la p
 
 
 Actualización autorizada (27-10-2026): «Incluir captura original» permite aprobar la captura existente sin descargarla ni volver a subirla, con vista previa privada, descripción y confirmación explícita. Disponible al publicar y en publicaciones existentes; «Subir otra imagen» sigue siendo alternativa. El servidor toma únicamente la evidencia del reporte autorizado y crea una copia pública independiente; no admite identificadores arbitrarios de evidencia ni cambia el original. Sustituye el requisito previo de preparar siempre un archivo externo. Sin migraciones.
+
+
+## Publicaciones estructuradas aprobadas (29-10-2026)
+
+Al preparar una publicación, la revisora puede completar categorías públicas (hasta cuatro), resumen, contexto, hallazgos, análisis y límites. Son campos públicos independientes: no se copian clasificaciones internas, notas, seguimiento, borradores ni resultados IA automáticamente. Se guardan con título/texto e imagen opcional en la misma transacción y con las confirmaciones de privacidad/publicación. Incluir análisis requiere límites de al menos diez caracteres. El servidor valida categorías, unicidad, longitudes y campos estrictos tanto en JSON como multipart.
+
+Migración013 aditiva: publicaciones existentes conservan título/texto/fecha/imagen y apartados nuevos vacíos, sin inferencias ni reinterpretaciones. La ficha pública consulta únicamente publicaciones y copias de imagen aprobadas; no une notas ni análisis privados. Los apartados vacíos no se muestran. Este incremento permite completar campos al publicar; no incluye edición posterior de los apartados textuales de publicaciones ya aprobadas.

@@ -73,7 +73,7 @@ Validación focalizada: catálogo → publicación por teclado → catálogo, au
 
 ## Trazabilidad
 
-Migraciones 001–012 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
+Migraciones 001–013 aditivas y documentos de verificación por incremento. Consolidación guardada en `dacd3c3`; diseño del dashboard en `ab000e8`. Se conservan implementación, pruebas y documentación sin incluir `.env`, credenciales locales, capturas ni datos de base. El dashboard no requiere nuevas migraciones.
 
 
 ## Imágenes públicas aprobadas (27-10-2026)
@@ -111,3 +111,12 @@ Modernización visual institucional de Inicio (28-10-2026): ¿Qué es? en compos
 
 
 Consentimiento y aviso versionados (29-10-2026): próximos envíos registran2026-10-29-reports-v2 y el servidor exige coincidencia con el aviso del formulario; versiones obsoletas piden recargar sin crear el reporte. Formulario y contexto aclaran aprobación expresa de texto/copia de captura. Aviso vigente archivado en docs/avisos/2026-10-29-reports-v2.txt. Históricos mantienen versión/fecha; su autorización original permite únicamente el mismo análisis privado IA, no atribuye aceptación de términos nuevos ni permiso de publicación. No se actualizaron filas históricas ni se ejecutaron envíos reales. TypeScript y12 comprobaciones focalizadas aprobados; recorrido sintético de recepción/revisión/publicación aprobado tras repetir recarga de desarrollo en detalle público. Sin build.
+
+
+## Publicaciones estructuradas aprobadas (29-10-2026)
+
+Al preparar una publicación, la revisora puede completar categorías públicas (hasta cuatro), resumen, contexto, hallazgos, análisis y límites. Son campos públicos independientes: no se copian clasificaciones internas, notas, seguimiento, borradores ni resultados IA automáticamente. Se guardan con título/texto e imagen opcional en la misma transacción y con las confirmaciones de privacidad/publicación. Incluir análisis requiere límites de al menos diez caracteres. El servidor valida categorías, unicidad, longitudes y campos estrictos tanto en JSON como multipart.
+
+Migración013 aditiva: publicaciones existentes conservan título/texto/fecha/imagen y apartados nuevos vacíos, sin inferencias ni reinterpretaciones. La ficha pública consulta únicamente publicaciones y copias de imagen aprobadas; no une notas ni análisis privados. Los apartados vacíos no se muestran. Este incremento permite completar campos al publicar; no incluye edición posterior de los apartados textuales de publicaciones ya aprobadas.
+
+Validación: TypeScript y nueve comprobaciones de contrato/seguridad aprobadas; dos recorridos focalizados aprobados con fixtures y PostgreSQL aislado. Incluyen aprobación multipart de campos e imagen, publicación JSON anterior sin campos nuevos, rechazo participante403, original401/intacto, concurrencia/versiones de imagen, modal/Escape y revisión visual sin overflow320/390/768/1440. Migración013 aplicada en entorno principal y de pruebas; sin build ni recreación de app/worker. Pendientes: edición posterior de textos publicados, Safari/dispositivos físicos y aceptación humana.
