@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test("login ADN adapts to screen sizes and password visibility works without submitting", async ({
   page,

@@ -1,4 +1,4 @@
-import { test, expect, type APIRequestContext } from "@playwright/test";
+import { test, expect, type APIRequestContext } from "./fixtures";
 import { execFileSync } from "node:child_process";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";

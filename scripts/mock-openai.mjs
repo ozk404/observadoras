@@ -52,7 +52,8 @@ createServer(async (req, res) => {
   if (
     payload.store !== false ||
     payload.text?.format?.type !== "json_schema" ||
-    input.includes("@")
+    (input.includes("@") &&
+      payload.text?.format?.name !== "observadoras_intake")
   ) {
     res.writeHead(400);
     res.end();

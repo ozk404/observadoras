@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test("report form uses equal desktop columns and an integrated tutorial header", async ({
   page,

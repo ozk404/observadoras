@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { imageFixture } from "../image-fixture";
 
 test("tutorial is optional, keyboard accessible and preserves the report", async ({
@@ -129,6 +129,15 @@ test("all five visual steps fit small and large screens without submitting", asy
         await expect(
           page.getByRole("dialog", { name: titles[0] }),
         ).toBeVisible();
+        // Driver ignores keyboard input while its highlight frame is settling.
+        await page.evaluate(
+          () =>
+            new Promise<void>((resolve) => {
+              requestAnimationFrame(() =>
+                requestAnimationFrame(() => resolve()),
+              );
+            }),
+        );
         await page.keyboard.press("ArrowRight");
         await expect(dialog).toBeVisible();
       }

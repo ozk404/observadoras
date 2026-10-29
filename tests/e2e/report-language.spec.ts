@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 test("report terminology, consent and old links use the public report routes", async ({page}) => {
   for (const [oldPath, expected] of [["/denuncia", "/reportar"], ["/denuncias?pagina=2", "/reportes?pagina=2"], ["/denuncias/00000000-0000-4000-8000-000000000001", "/reportes/00000000-0000-4000-8000-000000000001"]]) {
     const response = await page.request.get(oldPath, {maxRedirects:0});
@@ -12,6 +12,6 @@ test("report terminology, consent and old links use the public report routes", a
   await expect(page.getByText(/no presenta una denuncia penal/)).toBeVisible();
   expect(await page.locator("body").innerText()).not.toMatch(/fictici[oa]|solo.*pruebas/i);
   await page.goto("/privacidad");
-  await expect(page.getByText(/Se registra tu aceptación/)).toBeVisible();
+  await expect(page.getByText(/Se registra la autorización/)).toBeVisible();
   expect(await page.locator("body").innerText()).not.toMatch(/fictici[oa]|deshabilitado/i);
 });

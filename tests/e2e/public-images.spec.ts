@@ -4,7 +4,7 @@ import {
   expect,
   type Page,
   type APIRequestContext,
-} from "@playwright/test";
+} from "./fixtures";
 import sharp from "sharp";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";

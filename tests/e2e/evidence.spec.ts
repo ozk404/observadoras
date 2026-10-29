@@ -1,5 +1,5 @@
 import { AI_CONSENT_VERSION } from "../../src/lib/consent";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 test("public form requires an image, accepts a private preview and works on mobile", async ({

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";
 

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const prefix = process.env.TEST_PREFIX ?? "test";
 async function login(page: Page, role = "reviewer") {

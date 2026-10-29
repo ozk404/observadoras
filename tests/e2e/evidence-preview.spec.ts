@@ -1,5 +1,5 @@
 import { AI_CONSENT_VERSION } from "../../src/lib/consent";
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import sharp from "sharp";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";

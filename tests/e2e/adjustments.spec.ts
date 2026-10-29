@@ -1,5 +1,5 @@
 import { AI_CONSENT_VERSION } from "../../src/lib/consent";
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const prefix = process.env.TEST_PREFIX ?? "test";

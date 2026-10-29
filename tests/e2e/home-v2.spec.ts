@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 test("Inicio ADN: responsive structure, factual copy, primary purple blocks and accessible controls", async ({
   page,
 }) => {
@@ -80,7 +80,7 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
     const primary = page.getByRole("link", {
       name: "Enviar un reporte",
       exact: true,
-    });
+    }).first();
     expect((await primary.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await page.screenshot({
       path: `artifacts/home-v2-${width}.png`,
@@ -107,7 +107,7 @@ test("Inicio ADN: links lead to real routes and its visual scope does not leak t
     .evaluate((el) => getComputedStyle(el).minHeight);
   await page.goto("/");
   await page
-    .getByRole("link", { name: "Enviar un reporte", exact: true })
+    .getByRole("link", { name: "Enviar un reporte", exact: true }).first()
     .click();
   await expect(page).toHaveURL(/\/reportar$/);
   await expect(
@@ -140,7 +140,7 @@ test("Inicio ADN: links lead to real routes and its visual scope does not leak t
     .click();
   await expect(page).toHaveURL(/\/privacidad$/);
   await expect(
-    page.getByRole("heading", { name: "Qué ocurre con la IA" }),
+    page.getByRole("heading", { name: "Análisis con inteligencia artificial" }),
   ).toBeVisible();
   await page.goto("/");
   await page.getByRole("link", { name: /Acceso del equipo/ }).click();

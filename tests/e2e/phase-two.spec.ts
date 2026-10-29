@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";
 test.skip(
@@ -204,7 +204,12 @@ test("prepared input only; suggestions persist; human edits and approvals remain
   await publicPage.goto(`${origin}/reportes`);
   await publicPage.getByRole("heading", { name: title }).click();
   await expect(publicPage).toHaveURL(/\/reportes\/[a-f0-9-]+$/);
-  await expect(publicPage.locator(".report-body")).toHaveText(humanText);
+  await expect(
+    publicPage.getByRole("region", {
+      name: "Reporte documentado",
+      exact: true,
+    }),
+  ).toHaveText(`Reporte documentado${humanText}`);
   await expect(
     publicPage.getByText("original@example.test", { exact: false }),
   ).toHaveCount(0);

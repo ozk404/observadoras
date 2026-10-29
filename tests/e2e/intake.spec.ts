@@ -1,5 +1,5 @@
 import { AI_CONSENT_VERSION } from "../../src/lib/consent";
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const prefix = process.env.TEST_PREFIX ?? "test";
@@ -15,7 +15,8 @@ async function submit(page: Page, description: string) {
     headers: { origin },
     multipart: {
       description,
-      consent: "true", consentVersion: AI_CONSENT_VERSION,
+      consent: "true",
+      consentVersion: AI_CONSENT_VERSION,
 
       website: "",
       token,
@@ -36,7 +37,9 @@ async function submit(page: Page, description: string) {
 async function login(page: Page) {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-intake-reviewer`);
-  await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
+  await page
+    .getByLabel("Contraseña", { exact: true })
+    .fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
 }
@@ -113,7 +116,7 @@ test("receipt automatically analyzes screenshot, exposes private insights and pr
     fullPage: true,
   });
 });
-test("provider failure retries twice without preventing manual review; privacy blocks external analysis", async ({
+test("provider failure permits manual review; authorized intake is not blocked by an email in the original", async ({
   page,
 }) => {
   await login(page);
@@ -146,9 +149,9 @@ test("provider failure retries twice without preventing manual review; privacy b
       })
     ).status(),
   ).toBe(200);
-  const blocked = await submit(
+  const sensitive = await submit(
     page,
-    "Ejemplo ficticio con correo prueba@example.test que debe bloquear la salida automática de información.",
+    "Ejemplo ficticio autorizado con correo prueba@example.test para revisar información sensible en privado.",
   );
   await expect
     .poll(
@@ -156,18 +159,20 @@ test("provider failure retries twice without preventing manual review; privacy b
         (
           await (
             await page.request.get(
-              `/api/privado/registros/${blocked}/analisis-inicial`,
+              `/api/privado/registros/${sensitive}/analisis-inicial`,
             )
           ).json()
         ).state,
       { timeout: 15000 },
     )
-    .toBe("blocked");
+    .toBe("completed");
   const analysis = await (
-    await page.request.get(`/api/privado/registros/${blocked}/analisis-inicial`)
+    await page.request.get(
+      `/api/privado/registros/${sensitive}/analisis-inicial`,
+    )
   ).json();
-  expect(analysis.error_code).toBe("privacy");
-  expect(analysis.result).toBeNull();
+  expect(analysis.error_code).toBeNull();
+  expect(analysis.result).not.toBeNull();
 });
 
 test("a response arriving after human validation is discarded without overwriting the review", async ({

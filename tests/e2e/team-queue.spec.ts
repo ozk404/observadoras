@@ -1,4 +1,4 @@
-import { test, expect, type BrowserContext, type Page } from "@playwright/test";
+import { test, expect, type BrowserContext, type Page } from "./fixtures";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
 const prefix = process.env.TEST_PREFIX ?? "test";
 const password = process.env.TEST_PASSWORD;
