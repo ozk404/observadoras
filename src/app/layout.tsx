@@ -54,7 +54,7 @@ export default function RootLayout({
               Privacidad y cuidado de la información
             </Link>
           </div>
-          <p className="site-credits">Hecho con mucho 💙 desde Guatemala por Tecsify HumanLabs</p>
+          <p className="site-credits">Hecho con mucho 💙 desde Guatemala por <a href="https://tecsify.com" target="_blank" rel="noopener noreferrer">Tecsify HumanLabs</a></p>
         </footer>
       </body>
     </html>
