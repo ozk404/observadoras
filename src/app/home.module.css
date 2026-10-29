@@ -527,56 +527,103 @@
   }
 }
 
-/* Project information: editorial hierarchy, within the approved home ADN. */
+/* Institutional sections: three distinct compositions in the home ADN. */
 .introduction {
   width: min(1280px, calc(100% - 96px));
-  margin: 0 auto 80px;
-  padding-top: 40px;
-  border-top: 1px solid var(--home-line);
+  margin: 0 auto 88px;
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
-  gap: 80px;
+  grid-template-columns: 1.05fr 1fr;
+  background: #f6f0f9;
+  border-radius: 16px 100px 16px 16px;
+  overflow: hidden;
 }
-.introduction h2 {
-  font-size: clamp(32px, 3.1vw, 44px);
-  font-weight: 760;
-  line-height: 1.14;
-  letter-spacing: -0.035em;
-  margin: 0;
-}
-.introduction p {
-  font-size: 17px;
-  line-height: 1.85;
-  color: var(--home-muted);
-  margin: 0;
-}
-.introduction p + p,
-.purpose p + p,
-.program > p + p {
-  margin-top: 24px;
-}
-.program > p {
-  max-width: none;
-}
-.territory > p {
-  color: white;
+.introStatement { padding: 52px; background: var(--home-lavender); border-radius: 0 100px 100px 0; }
+.introStatement h2, .objective h2 {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 750;
   margin: 0 0 24px;
 }
+.introStatement > p {
+  color: var(--home-ink);
+  font-family: "Archivo Home", sans-serif;
+  font-size: clamp(34px, 3.8vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -.04em;
+  font-weight: 760;
+  margin: 0;
+}
+.introStatement strong { color: var(--brand); font-weight: inherit; }
+.introContent { padding: 52px 48px; align-self: center; }
+.introContent > p { font-size: 16px; line-height: 1.85; margin: 0; color: var(--home-ink); }
+.introContent .introClosing { margin-top: 24px; border-top: 1px solid #d9c2e4; padding-top: 24px; font-weight: 650; }
+.purpose { position: relative; overflow: hidden; }
+.purpose::before {
+  content: "";
+  position: absolute;
+  width: 540px;
+  height: 540px;
+  border: 1px solid #ffffff26;
+  border-radius: 50%;
+  left: -300px;
+  bottom: -350px;
+  pointer-events: none;
+}
+.purposeInner { grid-template-columns: 1.35fr .8fr; gap: 80px; }
+.objective h2 { font-size: 14px; letter-spacing: .02em; }
+.purpose .objectiveLead {
+  font-family: "Archivo Home", sans-serif;
+  font-size: clamp(40px, 4.3vw, 64px);
+  font-weight: 780;
+  line-height: 1.06;
+  letter-spacing: -.04em;
+  margin-bottom: 28px;
+}
+.objective > p:last-child { font-size: 17px; max-width: 620px; line-height: 1.8; }
+.evidenceCommitment {
+  background: var(--home-lavender);
+  color: var(--home-ink);
+  padding: 42px 36px;
+  border-radius: 72px 12px 12px 12px;
+}
+.evidenceCommitment h3 { font-size: 30px; line-height: 1.15; letter-spacing: -.03em; margin: 0 0 24px; color: var(--brand); }
+.evidenceCommitment p { color: var(--home-ink); font-size: 16px; line-height: 1.8; }
+.about { border: 0; border-radius: 0; grid-template-columns: 1.35fr .8fr; gap: 80px; overflow: visible; }
+.program { padding: 0; }
+.program h2 { max-width: 620px; }
+.program h2 span { color: var(--brand); }
+.program > p { max-width: 620px; font-size: 16px; }
+.program > p + p { margin-top: 20px; }
+.programSupport { border-top: 1px solid var(--home-line); margin-top: 32px; padding-top: 24px; display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; align-items: baseline; }
+.programSupport > span { font-size: 13px; color: var(--home-muted); }
+.programSupport strong { font-size: 24px; color: var(--brand); }
+.programSupport p { grid-column: 1/-1; font-size: 13px; line-height: 1.7; margin: 0; color: var(--home-muted); }
+.territory { position: relative; overflow: hidden; border-radius: 100px 16px 16px 16px; padding: 48px 36px; }
+.territory::after { content: ""; width: 240px; height: 240px; border: 1px solid #ffffff33; border-radius: 50%; position: absolute; top: -120px; right: -120px; pointer-events: none; }
+.territory h3 { font-size: 26px; font-weight: 650; margin-bottom: 36px; }
+.territoryNumber { display: block; font-size: clamp(104px, 12vw, 160px); line-height: .95; font-weight: 800; letter-spacing: -.07em; margin-bottom: 10px; }
+.territory > p { color: white; font-size: 13px; margin: 0 0 20px; }
+.territory ul { display: flex; flex-wrap: wrap; gap: 12px; }
+.territory li { font-size: 14px; padding: 10px 14px; border: 1px solid #ffffff55; border-radius: 6px; }
 @media (max-width: 1000px) {
-  .introduction {
-    width: calc(100% - 56px);
-    gap: 40px;
-  }
+  .introduction { width: calc(100% - 56px); }
+  .introStatement, .introContent { padding: 36px 28px; }
+  .purposeInner, .about { gap: 36px; grid-template-columns: 1.1fr 1fr; }
+  .evidenceCommitment { padding: 36px 28px; }
+  .evidenceCommitment h3 { font-size: 26px; }
 }
 @media (max-width: 720px) {
-  .introduction {
-    width: calc(100% - 40px);
-    grid-template-columns: 1fr;
-    gap: 24px;
-    margin-bottom: 54px;
-    padding-top: 32px;
-  }
-  .introduction p {
-    font-size: 15px;
-  }
+  .introduction { width: calc(100% - 40px); grid-template-columns: 1fr; border-radius: 12px 64px 12px 12px; margin-bottom: 54px; }
+  .introStatement { border-radius: 0 64px 64px 0; padding: 32px 26px; }
+  .introStatement > p { font-size: 38px; }
+  .introContent { padding: 28px 26px; }
+  .introContent > p { font-size: 15px; }
+  .purposeInner, .about { grid-template-columns: 1fr; gap: 32px; }
+  .objective > p:last-child { font-size: 15px; }
+  .evidenceCommitment { border-radius: 56px 12px 12px 12px; padding: 32px 26px; }
+  .evidenceCommitment p { font-size: 15px; }
+  .program { padding: 0; }
+  .program > p { font-size: 15px; }
+  .territory { padding: 36px 28px; border-radius: 72px 12px 12px 12px; }
+  .territoryNumber { font-size: 112px; }
 }

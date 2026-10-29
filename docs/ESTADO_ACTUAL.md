@@ -105,3 +105,6 @@ Inicio institucional actualizado (28-10-2026): nombre oficial Observatorio de Vi
 
 
 Revalidación de Inicio (28-10-2026): Docker recuperado; Inicio200 en1440/390, sin overflow, nombre oficial/metadatos e ilustración cargados. Revisión visual de ¿Qué es?, objetivo y Paridad/territorios completada. Corregido contraste del texto introductorio territorial a blanco sobre morado; comprobado en navegador y health200. Sin build ni cambios de datos.
+
+
+Modernización visual institucional de Inicio (28-10-2026): ¿Qué es? en composición lavanda curva y titular protagonista; objetivo en morado con mensaje de gran escala y compromiso en bloque lavanda; Paridad con apoyo CLADEM diferenciado y alcance10 destacado. Conservados hero, ilustración y adornos. Revisión visual directa1440/390 sin overflow; sin pruebas de datos, build ni recreación de Docker por ser cambio editorial/CSS.

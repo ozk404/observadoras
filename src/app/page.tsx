@@ -45,16 +45,18 @@ export default function Home() {
         </div>
       </section>
       <section className={styles.introduction} aria-labelledby="what-title">
-        <h2 id="what-title">¿Qué es el observatorio?</h2>
-        <div>
+        <div className={styles.introStatement}>
+          <h2 id="what-title">¿Qué es el observatorio?</h2>
+          <p>Un espacio de <strong>monitoreo ciudadano.</strong></p>
+        </div>
+        <div className={styles.introContent}>
           <p>
-            En el marco del Programa Paridad 2026, Fundación Oxlajuj N’oj
-            desarrolla el Observatorio de Violencia Política: un espacio de
-            monitoreo ciudadano para documentar, sistematizar y dar seguimiento
-            a casos de violencia política, desinformación y barreras a la
-            participación política de las mujeres.
+            Fundación Oxlajuj N’oj desarrolla el Observatorio de Violencia
+            Política en el marco del Programa Paridad 2026 para documentar,
+            sistematizar y dar seguimiento a casos de violencia política,
+            desinformación y barreras a la participación política de las mujeres.
           </p>
-          <p>
+          <p className={styles.introClosing}>
             La evidencia reunida respalda y orienta las acciones del Programa.
           </p>
         </div>
@@ -88,21 +90,23 @@ export default function Home() {
 
       <section className={styles.purpose} aria-labelledby="purpose-title">
         <div className={styles.purposeInner}>
-          <h2 id="purpose-title">Objetivo del observatorio</h2>
-          <div>
+          <div className={styles.objective}>
+            <h2 id="purpose-title">Objetivo del observatorio</h2>
+            <p className={styles.objectiveLead}>Visibilizar la violencia política digital.</p>
             <p>
-              Recopilar, documentar, sistematizar y analizar información para
-              visibilizar la violencia política digital contra las mujeres,
-              especialmente cuando limita, obstaculiza o impide su participación
-              en espacios de decisión.
-            </p>
-            <p>
-              El observatorio asume el compromiso de construir una base de
-              evidencia confiable y accesible para comprender estas barreras y
-              fortalecer las garantías para el ejercicio libre y seguro de los
-              derechos políticos de las mujeres.
+              Recopilamos, documentamos, sistematizamos y analizamos información
+              sobre situaciones que limitan, obstaculizan o impiden la
+              participación de las mujeres en espacios de decisión.
             </p>
           </div>
+          <aside className={styles.evidenceCommitment}>
+            <h3>Una base de evidencia confiable y accesible.</h3>
+            <p>
+              Nuestro compromiso es comprender las barreras que enfrentan las
+              mujeres y fortalecer las garantías para el ejercicio libre y
+              seguro de sus derechos políticos.
+            </p>
+          </aside>
         </div>
       </section>
 
@@ -135,28 +139,27 @@ export default function Home() {
 
       <section className={styles.about} aria-labelledby="program-title">
         <div className={styles.program}>
-          <h2 id="program-title">¿Qué es el Programa Paridad 2026?</h2>
+          <h2 id="program-title">¿Qué es el Programa <span>Paridad 2026?</span></h2>
           <p>
-            Una iniciativa de Fundación Oxlajuj N’oj, ejecutada con el apoyo
-            técnico del Comité de América Latina y El Caribe para la Defensa de
-            los Derechos de las Mujeres (CLADEM), para fortalecer la
+            Una iniciativa de Fundación Oxlajuj N’oj para fortalecer la
             participación política y ciudadana de mujeres jóvenes y juventudes
             diversas.
           </p>
           <p>
-            Identifica y documenta barreras, violencia política, desinformación,
-            exclusión y discriminación que puedan limitar esa participación. Su
-            finalidad es que el principio de paridad se traduzca en una
-            participación efectiva de las mujeres en los espacios de toma de
-            decisiones.
+            Identifica y documenta barreras, violencia política,
+            desinformación, exclusión y discriminación. Su finalidad es que el
+            principio de paridad se traduzca en una participación efectiva de
+            las mujeres en los espacios de toma de decisiones.
           </p>
+          <div className={styles.programSupport}>
+            <span>Apoyo técnico</span>
+            <strong>CLADEM</strong>
+            <p>Comité de América Latina y El Caribe para la Defensa de los Derechos de las Mujeres.</p>
+          </div>
         </div>
-        <aside
-          className={styles.territory}
-          aria-label="Alcance territorial del programa"
-        >
-          <h3>Diez departamentos</h3>
-          <p>Con prioridad en:</p>
+        <aside className={styles.territory} aria-label="Alcance territorial del programa">
+          <h3><span className={styles.territoryNumber}>10</span> departamentos</h3>
+          <p>Territorios prioritarios</p>
           <ul>
             <li>Guatemala</li>
             <li>Quiché</li>
