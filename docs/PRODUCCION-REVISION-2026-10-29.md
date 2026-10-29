@@ -12,7 +12,7 @@ Implementados y comprobados después de la auditoría: corrección del texto y a
 
 Los cinco logos se mantienen; únicamente lc4 enlaza a https://www.fundacionoxlajujnoj.org/ y lc5 a https://tecsify.com/. No quedan enlaces provisionales en esos logos.
 
-El usuario confirma atención de solicitudes por correo institucional en 15 días desde su recepción. Conservación/supresión y revisión jurídica siguen pendientes. Aviso v3 para nuevos envíos, conservando sin alteración los consentimientos v1/v2.
+El usuario confirma atención de solicitudes por correo institucional en 15 días desde su recepción. El usuario define conservación sin caducidad automática y eliminación exclusivamente manual autorizada. La revisión jurídica sigue pendiente. Aviso v3 para nuevos envíos, conservando sin alteración los consentimientos v1/v2.
 
 Validación del incremento: TypeScript correcto; **36/36 pruebas de servidor**, sin omisiones, en una base temporal aislada; los dos recorridos de inicio y los dos nuevos de publicaciones aprobados entre ejecución y repetición focalizada. Estos últimos comprueban acceso401/403, origen, confirmaciones, versión obsoleta, concurrencia, corrección de apartados, retirada de catálogo/detalle/imagen, conservación del original y nueva aprobación sin recuperar la imagen. El recorrido de interfaz conserva controles funcionales con el refresco suspendido. No se repitió la suite completa de 62 escenarios.
 
@@ -30,7 +30,8 @@ Los respaldos están excluidos expresamente de este incremento. El análisis de 
 | Publicaciones | Resuelto: corregir, retirar y volver a publicar con permisos, historial y versiones; original privado conservado. |
 | Logos | Resuelto: cinco visibles y solo Fundación/Tecsify con enlace definitivo. |
 | Solicitudes sobre datos | Canal y atención en 15 días definidos por el usuario. No se implementa envío de correo desde el sistema. |
-| Conservación/supresión y revisión jurídica | Pendientes de decisión institucional. No se eliminan reportes automáticamente. |
+| Conservación de reportes | Definida por el usuario: sin caducidad ni eliminación automática; toda eliminación definitiva será manual y autorizada. No se ha añadido un botón de eliminación de originales. |
+| Revisión jurídica | Pendiente de validación institucional del aviso y condiciones aplicables. |
 | Contraseña de prueba | Conservada por decisión del usuario; el cambio se hará desde Usuarios. Debe sustituirse antes de habilitar acceso público al área privada. |
 | Escaneo de sistema operativo | Docker Scout requiere autenticación; no completado. La consulta anterior de npm no reportó vulnerabilidades conocidas en dependencias de ejecución. |
 | Respaldos | Fuera del incremento por indicación expresa; restauración técnica comprobada previamente, operación periódica no verificada. |
