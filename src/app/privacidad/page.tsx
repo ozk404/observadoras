@@ -13,6 +13,25 @@ export default function Privacy() {
         del servicio.
       </p>
 
+      <h2>Administración de la información</h2>
+      <p>
+        Fundación Oxlajuj N’oj administra la información del observatorio y,
+        a través de su equipo autorizado, decide sobre el acceso a los reportes,
+        su revisión, clasificación, seguimiento y publicación. También le
+        corresponde atender las solicitudes relacionadas con los datos y
+        determinar las medidas de corrección, conservación o retirada que
+        procedan, conforme a la legislación aplicable y los derechos de las
+        personas involucradas.
+      </p>
+      <p>
+        Tecsify HumanLabs participa en el desarrollo tecnológico de la
+        plataforma. Esta función no le atribuye decisiones editoriales ni
+        autoridad para aprobar reportes, determinar su veracidad, autorizar
+        publicaciones o resolver solicitudes sobre la información. Las
+        decisiones del observatorio corresponden a la Fundación; el uso de
+        proveedores tecnológicos no transfiere esas decisiones a dichos
+        proveedores.
+      </p>
       <h2>Responsabilidad de quien envía</h2>
       <p>
         Quien presenta un reporte es responsable de la información y los
