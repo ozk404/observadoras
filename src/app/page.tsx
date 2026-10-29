@@ -150,6 +150,15 @@ export default function Home() {
           </ul>
         </aside>
       </section>
+      <section className={styles.reportInvite} aria-labelledby="report-invite-title">
+        <div>
+          <h2 id="report-invite-title">Documenta una situación de violencia política.</h2>
+          <p>Comparte una captura y describe lo ocurrido. No necesitas una cuenta.</p>
+        </div>
+        <Link className={styles.primary} href="/reportar">
+          Enviar un reporte <Arrow />
+        </Link>
+      </section>
       <section className={styles.catalog} aria-labelledby="catalog-title">
         <h2 id="catalog-title">Reportes publicados</h2>
         <Link className={styles.inverse} href="/reportes">

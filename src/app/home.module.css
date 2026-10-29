@@ -626,3 +626,36 @@
   .logoGrid img { height: 64px; }
 }
 @media (prefers-reduced-motion: reduce) { .logoGrid a { transition: none; } }
+
+.reportInvite {
+  width: min(1280px, calc(100% - 96px));
+  margin: 88px auto 0;
+  padding: 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 64px;
+  align-items: center;
+  background: var(--home-lavender);
+  border-radius: 16px 100px 16px 16px;
+}
+.reportInvite h2 {
+  color: var(--brand);
+  font-size: clamp(34px, 3.5vw, 50px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+  font-weight: 780;
+  max-width: 680px;
+  margin: 0 0 24px;
+}
+.reportInvite p { color: var(--home-ink); font-size: 16px; line-height: 1.8; margin: 0; max-width: 560px; }
+.reportInvite + .catalog { margin-top: 32px; }
+@media (max-width: 1000px) {
+  .reportInvite { width: calc(100% - 56px); padding: 44px 36px; gap: 36px; }
+}
+@media (max-width: 720px) {
+  .reportInvite { width: calc(100% - 40px); margin-top: 54px; padding: 36px 28px; grid-template-columns: 1fr; gap: 28px; border-radius: 12px 64px 12px 12px; }
+  .reportInvite h2 { font-size: 34px; }
+  .reportInvite p { font-size: 15px; }
+  .reportInvite .primary { justify-self: start; }
+  .reportInvite + .catalog { margin-top: 24px; }
+}
