@@ -687,6 +687,17 @@
 .inviteArt img { display: block; width: 100%; height: auto; }
 .inviteCopy { padding-block: 12px 52px; }
 .inviteCopy .primary { margin-top: 28px; }
+.inviteTutorial {
+  display: table;
+  margin-top: 12px;
+  padding-block: 10px;
+  min-height: 44px;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 @media (max-width: 1000px) {
   .reportInvite { padding: 36px 36px 0 28px; gap: 32px; grid-template-columns: minmax(180px, .8fr) minmax(0, 1.2fr); }
   .reportInvite h2 { font-size: 36px; }

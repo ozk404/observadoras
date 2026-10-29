@@ -161,6 +161,9 @@ export default function Home() {
           <Link className={styles.primary} href="/reportar">
             Enviar un reporte <Arrow />
           </Link>
+          <Link className={styles.inviteTutorial} href="/reportar#tutorial">
+            ¿No sabes cómo? Aprende a enviar un reporte
+          </Link>
         </div>
       </section>
       <section className={styles.catalog} aria-labelledby="catalog-title">
