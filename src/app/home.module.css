@@ -659,3 +659,42 @@
   .reportInvite .primary { justify-self: start; }
   .reportInvite + .catalog { margin-top: 24px; }
 }
+
+.reportInvite {
+  grid-template-columns: minmax(240px, .8fr) minmax(0, 1.25fr);
+  padding: 48px 64px 0 40px;
+  gap: 56px;
+  overflow: hidden;
+  border-radius: 100px 16px 16px 16px;
+}
+.inviteArt {
+  position: relative;
+  isolation: isolate;
+  align-self: end;
+  width: 100%;
+  max-width: 380px;
+  justify-self: center;
+}
+.inviteArt::before {
+  content: "";
+  position: absolute;
+  inset: 8% -5% -28%;
+  background: #ffffff88;
+  border: 1px solid #c6a5d7;
+  border-radius: 50% 50% 0 0;
+  z-index: -1;
+}
+.inviteArt img { display: block; width: 100%; height: auto; }
+.inviteCopy { padding-block: 12px 52px; }
+.inviteCopy .primary { margin-top: 28px; }
+@media (max-width: 1000px) {
+  .reportInvite { padding: 36px 36px 0 28px; gap: 32px; grid-template-columns: minmax(180px, .8fr) minmax(0, 1.2fr); }
+  .reportInvite h2 { font-size: 36px; }
+  .inviteCopy { padding-bottom: 36px; }
+}
+@media (max-width: 720px) {
+  .reportInvite { grid-template-columns: 1fr; padding: 36px 28px 0; gap: 28px; border-radius: 12px 64px 12px 12px; }
+  .inviteCopy { grid-row: 1; padding: 0; }
+  .reportInvite h2 { font-size: 34px; }
+  .inviteArt { max-width: 260px; }
+}

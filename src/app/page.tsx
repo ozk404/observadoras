@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import heroIllustration from "../../public/illustrations/hero.webp";
+import reportIllustration from "../../public/illustrations/intro.webp";
 import placeholderLogo from "../../public/illustrations/c1.png";
 import { Arrow, ObservationIcon } from "@/components/icons";
 import styles from "./home.module.css";
@@ -151,13 +152,16 @@ export default function Home() {
         </aside>
       </section>
       <section className={styles.reportInvite} aria-labelledby="report-invite-title">
-        <div>
+        <div className={styles.inviteArt} aria-hidden="true">
+          <Image src={reportIllustration} alt="" sizes="(max-width: 720px) 260px, 380px" />
+        </div>
+        <div className={styles.inviteCopy}>
           <h2 id="report-invite-title">Documenta una situación de violencia política.</h2>
           <p>Comparte una captura y describe lo ocurrido. No necesitas una cuenta.</p>
+          <Link className={styles.primary} href="/reportar">
+            Enviar un reporte <Arrow />
+          </Link>
         </div>
-        <Link className={styles.primary} href="/reportar">
-          Enviar un reporte <Arrow />
-        </Link>
       </section>
       <section className={styles.catalog} aria-labelledby="catalog-title">
         <h2 id="catalog-title">Reportes publicados</h2>
