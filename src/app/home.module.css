@@ -587,3 +587,42 @@
   .territory { padding: 36px 28px; border-radius: 72px 12px 12px 12px; }
   .territoryNumber { font-size: 112px; }
 }
+
+.logos {
+  width: min(1280px, calc(100% - 96px));
+  margin: 72px auto 0;
+  border-top: 1px solid var(--home-line);
+  padding-top: 40px;
+}
+.logoGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.logoGrid li { min-width: 0; }
+.logoGrid a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 104px;
+  padding: 12px;
+  border-radius: 12px;
+  transition: background-color .18s ease;
+}
+.logoGrid a:hover { background: #f6f0f9; }
+.logoGrid img { display: block; width: 100%; max-width: 200px; height: 80px; object-fit: contain; }
+@media (max-width: 1000px) {
+  .logos { width: calc(100% - 56px); }
+  .logoGrid { gap: 16px; }
+}
+@media (max-width: 720px) {
+  .logos { width: calc(100% - 40px); margin-top: 48px; padding-top: 24px; }
+  .logoGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .logoGrid li:last-child { grid-column: 1/-1; width: calc(50% - 6px); justify-self: center; }
+  .logoGrid a { min-height: 88px; }
+  .logoGrid img { height: 64px; }
+}
+@media (prefers-reduced-motion: reduce) { .logoGrid a { transition: none; } }

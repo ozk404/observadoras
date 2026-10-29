@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import heroIllustration from "../../public/illustrations/hero.webp";
+import placeholderLogo from "../../public/illustrations/c1.png";
 import { Arrow, ObservationIcon } from "@/components/icons";
 import styles from "./home.module.css";
 
@@ -12,6 +13,14 @@ export const metadata: Metadata = {
   description:
     "Documentación, análisis y seguimiento de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Fundación Oxlajuj No’j · Programa Paridad 2026.",
 };
+// Replace each provisional image, accessible name and destination together.
+const projectLogos = Array.from({ length: 5 }, (_, index) => ({
+  id: index + 1,
+  image: placeholderLogo,
+  name: `Logo provisional ${index + 1}`,
+  href: "https://example.com/",
+}));
+
 export default function Home() {
   return (
     <div className={`home-v2 ${styles.home}`}>
@@ -146,6 +155,17 @@ export default function Home() {
         <Link className={styles.inverse} href="/reportes">
           Ver el catálogo <Arrow />
         </Link>
+      </section>
+      <section className={styles.logos} aria-label="Organizaciones del proyecto">
+        <ul className={styles.logoGrid}>
+          {projectLogos.map((logo) => (
+            <li key={logo.id}>
+              <a href={logo.href} target="_blank" rel="noopener noreferrer" aria-label={`${logo.name} (abre en otra pestaña)`}>
+                <Image src={logo.image} alt="" sizes="(max-width: 720px) 140px, 200px" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );
