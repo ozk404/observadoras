@@ -65,3 +65,5 @@ D-10: cuentas cerradas gestionadas desde Usuarios por permiso administrativo ind
 
 
 29-10-2026: revisión del aviso solicitada por el usuario. Aclaradas responsabilidad del remitente, usos prohibidos, límites del servicio y tratamiento real IA/publicación; no se promete exoneración total ni renuncia de derechos. Antes de adoptar condiciones definitivas: revisión jurídica en Guatemala, identificación/contacto formal del responsable, canal y procedimiento de derechos/corrección/retirada, plazos y criterios de conservación/supresión y condiciones del proveedor. No inventar estos datos. La revisión editorial no atribuye aceptación retroactiva ni reemplaza el consentimiento IA ya registrado.
+
+29-10-2026: el usuario confirma programaparidadoxlajujnoj@gmail.com como canal institucional de contacto para solicitudes sobre datos, corrección y retirada. Incorporado al aviso con enlace mailto. Siguen pendientes procedimiento/plazos de atención, conservación/supresión y revisión jurídica; no se inventan garantías de respuesta ni se automatizan retiradas.

@@ -114,6 +114,17 @@ export default function Privacy() {
         legales de protección de datos ni responsabilidades que no puedan
         limitarse por acuerdo, y no suponen una renuncia a derechos.
       </p>
+      <h2>Contacto y solicitudes sobre tus datos</h2>
+      <p>
+        Para consultar sobre el tratamiento de datos, solicitar una corrección
+        o pedir la retirada de contenido, escribe a{" "}
+        <a href="mailto:programaparidadoxlajujnoj@gmail.com">
+          programaparidadoxlajujnoj@gmail.com
+        </a>
+        . Indica la referencia o el enlace del reporte, si lo tienes, y describe
+        tu solicitud. Evita adjuntar documentos de identidad o información
+        sensible que no sea necesaria.
+      </p>
     </article>
   );
 }
