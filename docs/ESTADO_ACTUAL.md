@@ -102,3 +102,6 @@ Entorno único de trabajo autorizado (27-10-2026): localhost:3000 usa Next dev/W
 
 
 Inicio institucional actualizado (28-10-2026): nombre oficial Observatorio de Violencia Política en hero, cabecera, pie y metadatos. Nueva sección ¿Qué es?, objetivo en bloque morado, Paridad2026 con apoyo técnico de CLADEM, alcance de diez departamentos y cuatro territorios prioritarios proporcionados por el usuario. Compromiso de evidencia presentado como propósito institucional. Conservados hero/ilustración/adornos y acciones. TypeScript aprobado; revisión visual pendiente porque Docker Desktop devuelve500 y localhost:3000 no está disponible. No se reconstruyeron imágenes ni se modificaron datos.
+
+
+Revalidación de Inicio (28-10-2026): Docker recuperado; Inicio200 en1440/390, sin overflow, nombre oficial/metadatos e ilustración cargados. Revisión visual de ¿Qué es?, objetivo y Paridad/territorios completada. Corregido contraste del texto introductorio territorial a blanco sobre morado; comprobado en navegador y health200. Sin build ni cambios de datos.
