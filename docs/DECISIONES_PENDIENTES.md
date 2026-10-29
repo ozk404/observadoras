@@ -62,3 +62,6 @@ El usuario autoriza retirar el requisito ficticio y recibir reportes reales, inc
 ## Administración mínima autorizada — 27-10-2026
 
 D-10: cuentas cerradas gestionadas desde Usuarios por permiso administrativo independiente, nombres obligatorios para nuevas altas y auditoría sin contraseñas. Bootstrap explícito de la cuenta local admin como Administrador; no cambia roles de revisión ni acceso a originales. Sin invitaciones, registro público ni correo. La matriz institucional ampliada y transferencia de credenciales siguen pendientes de definición institucional. Ver `superpowers/specs/2026-10-27-user-administration-design.md`.
+
+
+29-10-2026: revisión del aviso solicitada por el usuario. Aclaradas responsabilidad del remitente, usos prohibidos, límites del servicio y tratamiento real IA/publicación; no se promete exoneración total ni renuncia de derechos. Antes de adoptar condiciones definitivas: revisión jurídica en Guatemala, identificación/contacto formal del responsable, canal y procedimiento de derechos/corrección/retirada, plazos y criterios de conservación/supresión y condiciones del proveedor. No inventar estos datos. La revisión editorial no atribuye aceptación retroactiva ni reemplaza el consentimiento IA ya registrado.
