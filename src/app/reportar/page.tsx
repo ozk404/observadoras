@@ -24,9 +24,9 @@ export default function Reportar() {
           <Shield />
           <h2>Tu reporte comienza en privado.</h2>
           <p>
-            No pedimos tu nombre ni datos de contacto. La captura y el enlace
-            permanecen privados; solo una versión revisada y aprobada por el
-            equipo puede publicarse.
+            No pedimos tu nombre ni datos de contacto. El original queda en el
+            área privada; el equipo puede aprobar una versión pública del texto
+            y una copia de la captura.
           </p>
           <p className={styles.notice}>
             Este envío informa al observatorio; no presenta una denuncia penal

@@ -8,16 +8,20 @@ import {
 } from "@/server/security";
 import { HttpError } from "@/server/security";
 import { normalizeEvidence, readEvidenceForm } from "@/server/evidence";
+import { AI_CONSENT_VERSION } from "@/lib/consent";
 export async function POST(request: Request) {
   try {
     checkOrigin(request);
     await limit("public:global", 120, 600);
     await limit(`public:${networkKey(request)}`, 30, 600);
     const form = await readEvidenceForm(request);
+    if (form.get("consentVersion") !== AI_CONSENT_VERSION)
+      throw new HttpError(409, "El aviso cambió. Recarga la página y revísalo antes de enviar.");
     const data = publicSubmission.parse({
       description: form.get("description"),
       sourceUrl: form.get("sourceUrl") ?? "",
       consent: form.get("consent") === "true",
+      consentVersion: form.get("consentVersion"),
       website: form.get("website"),
       token: form.get("token"),
       submissionKey: form.get("submissionKey"),

@@ -1,4 +1,5 @@
 "use client";
+import { AI_CONSENT_VERSION } from "@/lib/consent";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { MAX_EVIDENCE_BYTES, EVIDENCE_TYPES } from "@/lib/evidence";
 import { Arrow } from "./icons";
@@ -88,6 +89,7 @@ export function PublicForm({ heading }: { heading: ReactNode }) {
       )
         throw new Error("Usa una imagen PNG, JPG o WebP de hasta 5 MB.");
       data.set("consent", String(data.get("consent") === "on"));
+      data.set("consentVersion", AI_CONSENT_VERSION);
       data.set("token", token);
       data.set("submissionKey", key.current);
       const response = await fetch("/api/denuncias", {
@@ -334,8 +336,9 @@ export function PublicForm({ heading }: { heading: ReactNode }) {
               aviso de tratamiento de información
             </a>
             . Autorizo el análisis de la descripción y la captura con OpenAI
-            para apoyar la revisión del equipo. El original y la imagen
-            permanecen privados.
+            para apoyar la revisión del equipo. El envío comienza en privado;
+            publicar una versión del texto o una copia de la captura requiere
+            aprobación expresa del equipo.
           </span>
         </label>
         <div className="form-actions">

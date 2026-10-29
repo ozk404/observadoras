@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import {
   test,
   expect,
@@ -33,7 +34,7 @@ async function received(page: Page) {
           description:
             "Reporte completamente ficticio para verificar la separación entre captura original y copia pública preparada.",
           sourceUrl: "",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
           website: "",
           token,
           submissionKey: key,

@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
@@ -160,7 +161,7 @@ test("server rejects missing, corrupt or forged evidence and unsafe source URLs"
       description:
         "Relato completamente ficticio para probar el rechazo de un envío inválido.",
       website: "",
-      consent: "true",
+      consent: "true", consentVersion: AI_CONSENT_VERSION,
 
       token: token.token,
       submissionKey: crypto.randomUUID(),

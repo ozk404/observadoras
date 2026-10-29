@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../src/lib/consent";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { hashPassword, verifyPassword } from "../src/server/password";
@@ -80,7 +81,7 @@ test("public token rejects tampering and automated immediate submission", () => 
 test("public intake requires notice acknowledgement and empty honeypot", () => {
   const sample = {
     description: "Descripción ficticia suficientemente extensa.",
-    consent: true,
+    consent: true, consentVersion: AI_CONSENT_VERSION,
 
     website: "",
     token: "token",

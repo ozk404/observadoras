@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AI_CONSENT_VERSION } from "@/lib/consent";
 
 export const metadata: Metadata = { title: "Privacidad y condiciones de envío" };
 
@@ -6,6 +7,7 @@ export default function Privacy() {
   return (
     <article className="wrap page-space reading">
       <h1>Privacidad y condiciones de envío</h1>
+      <p className="help">Versión {AI_CONSENT_VERSION} · Vigente desde el 29 de octubre de 2026.</p>
       <p>
         El Observatorio de Violencia Política es una herramienta de monitoreo
         ciudadano de Fundación Oxlajuj N’oj, en el marco del Programa Paridad

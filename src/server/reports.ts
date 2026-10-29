@@ -43,6 +43,7 @@ export const publicSubmission = z
     consent: z.literal(true, {
       error: "Confirma que leíste el aviso de tratamiento.",
     }),
+    consentVersion: z.literal(AI_CONSENT_VERSION, { error: "El aviso cambió. Recarga la página y revísalo antes de enviar." }),
     website: z.string().max(0),
     token: z.string().max(200),
     submissionKey: z.uuid(),

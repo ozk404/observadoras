@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect, type Page } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
@@ -44,7 +45,7 @@ async function createPublic(page: Page) {
         multipart: {
           description:
             "Relato ficticio sin cuenta para comprobar seguimiento privado y cierre sin retirar la publicación.",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
 
           website: "",
           token,

@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../src/lib/consent";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { requestIntakeSuggestion } from "../src/server/openai";
@@ -60,7 +61,7 @@ test("intake rejects claims of verified truth, unknown categories and forged dec
   assert.equal(
     publicSubmission.safeParse({
       description: "Un relato de prueba suficientemente largo.",
-      consent: true,
+      consent: true, consentVersion: AI_CONSENT_VERSION,
       website: "",
       token: "token",
       submissionKey: crypto.randomUUID(),

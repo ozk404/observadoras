@@ -108,3 +108,6 @@ Revalidación de Inicio (28-10-2026): Docker recuperado; Inicio200 en1440/390, s
 
 
 Modernización visual institucional de Inicio (28-10-2026): ¿Qué es? en composición lavanda curva y titular protagonista; objetivo en morado con mensaje de gran escala y compromiso en bloque lavanda; Paridad con apoyo CLADEM diferenciado y alcance10 destacado. Conservados hero, ilustración y adornos. Revisión visual directa1440/390 sin overflow; sin pruebas de datos, build ni recreación de Docker por ser cambio editorial/CSS.
+
+
+Consentimiento y aviso versionados (29-10-2026): próximos envíos registran2026-10-29-reports-v2 y el servidor exige coincidencia con el aviso del formulario; versiones obsoletas piden recargar sin crear el reporte. Formulario y contexto aclaran aprobación expresa de texto/copia de captura. Aviso vigente archivado en docs/avisos/2026-10-29-reports-v2.txt. Históricos mantienen versión/fecha; su autorización original permite únicamente el mismo análisis privado IA, no atribuye aceptación de términos nuevos ni permiso de publicación. No se actualizaron filas históricas ni se ejecutaron envíos reales. TypeScript y12 comprobaciones focalizadas aprobados; recorrido sintético de recepción/revisión/publicación aprobado tras repetir recarga de desarrollo en detalle público. Sin build.

@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
@@ -55,7 +56,7 @@ test("public intake → private human review → separately approved public vers
         multipart: {
           description: privateText,
           sourceUrl: "https://example.test/fuente-privada",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
 
           website: "",
           token: retryToken.token,

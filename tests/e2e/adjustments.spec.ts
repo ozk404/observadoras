@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect, type Page } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
@@ -333,7 +334,7 @@ test("requests reject unsupported states, anonymous reports, forged or stale act
         multipart: {
           description:
             "Relato ficticio sin cuenta que no dispone de canal para solicitar ajustes.",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
 
           website: "",
           token: token.token,

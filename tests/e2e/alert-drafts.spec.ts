@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect, type Page } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
@@ -144,7 +145,7 @@ test("existing initial AI summary is used only explicitly, edited and saved with
           description:
             "Relato ficticio de desinformación para probar una alerta privada a partir de un resumen existente.",
           website: "",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
 
           token,
           submissionKey,

@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect } from "@playwright/test";
 import sharp from "sharp";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
@@ -69,7 +70,7 @@ test("private thumbnails preserve proportions and enlarge without leaving the qu
         multipart: {
           description: `Captura ${size.name} completamente ficticia para comprobar la vista previa privada.`,
           sourceUrl: "",
-          consent: "true",
+          consent: "true", consentVersion: AI_CONSENT_VERSION,
           website: "",
           token: token.token,
           submissionKey: key,

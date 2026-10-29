@@ -10,7 +10,7 @@ import { HttpError, limit } from "./security";
 import type { User } from "./auth";
 import type { IntakeView, IntakeSuggestion } from "../lib/ai-contract";
 import { z } from "zod";
-import { AI_CONSENT_VERSION } from "../lib/consent";
+import { AI_ANALYSIS_CONSENT_VERSIONS, permitsInitialAnalysis } from "../lib/consent";
 export async function getIntake(
   user: User,
   reportId: string,
@@ -49,10 +49,10 @@ export async function retryIntake(
     throw new HttpError(409, "El registro ya cambió o su revisión terminó.");
   const row = await db.query(
     `UPDATE intake_analyses a SET state='queued',attempts=0,available_at=now(),error_code=NULL,result=NULL,finished_at=NULL,last_retry_by=$2
-    WHERE report_id=$1 AND ai_consent AND consent_version=$4 AND consented_at IS NOT NULL AND state IN ('blocked','failed')
+    WHERE report_id=$1 AND ai_consent AND consent_version=ANY($4::text[]) AND consented_at IS NOT NULL AND state IN ('blocked','failed')
     AND EXISTS(SELECT 1 FROM reports r WHERE r.id=a.report_id AND r.status='pending' AND r.version=$3 AND r.version=a.report_version)
     AND EXISTS(SELECT 1 FROM users WHERE id=$2 AND enabled AND role='reviewer') RETURNING id`,
-    [reportId, user.id, data.version, AI_CONSENT_VERSION],
+    [reportId, user.id, data.version, AI_ANALYSIS_CONSENT_VERSIONS],
   );
   if (!row.rowCount)
     throw new HttpError(
@@ -145,7 +145,7 @@ export async function runIntakeOnce() {
     }
     if (
       !job.ai_consent ||
-      job.consent_version !== AI_CONSENT_VERSION ||
+      !permitsInitialAnalysis(job.consent_version) ||
       !job.consented_at
     ) {
       await endJob(job, "blocked", "privacy");

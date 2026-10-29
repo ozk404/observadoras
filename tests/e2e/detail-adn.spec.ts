@@ -1,3 +1,4 @@
+import { AI_CONSENT_VERSION } from "../../src/lib/consent";
 import { test, expect } from "@playwright/test";
 import { imageFixture } from "../image-fixture";
 const origin = process.env.TEST_BASE_URL ?? "http://localhost:3100";
@@ -26,7 +27,7 @@ test("report detail separates original, AI and human decisions across responsive
       description:
         "Reporte enteramente ficticio sobre desinformación dirigida a una candidata inventada. Esta imagen es una prueba de diseño sin personas ni hechos reales.",
       sourceUrl: "https://example.test/publicacion-ficticia",
-      consent: "true",
+      consent: "true", consentVersion: AI_CONSENT_VERSION,
       website: "",
       token,
       submissionKey: key,

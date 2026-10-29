@@ -113,6 +113,7 @@ export async function readEvidenceForm(
     "description",
     "sourceUrl",
     "consent",
+    "consentVersion",
     "website",
     "token",
     "submissionKey",
