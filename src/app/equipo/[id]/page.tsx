@@ -13,9 +13,8 @@ import { AdjustmentForm } from "@/components/adjustment-form";
 import { IntakeInsights } from "@/components/intake-insights";
 import { categoryLabels } from "@/lib/ai-contract";
 import { listFollowup } from "@/server/followup";
-import { FollowupPanel } from "@/components/followup-panel";
+import { ReportOperations } from "@/components/report-operations";
 import { getAlertContext } from "@/server/alert-drafts";
-import { AlertDraftForm } from "@/components/alert-draft-form";
 import { EvidencePreview } from "@/components/evidence-preview";
 import { publicImageContext } from "@/server/publication-images";
 import { PublicImagePanel } from "@/components/public-image-panel";
@@ -254,29 +253,23 @@ export default async function Detail({
               </div>
               {imageContext && (
                 <div className={styles.publication}>
-                  <PublicImagePanel key={report.id} id={report.id} context={imageContext} />
+                  <PublicImagePanel
+                    key={report.id}
+                    id={report.id}
+                    context={imageContext}
+                  />
                 </div>
               )}
               {canFollowup && (
-                <div className={styles.operations}>
-                  <div id="seguimiento">
-                    <FollowupPanel
-                      id={report.id}
-                      version={report.version}
-                      entries={followup}
-                    />
-                  </div>
-                  {alertContext && (
-                    <div id="alerta">
-                      <AlertDraftForm
-                        id={report.id}
-                        reportVersion={report.version}
-                        context={alertContext}
-                        aiReady={ready}
-                      />
-                    </div>
-                  )}
-                </div>
+                <ReportOperations
+                  key={report.id}
+                  id={report.id}
+                  version={report.version}
+                  entries={followup}
+                  alertContext={alertContext}
+                  aiReady={ready}
+                  className={styles.operations}
+                />
               )}
             </>
           )}

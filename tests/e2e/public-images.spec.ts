@@ -643,32 +643,191 @@ test("published image approval finishes independently of a delayed page refresh"
     await panel
       .getByRole("button", { name: "Aprobar imagen pública", exact: true })
       .click();
-    const savedResponse=await saved;
+    const savedResponse = await saved;
     expect(savedResponse.status()).toBe(200);
-    const savedImage=await savedResponse.json();
+    const savedImage = await savedResponse.json();
     await expect(
       panel.getByRole("button", { name: "Guardando…", exact: true }),
     ).toHaveCount(0, { timeout: 5000 });
-    await expect(panel.getByRole("button",{name:"Retirar imagen pública",exact:true})).toBeEnabled();
-    await expect(panel.locator(`img[src="/api/imagenes-publicas/${savedImage.assetId}"]`)).toBeVisible();
-    page.once("dialog",d=>d.accept());
-    await panel.getByRole("button",{name:"Retirar imagen pública",exact:true}).click();
-    await expect(panel.getByText("Esta publicación todavía no tiene una imagen pública.")).toBeVisible();
-    expect((await page.request.get(`/api/imagenes-publicas/${savedImage.assetId}`)).status()).toBe(404);
+    await expect(
+      panel.getByRole("button", {
+        name: "Retirar imagen pública",
+        exact: true,
+      }),
+    ).toBeEnabled();
+    await expect(
+      panel.locator(`img[src="/api/imagenes-publicas/${savedImage.assetId}"]`),
+    ).toBeVisible();
+    page.once("dialog", (d) => d.accept());
+    await panel
+      .getByRole("button", { name: "Retirar imagen pública", exact: true })
+      .click();
+    await expect(
+      panel.getByText("Esta publicación todavía no tiene una imagen pública."),
+    ).toBeVisible();
+    expect(
+      (
+        await page.request.get(`/api/imagenes-publicas/${savedImage.assetId}`)
+      ).status(),
+    ).toBe(404);
     // A failed save must release the button and preserve the selected image.
-    await page.route(`**/api/privado/registros/${id}/imagen-publica`,async route=>{
-      if(route.request().method()==="PUT") await route.fulfill({status:503,json:{error:"Fallo ficticio del servicio."}});
-      else await route.continue();
-    });
-    await panel.getByRole("checkbox",{name:"Incluir captura original"}).check();
-    await panel.getByLabel("Descripción de la imagen pública",{exact:true}).fill("Captura ficticia conservada después del error.");
-    await panel.getByRole("checkbox",{name:/Revisé los datos visibles/}).check();
-    page.once("dialog",d=>d.accept());
-    await panel.getByRole("button",{name:"Aprobar imagen pública",exact:true}).click();
-    await expect(panel.getByRole("alert")).toHaveText("Fallo ficticio del servicio.");
-    await expect(panel.getByRole("button",{name:"Aprobar imagen pública",exact:true})).toBeEnabled();
-    await expect(panel.getByRole("checkbox",{name:"Incluir captura original"})).toBeChecked();
+    await page.route(
+      `**/api/privado/registros/${id}/imagen-publica`,
+      async (route) => {
+        if (route.request().method() === "PUT")
+          await route.fulfill({
+            status: 503,
+            json: { error: "Fallo ficticio del servicio." },
+          });
+        else await route.continue();
+      },
+    );
+    await panel
+      .getByRole("checkbox", { name: "Incluir captura original" })
+      .check();
+    await panel
+      .getByLabel("Descripción de la imagen pública", { exact: true })
+      .fill("Captura ficticia conservada después del error.");
+    await panel
+      .getByRole("checkbox", { name: /Revisé los datos visibles/ })
+      .check();
+    page.once("dialog", (d) => d.accept());
+    await panel
+      .getByRole("button", { name: "Aprobar imagen pública", exact: true })
+      .click();
+    await expect(panel.getByRole("alert")).toHaveText(
+      "Fallo ficticio del servicio.",
+    );
+    await expect(
+      panel.getByRole("button", {
+        name: "Aprobar imagen pública",
+        exact: true,
+      }),
+    ).toBeEnabled();
+    await expect(
+      panel.getByRole("checkbox", { name: "Incluir captura original" }),
+    ).toBeChecked();
+  } finally {
+    release();
+  }
+});
 
+test("follow-up and alert draft keep working with delayed refresh and recover from failed writes", async ({
+  page,
+}) => {
+  await login(page.request);
+  const id = await received(page);
+  await validate(page.request, id);
+  await page.reload();
+  const follow = page.getByRole("region", { name: "Seguimiento", exact: true });
+  const alert = page.getByRole("region", {
+    name: "Borrador de alerta",
+    exact: true,
+  });
+  let release: () => void = () => {};
+  const blocked = new Promise<void>((r) => (release = r));
+  await page.route("**/equipo/**", async (route) => {
+    if (route.request().headers()["rsc"] === "1") await blocked;
+    await route.continue();
+  });
+  const saveDraft = async () => {
+    const response = page.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/api/privado/registros/${id}/borrador-alerta`) &&
+        r.request().method() === "POST",
+    );
+    await alert
+      .getByRole("button", { name: "Guardar borrador", exact: true })
+      .click();
+    const savedResponse = await response;
+    if (savedResponse.status() !== 200) {
+      const stored = await (
+        await page.request.get(`/api/privado/registros/${id}`)
+      ).json();
+      throw Error(
+        `Save status ${savedResponse.status()}; sent reportVersion ${savedResponse.request().postDataJSON().reportVersion}; stored ${stored.version}; ${(await savedResponse.json()).error}`,
+      );
+    }
+    await expect(
+      alert.getByLabel("Título de alerta", { exact: true }),
+    ).toBeEnabled();
+  };
+  try {
+    const note = "Primera nota ficticia con recarga detenida.";
+    await follow.getByLabel("Nota", { exact: true }).fill(note);
+    await follow
+      .getByRole("button", { name: "Guardar nota", exact: true })
+      .click();
+    await expect(
+      follow.getByRole("article").getByText(note, { exact: true }),
+    ).toHaveCount(1);
+    await expect(follow.getByLabel("Nota", { exact: true })).toBeEnabled();
+    await alert
+      .getByLabel("Título de alerta", { exact: true })
+      .fill("Alerta ficticia sin bloqueo");
+    await alert
+      .getByLabel("Texto de alerta", { exact: true })
+      .fill("Primer texto ficticio conservado sin esperar la recarga.");
+    await saveDraft();
+    await follow
+      .getByLabel("Nota", { exact: true })
+      .fill("Segunda nota ficticia con versión actualizada.");
+    await follow
+      .getByRole("button", { name: "Guardar nota", exact: true })
+      .click();
+    await expect(
+      follow
+        .getByRole("article")
+        .getByText("Segunda nota ficticia con versión actualizada.", {
+          exact: true,
+        }),
+    ).toBeVisible();
+    const revised =
+      "Segundo texto ficticio con borrador y versión del reporte vigentes.";
+    await alert.getByLabel("Texto de alerta", { exact: true }).fill(revised);
+    await saveDraft();
+    const current = await (
+      await page.request.get(`/api/privado/registros/${id}/borrador-alerta`)
+    ).json();
+    expect(current.draft.version).toBe(2);
+    const failUrl = `**/api/privado/registros/${id}/borrador-alerta`;
+    await page.route(failUrl, (route) =>
+      route.fulfill({
+        status: 503,
+        json: { error: "Fallo ficticio al guardar." },
+      }),
+    );
+    const unsaved =
+      "Texto ficticio que debe conservarse después del error de guardado.";
+    await alert.getByLabel("Texto de alerta", { exact: true }).fill(unsaved);
+    await alert
+      .getByRole("button", { name: "Guardar borrador", exact: true })
+      .click();
+    await expect(alert.getByRole("alert")).toHaveText(
+      "Fallo ficticio al guardar.",
+    );
+    await expect(
+      alert.getByLabel("Texto de alerta", { exact: true }),
+    ).toHaveValue(unsaved);
+    await expect(
+      alert.getByRole("button", { name: "Guardar borrador", exact: true }),
+    ).toBeEnabled();
+    await page.unroute(failUrl);
+    await saveDraft();
+    await follow
+      .getByRole("button", { name: "Cerrar seguimiento", exact: true })
+      .click();
+    await follow
+      .getByLabel("Motivo del cierre")
+      .fill("Cierre ficticio confirmado sin esperar la recarga.");
+    page.once("dialog", (d) => d.accept());
+    await follow
+      .getByRole("button", { name: "Confirmar cierre", exact: true })
+      .click();
+    await expect(follow.getByText("Cerrado", { exact: true })).toBeVisible();
+    await expect(
+      follow.getByRole("button", { name: "Guardar nota", exact: true }),
+    ).toHaveCount(0);
   } finally {
     release();
   }

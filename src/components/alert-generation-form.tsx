@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { send } from "./api";
+import { send, requestJson } from "./api";
 import { analysisErrorLabels } from "@/lib/ai-contract";
 import type { AlertGenerationView } from "@/lib/alert-contract";
 export function AlertGenerationForm({
@@ -35,18 +35,27 @@ export function AlertGenerationForm({
     let disposed = false;
     let timer: ReturnType<typeof setTimeout>;
     let polls = 0;
+    const deadline = Date.now() + 135000;
+    const controller = new AbortController();
     async function load() {
       try {
-        const response = await fetch(
+        const value = await requestJson(
           `/api/privado/registros/${id}/generacion-alerta`,
-          { cache: "no-store" },
+          { cache: "no-store", signal: controller.signal },
+          15000,
         );
-        if (!response.ok) throw Error();
-        const value = await response.json();
         if (disposed) return;
         setJob(value);
-        if (value?.status === "running" && polls++ < 85)
+        if (
+          value?.status === "running" &&
+          polls++ < 85 &&
+          Date.now() < deadline
+        )
           timer = setTimeout(load, 1500);
+        else if (value?.status === "running")
+          setError(
+            "No se ha confirmado el resultado. Recarga para consultar el estado de la propuesta.",
+          );
       } catch {
         if (!disposed)
           setError(
@@ -57,6 +66,7 @@ export function AlertGenerationForm({
     timer = setTimeout(load, 1500);
     return () => {
       disposed = true;
+      controller.abort();
       clearTimeout(timer);
     };
   }, [id, job?.id, job?.status]);
@@ -88,11 +98,13 @@ export function AlertGenerationForm({
               } catch (error) {
                 setError((error as Error).message);
                 try {
-                  const response = await fetch(
-                    `/api/privado/registros/${id}/generacion-alerta`,
-                    { cache: "no-store" },
+                  setJob(
+                    await requestJson(
+                      `/api/privado/registros/${id}/generacion-alerta`,
+                      { cache: "no-store" },
+                      10000,
+                    ),
                   );
-                  if (response.ok) setJob(await response.json());
                 } catch {}
               } finally {
                 setBusy(false);

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { PublicationForm } from "./private-forms";
 import { send } from "./api";
@@ -36,10 +36,21 @@ export function AiReview({
   const router = useRouter();
   const signals = sensitiveSignals(text);
   const latest = analyses[0];
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    setClock(Date.now());
+    if (latest?.status !== "running") return;
+    const remaining = Math.max(
+      0,
+      120000 - (Date.now() - new Date(latest.created_at).getTime()),
+    );
+    const timer = setTimeout(() => setClock(Date.now()), remaining + 10);
+    return () => clearTimeout(timer);
+  }, [latest?.id, latest?.status, latest?.created_at]);
   const running =
     busy ||
     (latest?.status === "running" &&
-      Date.now() - new Date(latest.created_at).getTime() < 120000);
+      clock - new Date(latest.created_at).getTime() < 120000);
   return (
     <div className="review-assistance">
       {(editable || analyses.length > 0) && (
@@ -74,11 +85,16 @@ export function AiReview({
                   }
                   setBusy(true);
                   try {
-                    await send(`/api/privado/registros/${id}/analisis`, {
-                      text,
-                      version,
-                      privacyConfirmed: privacy,
-                    });
+                    await send(
+                      `/api/privado/registros/${id}/analisis`,
+                      {
+                        text,
+                        version,
+                        privacyConfirmed: privacy,
+                      },
+                      "POST",
+                      45000,
+                    );
                     router.refresh();
                   } catch (error) {
                     setError((error as Error).message);

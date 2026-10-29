@@ -1,4 +1,5 @@
 "use client";
+import { requestJson } from "./api";
 import { AI_CONSENT_VERSION } from "@/lib/consent";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { MAX_EVIDENCE_BYTES, EVIDENCE_TYPES } from "@/lib/evidence";
@@ -26,11 +27,7 @@ export function PublicForm({ heading }: { heading: ReactNode }) {
   const evidenceInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     key.current = crypto.randomUUID();
-    fetch("/api/form-token", { cache: "no-store" })
-      .then((r) => {
-        if (!r.ok) throw Error();
-        return r.json();
-      })
+    requestJson("/api/form-token", { cache: "no-store" })
       .then((d) => setToken(d.token))
       .catch(() =>
         setFailure("No pudimos preparar el formulario. Recarga la página."),
@@ -92,16 +89,7 @@ export function PublicForm({ heading }: { heading: ReactNode }) {
       data.set("consentVersion", AI_CONSENT_VERSION);
       data.set("token", token);
       data.set("submissionKey", key.current);
-      const response = await fetch("/api/denuncias", {
-        method: "POST",
-        body: data,
-      });
-      const result = await response.json();
-      if (!response.ok)
-        throw Object.assign(
-          new Error(result.error ?? "No se pudo enviar el reporte."),
-          { fields: result.fields },
-        );
+      await requestJson("/api/denuncias", { method: "POST", body: data });
       setDone(true);
       setPreview("");
     } catch (error) {

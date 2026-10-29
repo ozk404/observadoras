@@ -5,7 +5,7 @@ const origin = process.env.TEST_BASE_URL ?? "http://localhost:3000";
 const prefix = process.env.TEST_PREFIX ?? "test";
 async function login(page: Page, role = "reviewer") {
   await page.goto("/ingreso");
-  await page.getByLabel("Nombre de usuario").fill(`${prefix}-followup-${role}`);
+  await page.getByLabel("Nombre de usuario").fill(`${prefix}-${role}`);
   await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
   await page.getByRole("button", { name: "Ingresar al área privada" }).click();
   await expect(page).toHaveURL(/\/equipo$/);
@@ -149,7 +149,7 @@ test("reviewer adds notes and closes follow-up while the approved publication st
   expect(
     history.every(
       (entry: { reviewer_username: string; created_at: string }) =>
-        entry.reviewer_username === `${prefix}-followup-reviewer` &&
+        entry.reviewer_username === `${prefix}-reviewer` &&
         entry.created_at,
     ),
   ).toBe(true);

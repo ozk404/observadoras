@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { PublicationFields } from "./publication-fields";
 import { publicationSections } from "@/lib/publication";
 import { useRouter } from "next/navigation";
-import { send } from "./api";
+import { send, requestJson } from "./api";
 import { PublicImagePicker } from "./public-image-picker";
 import { Arrow } from "./icons";
 function useFormReady() {
@@ -286,13 +286,10 @@ export function PublicationForm({
             else if (image) form.set("image", image);
             form.set("imageDescription", imageDescription);
             form.set("imageConfirmed", String(imageConfirmed));
-            const response = await fetch(
-              `/api/privado/registros/${id}/publicacion`,
-              { method: "POST", body: form },
-            );
-            const result = await response.json();
-            if (!response.ok)
-              throw Error(result.error || "No se pudo publicar.");
+            await requestJson(`/api/privado/registros/${id}/publicacion`, {
+              method: "POST",
+              body: form,
+            });
           } else await send(`/api/privado/registros/${id}/publicacion`, input);
           router.refresh();
         } catch (error) {

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ManagedUser } from "@/server/users";
 import { TeamNavigation } from "./team-navigation";
-import { send } from "./api";
+import { send, requestJson } from "./api";
 import styles from "@/app/equipo/usuarios/users.module.css";
 type History = {
   id: string;
@@ -77,12 +77,10 @@ export function UserManagement({
     let cancelled = false;
     setHistory([]);
     setHistoryError(false);
-    fetch(`/api/privado/usuarios/${selected.id}/historial`, {
+    requestJson(`/api/privado/usuarios/${selected.id}/historial`, {
       cache: "no-store",
     })
-      .then(async (response) => {
-        if (!response.ok) throw Error();
-        const value = await response.json();
+      .then((value) => {
         if (!cancelled) setHistory(value);
       })
       .catch(() => {

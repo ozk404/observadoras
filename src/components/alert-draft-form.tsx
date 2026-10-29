@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type {
   AlertContext,
@@ -31,9 +31,8 @@ export function AlertDraftForm({
   );
   const [writing, setWriting] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [refreshing, startTransition] = useTransition();
   const [error, setError] = useState("");
-  const busy = !ready || writing || refreshing || generating;
+  const busy = !ready || writing || generating;
   const unchanged =
     !!draft &&
     title === draft.title &&
@@ -41,13 +40,23 @@ export function AlertDraftForm({
     JSON.stringify(source) === JSON.stringify(draft.source);
   const hasChanges = draft ? !unchanged : !!(title || body || source);
   useEffect(() => {
-    if (hasChanges || busy) return;
-    setBaseReportVersion(reportVersion);
+    setBaseReportVersion((old) => Math.max(old, reportVersion));
+  }, [reportVersion]);
+  useEffect(() => {
+    if (hasChanges || busy || reportVersion < baseReportVersion) return;
+    if ((context.draft?.version ?? 0) <= (draft?.version ?? 0)) return;
     setDraft(context.draft);
     setTitle(context.draft?.title ?? "");
     setBody(context.draft?.body ?? "");
     setSource(context.draft?.source ?? null);
-  }, [reportVersion, context.draft, hasChanges, busy]);
+  }, [
+    reportVersion,
+    context.draft,
+    hasChanges,
+    busy,
+    draft?.version,
+    baseReportVersion,
+  ]);
   return (
     <section className="form-panel" aria-labelledby="alert-draft-heading">
       <h2 id="alert-draft-heading">Borrador de alerta</h2>
@@ -68,7 +77,7 @@ export function AlertDraftForm({
         draftVersion={draft?.version ?? 0}
         latest={context.generation}
         ready={aiReady}
-        disabled={writing || refreshing}
+        disabled={writing}
         onBusy={setGenerating}
         onUse={(job) => {
           if (!job.result) return;
@@ -106,7 +115,7 @@ export function AlertDraftForm({
             setTitle(saved.title);
             setBody(saved.body);
             setSource(saved.source);
-            startTransition(() => router.refresh());
+            router.refresh();
           } catch (error) {
             setError((error as Error).message);
           } finally {

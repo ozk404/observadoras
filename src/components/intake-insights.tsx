@@ -7,7 +7,7 @@ import {
   intakeErrorLabels,
   type IntakeView,
 } from "@/lib/ai-contract";
-import { send } from "./api";
+import { send, requestJson } from "./api";
 export function IntakeInsights({
   id,
   version,
@@ -25,14 +25,15 @@ export function IntakeInsights({
     let disposed = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let polls = 0;
+    const deadline = Date.now() + 135000;
+    const controller = new AbortController();
     async function load() {
       try {
-        const response = await fetch(
+        const data = await requestJson(
           `/api/privado/registros/${id}/analisis-inicial`,
-          { cache: "no-store" },
+          { cache: "no-store", signal: controller.signal },
+          15000,
         );
-        if (!response.ok) throw Error();
-        const data = await response.json();
         if (disposed) return;
         setAnalysis(data);
         setLoaded(true);
@@ -40,9 +41,14 @@ export function IntakeInsights({
         if (
           data &&
           ["queued", "processing"].includes(data.state) &&
-          polls++ < 90
+          polls++ < 90 &&
+          Date.now() < deadline
         )
           timer = setTimeout(load, 1500);
+        else if (data && ["queued", "processing"].includes(data.state))
+          setError(
+            "No se ha confirmado el resultado. Recarga para consultar el estado del análisis.",
+          );
       } catch {
         if (!disposed) {
           setError(
@@ -55,6 +61,7 @@ export function IntakeInsights({
     void load();
     return () => {
       disposed = true;
+      controller.abort();
       if (timer) clearTimeout(timer);
     };
   }, [id, refresh]);

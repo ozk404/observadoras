@@ -44,7 +44,7 @@ export async function writeFollowup(
       )
     ).rows[0];
     const actor = await client.query(
-      "SELECT id FROM users WHERE id=$1 AND enabled AND role='reviewer' FOR SHARE",
+      "SELECT id,username FROM users WHERE id=$1 AND enabled AND role='reviewer' FOR SHARE",
       [user.id],
     );
     if (!actor.rowCount)
@@ -71,8 +71,8 @@ export async function writeFollowup(
     )
       throw new HttpError(409, "El seguimiento ya está cerrado.");
     const id = randomUUID();
-    await client.query(
-      "INSERT INTO report_followup_events(id,report_id,kind,note,reviewer_id) VALUES($1,$2,$3,$4,$5)",
+    const inserted = await client.query(
+      "INSERT INTO report_followup_events(id,report_id,kind,note,reviewer_id) VALUES($1,$2,$3,$4,$5) RETURNING id,kind,note,created_at",
       [
         id,
         reportId,
@@ -86,7 +86,15 @@ export async function writeFollowup(
       [reportId],
     );
     await client.query("COMMIT");
-    return { id, version: changed.rows[0].version };
+    return {
+      id,
+      version: changed.rows[0].version,
+      entry: {
+        ...inserted.rows[0],
+        created_at: inserted.rows[0].created_at.toISOString(),
+        reviewer_username: actor.rows[0].username,
+      },
+    };
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;

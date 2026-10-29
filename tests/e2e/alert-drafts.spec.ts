@@ -8,7 +8,7 @@ const content = {
   title: "Alerta interna ficticia",
   body: "Texto de alerta ficticia preparado para revisión humana sin difusión.",
 };
-async function login(page: Page, role = "alert-reviewer") {
+async function login(page: Page, role = "reviewer") {
   await page.goto("/ingreso");
   await page.getByLabel("Nombre de usuario").fill(`${prefix}-${role}`);
   await page.getByLabel("Contraseña", { exact: true }).fill(process.env.TEST_PASSWORD!);
@@ -101,7 +101,7 @@ test("manual alert draft persists and remains editable with closed follow-up wit
   const saved = (await context(page, id)).draft;
   expect(saved.body).toBe(edited);
   expect(saved.source).toBeNull();
-  expect(saved.editor_username).toBe(`${prefix}-alert-reviewer`);
+  expect(saved.editor_username).toBe(`${prefix}-reviewer`);
   const record = await (
     await page.request.get(`/api/privado/registros/${id}`)
   ).json();
@@ -212,7 +212,7 @@ test("draft isolation and version checks prevent forged, unsupported and concurr
   page,
   browser,
 }) => {
-  await login(page, "alert-participant");
+  await login(page, "participant");
   const id = await create(page);
   const draftId = await create(page, false);
   expect((await page.request.get(endpoint(id))).status()).toBe(403);

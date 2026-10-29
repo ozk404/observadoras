@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { FollowupEntry } from "@/lib/followup-contract";
 import { send } from "./api";
@@ -7,19 +7,26 @@ export function FollowupPanel({
   id,
   version,
   entries,
+  onVersionChange,
 }: {
   id: string;
   version: number;
   entries: FollowupEntry[];
+  onVersionChange?: (version: number) => void;
 }) {
   const router = useRouter();
   const [closing, setClosing] = useState(false);
   const [note, setNote] = useState("");
   const [writing, setBusy] = useState(false);
-  const [refreshing, startTransition] = useTransition();
-  const busy = writing || refreshing;
+  const [current, setCurrent] = useState({ version, entries });
+  useEffect(
+    () =>
+      setCurrent((old) => (version > old.version ? { version, entries } : old)),
+    [version, entries],
+  );
+  const busy = writing;
   const [error, setError] = useState("");
-  const closed = entries.some((entry) => entry.kind === "closed");
+  const closed = current.entries.some((entry) => entry.kind === "closed");
   return (
     <section className="form-panel" aria-labelledby="followup-heading">
       <h2 id="followup-heading">Seguimiento</h2>
@@ -27,7 +34,7 @@ export function FollowupPanel({
         Las notas son privadas. Cerrar conserva la publicación.
       </p>
       {closed && <span className="status">Cerrado</span>}
-      {entries.map((entry) => (
+      {current.entries.map((entry) => (
         <article className="adjustment-entry" key={entry.id}>
           {entry.kind === "closed" && <h3>Cierre del seguimiento</h3>}
           <p className="report-body">{entry.note}</p>
@@ -56,15 +63,23 @@ export function FollowupPanel({
             setBusy(true);
             setError("");
             try {
-              await send(`/api/privado/registros/${id}/seguimiento`, {
-                action: closing ? "close" : "note",
-                note,
-                version,
-                ...(closing ? { confirmed: true } : {}),
-              });
+              const saved = await send(
+                `/api/privado/registros/${id}/seguimiento`,
+                {
+                  action: closing ? "close" : "note",
+                  note,
+                  version: current.version,
+                  ...(closing ? { confirmed: true } : {}),
+                },
+              );
+              setCurrent((old) => ({
+                version: saved.version,
+                entries: [...old.entries, saved.entry],
+              }));
+              onVersionChange?.(saved.version);
               setNote("");
               setClosing(false);
-              startTransition(() => router.refresh());
+              router.refresh();
             } catch (error) {
               setError((error as Error).message);
             } finally {
