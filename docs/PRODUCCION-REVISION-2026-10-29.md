@@ -18,23 +18,25 @@ Validación del incremento: TypeScript correcto; **36/36 pruebas de servidor**, 
 
 Compilación de producción del incremento correcta: `observadoras-production-check:publication-management-20261029`, SHA256 `ecf93edb6fc62a8867b3f2564a43941e9f9607c5e184e14867d4df4da030c0d3`. Se conserva el entorno principal con recarga en3000; las pruebas aisladas quedan detenidas sin eliminar volúmenes.
 
-Credenciales: pendiente la elección solicitada al usuario entre generación segura en archivo privado local o cambio personal desde Usuarios. No se restableció la contraseña ni se cerraron sesiones de la cuenta real sin esa definición.
+Credenciales: el usuario decide conservar el acceso de prueba y cambiar la contraseña personalmente desde Usuarios. No se restableció la contraseña ni se cerraron sesiones. Esta decisión permite continuar la preparación técnica; la credencial de prueba no es adecuada para una apertura pública.
 
 Los respaldos están excluidos expresamente de este incremento. El análisis de vulnerabilidades del sistema operativo con Docker Scout sigue pendiente de autenticación. No se declara preparación definitiva para producción mientras subsistan estas condiciones y las decisiones institucionales.
 
-La tabla siguiente conserva los hallazgos de la auditoría original; los puntos de publicaciones y enlaces quedan sustituidos por esta actualización.
+## Estado actual para la salida
 
-## Pendientes para autorizar la apertura
+| Tema | Estado actual |
+|---|---|
+| Funcionalidad y entrega empaquetada | Validada: compilación de producción, TypeScript, 36 pruebas de servidor y recorridos focalizados del incremento. No hay cambios de código desde esa validación. |
+| Publicaciones | Resuelto: corregir, retirar y volver a publicar con permisos, historial y versiones; original privado conservado. |
+| Logos | Resuelto: cinco visibles y solo Fundación/Tecsify con enlace definitivo. |
+| Solicitudes sobre datos | Canal y atención en 15 días definidos por el usuario. No se implementa envío de correo desde el sistema. |
+| Conservación/supresión y revisión jurídica | Pendientes de decisión institucional. No se eliminan reportes automáticamente. |
+| Contraseña de prueba | Conservada por decisión del usuario; el cambio se hará desde Usuarios. Debe sustituirse antes de habilitar acceso público al área privada. |
+| Escaneo de sistema operativo | Docker Scout requiere autenticación; no completado. La consulta anterior de npm no reportó vulnerabilidades conocidas en dependencias de ejecución. |
+| Respaldos | Fuera del incremento por indicación expresa; restauración técnica comprobada previamente, operación periódica no verificada. |
+| Instalación pública | Usar la imagen de producción sin override de desarrollo, origen HTTPS exacto, cookies seguras y secretos propios. No se realizó despliegue público. |
 
-| Prioridad | Hallazgo confirmado | Cierre necesario |
-|---|---|---|
-| Alta | La base local conserva una cuenta administradora activa cuya contraseña coincide con una contraseña de prueba conocida. | Cambiar las credenciales o excluir las cuentas de prueba antes de transferir esta base. No se cambiaron contraseñas durante la auditoría. Una instalación nueva no crea automáticamente esa cuenta. |
-| Alta | La interfaz permite retirar una imagen pública, pero no corregir ni retirar el texto de una publicación ya aprobada. El aviso ofrece un canal de solicitud de corrección/retirada. | Definir e implementar el mecanismo autorizado para atender esas solicitudes con trazabilidad. No depender de modificaciones manuales de la base como procedimiento ordinario. |
-| Alta | Siguen sin definirse plazos y criterios de conservación/supresión, atención de derechos y condiciones institucionales finales del tratamiento con IA. | Aprobación de la Fundación y revisión jurídica del aviso/procedimientos. El consentimiento del formulario no sustituye estas decisiones. No se afirma anonimización automática de descripción o captura. |
-| Alta, operación | Se comprobó restauración técnica, pero no existe una política operativa de respaldos verificada para el servicio público. | Establecer responsable, frecuencia, destino protegido, retención y ensayo periódico de recuperación. El respaldo debe incluir evidencia privada e imágenes públicas almacenadas en PostgreSQL. |
-| Cierre editorial | Los cinco logos suministrados ya sustituyen la imagen provisional, pero sus enlaces siguen apuntando a example.com por indicación del usuario. | Sustituirlos por los cinco destinos definitivos antes de la publicación institucional. |
-
-Las decisiones institucionales pendientes ya se registran en `DECISIONES_PENDIENTES.md`; esta revisión no inventa políticas ni atribuye aprobación a la Fundación.
+**Conclusión actual:** el código está preparado para el proceso de despliegue, dentro de las funciones comprobadas. No se declara listo para abrirlo al público mientras se conserve la credencial de prueba y no se cierren los pendientes institucionales y de verificación indicados. No se exige contratar alojamiento ni aportar un dominio para emitir este dictamen.
 
 ## Comprobaciones ejecutadas
 
