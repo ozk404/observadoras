@@ -191,11 +191,25 @@
   padding-top: 24px;
 }
 .topic h3 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   font-size: 24px;
   line-height: 1.25;
   font-weight: 700;
   margin-bottom: 18px;
   letter-spacing: -0.025em;
+}
+.topicIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 16px 6px 16px 6px;
+  background: var(--home-lavender);
+  color: var(--brand);
 }
 .topic p {
   font-size: 15px;

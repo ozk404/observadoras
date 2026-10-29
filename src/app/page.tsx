@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import heroIllustration from "../../public/illustrations/hero.webp";
-import { Arrow } from "@/components/icons";
+import { Arrow, ObservationIcon } from "@/components/icons";
 import styles from "./home.module.css";
 
 export const metadata: Metadata = {
@@ -65,21 +65,21 @@ export default function Home() {
         <h2 id="scope-title">Ámbitos de observación</h2>
         <div className={styles.scopeGrid}>
           <div className={styles.topic}>
-            <h3>Violencia política digital</h3>
+            <h3><span className={styles.topicIcon}><ObservationIcon kind="violence" /></span>Violencia política digital</h3>
             <p>
               Acoso, amenazas, suplantación y ataques contra mujeres
               relacionados con su participación política en entornos digitales.
             </p>
           </div>
           <div className={styles.topic}>
-            <h3>Desinformación</h3>
+            <h3><span className={styles.topicIcon}><ObservationIcon kind="information" /></span>Desinformación</h3>
             <p>
               Contenido falso o manipulado sobre mujeres y su participación
               política, documentado para revisión del observatorio.
             </p>
           </div>
           <div className={styles.topic}>
-            <h3>Barreras a la participación</h3>
+            <h3><span className={styles.topicIcon}><ObservationIcon kind="barrier" /></span>Barreras a la participación</h3>
             <p>
               Obstáculos para acceder, permanecer o ejercer derechos en espacios
               de decisión y participación política.
