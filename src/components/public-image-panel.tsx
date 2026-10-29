@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PublicImagePicker } from "./public-image-picker";
-import { send } from "./api";
+
 export function PublicImagePanel({
   id,
   context,
@@ -15,6 +15,50 @@ export function PublicImagePanel({
   };
 }) {
   const router = useRouter();
+  const [current, setCurrent] = useState(context);
+  useEffect(
+    () =>
+      setCurrent((old) =>
+        context.image_version > old.image_version ? context : old,
+      ),
+    [context],
+  );
+  async function saveImage(
+    method: "PUT" | "DELETE",
+    body: FormData | { version: number; confirmed: true },
+  ) {
+    try {
+      const response = await fetch(
+        `/api/privado/registros/${id}/imagen-publica`,
+        {
+          method,
+          body: body instanceof FormData ? body : JSON.stringify(body),
+          headers:
+            body instanceof FormData
+              ? undefined
+              : { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(25000),
+        },
+      );
+      const result = await response.json();
+      if (!response.ok)
+        throw Error(result.error || "No se pudo guardar la imagen pública.");
+      setCurrent({
+        image_version: result.imageVersion,
+        asset_id: result.assetId,
+        description: result.description,
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        ["TimeoutError", "AbortError"].includes(error.name)
+      )
+        throw Error(
+          "La solicitud tardó demasiado. Recarga para comprobar si se guardó antes de volver a intentar.",
+        );
+      throw error;
+    }
+  }
   const [useOriginal, setUseOriginal] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState("");
@@ -22,17 +66,16 @@ export function PublicImagePanel({
   const [writing, setBusy] = useState(false);
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
-  const [refreshing, startTransition] = useTransition();
-  const busy = writing || refreshing || !ready;
+  const busy = writing || !ready;
   const [error, setError] = useState("");
   return (
     <section className="form-panel" aria-labelledby="public-image-title">
       <h2 id="public-image-title">Imagen pública</h2>
-      {context.asset_id ? (
+      {current.asset_id ? (
         <>
           <img
-            src={`/api/imagenes-publicas/${context.asset_id}`}
-            alt={context.description || "Imagen pública aprobada"}
+            src={`/api/imagenes-publicas/${current.asset_id}`}
+            alt={current.description || "Imagen pública aprobada"}
             style={{
               width: "100%",
               height: 280,
@@ -54,12 +97,11 @@ export function PublicImagePanel({
               setBusy(true);
               setError("");
               try {
-                await send(
-                  `/api/privado/registros/${id}/imagen-publica`,
-                  { version: context.image_version, confirmed: true },
-                  "DELETE",
-                );
-                startTransition(() => router.refresh());
+                await saveImage("DELETE", {
+                  version: current.image_version,
+                  confirmed: true,
+                });
+                router.refresh();
               } catch (error) {
                 setError((error as Error).message);
               } finally {
@@ -93,23 +135,17 @@ export function PublicImagePanel({
           setError("");
           try {
             const form = new FormData();
-            form.set("version", String(context.image_version));
+            form.set("version", String(current.image_version));
             if (useOriginal) form.set("imageSource", "original");
             else if (file) form.set("image", file);
             form.set("description", description);
             form.set("confirmed", String(confirmed));
-            const response = await fetch(
-              `/api/privado/registros/${id}/imagen-publica`,
-              { method: "PUT", body: form },
-            );
-            const result = await response.json();
-            if (!response.ok)
-              throw Error(result.error || "No se pudo publicar la imagen.");
+            await saveImage("PUT", form);
             setUseOriginal(false);
             setFile(null);
             setDescription("");
             setConfirmed(false);
-            startTransition(() => router.refresh());
+            router.refresh();
           } catch (error) {
             setError((error as Error).message);
           } finally {
@@ -135,7 +171,7 @@ export function PublicImagePanel({
         >
           {busy
             ? "Guardando…"
-            : context.asset_id
+            : current.asset_id
               ? "Reemplazar imagen pública"
               : "Aprobar imagen pública"}
         </button>

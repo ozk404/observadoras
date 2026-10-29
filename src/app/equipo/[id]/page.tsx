@@ -254,7 +254,7 @@ export default async function Detail({
               </div>
               {imageContext && (
                 <div className={styles.publication}>
-                  <PublicImagePanel id={report.id} context={imageContext} />
+                  <PublicImagePanel key={report.id} id={report.id} context={imageContext} />
                 </div>
               )}
               {canFollowup && (

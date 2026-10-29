@@ -598,3 +598,78 @@ test("reviewer includes stored original with explicit approval and no reupload",
   expect(await (await page.request.get(source)).body()).toEqual(original);
   await visitor.close();
 });
+
+test("published image approval finishes independently of a delayed page refresh", async ({
+  page,
+}) => {
+  await login(page.request);
+  const id = await received(page);
+  await validate(page.request, id);
+  expect(
+    (
+      await page.request.post(`/api/privado/registros/${id}/publicacion`, {
+        headers: { origin },
+        data: textData,
+      })
+    ).status(),
+  ).toBe(201);
+  await page.reload();
+  const panel = page.getByRole("region", {
+    name: "Imagen pública",
+    exact: true,
+  });
+  await panel
+    .getByRole("checkbox", { name: "Incluir captura original" })
+    .check();
+  await panel
+    .getByLabel("Descripción de la imagen pública", { exact: true })
+    .fill("Captura ficticia para probar guardado sin bloqueo.");
+  await panel
+    .getByRole("checkbox", { name: /Revisé los datos visibles/ })
+    .check();
+  let release: () => void = () => {};
+  const blocked = new Promise<void>((r) => (release = r));
+  await page.route("**/equipo/**", async (route) => {
+    if (route.request().headers()["rsc"] === "1") await blocked;
+    await route.continue();
+  });
+  try {
+    const saved = page.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/api/privado/registros/${id}/imagen-publica`) &&
+        r.request().method() === "PUT",
+    );
+    page.once("dialog", (d) => d.accept());
+    await panel
+      .getByRole("button", { name: "Aprobar imagen pública", exact: true })
+      .click();
+    const savedResponse=await saved;
+    expect(savedResponse.status()).toBe(200);
+    const savedImage=await savedResponse.json();
+    await expect(
+      panel.getByRole("button", { name: "Guardando…", exact: true }),
+    ).toHaveCount(0, { timeout: 5000 });
+    await expect(panel.getByRole("button",{name:"Retirar imagen pública",exact:true})).toBeEnabled();
+    await expect(panel.locator(`img[src="/api/imagenes-publicas/${savedImage.assetId}"]`)).toBeVisible();
+    page.once("dialog",d=>d.accept());
+    await panel.getByRole("button",{name:"Retirar imagen pública",exact:true}).click();
+    await expect(panel.getByText("Esta publicación todavía no tiene una imagen pública.")).toBeVisible();
+    expect((await page.request.get(`/api/imagenes-publicas/${savedImage.assetId}`)).status()).toBe(404);
+    // A failed save must release the button and preserve the selected image.
+    await page.route(`**/api/privado/registros/${id}/imagen-publica`,async route=>{
+      if(route.request().method()==="PUT") await route.fulfill({status:503,json:{error:"Fallo ficticio del servicio."}});
+      else await route.continue();
+    });
+    await panel.getByRole("checkbox",{name:"Incluir captura original"}).check();
+    await panel.getByLabel("Descripción de la imagen pública",{exact:true}).fill("Captura ficticia conservada después del error.");
+    await panel.getByRole("checkbox",{name:/Revisé los datos visibles/}).check();
+    page.once("dialog",d=>d.accept());
+    await panel.getByRole("button",{name:"Aprobar imagen pública",exact:true}).click();
+    await expect(panel.getByRole("alert")).toHaveText("Fallo ficticio del servicio.");
+    await expect(panel.getByRole("button",{name:"Aprobar imagen pública",exact:true})).toBeEnabled();
+    await expect(panel.getByRole("checkbox",{name:"Incluir captura original"})).toBeChecked();
+
+  } finally {
+    release();
+  }
+});

@@ -29,11 +29,12 @@ export async function insertPublicationImage(
     description: image.description,
     confirmed: image.confirmed,
   });
+  const assetId = randomUUID();
   await client.query(
     "INSERT INTO publication_images(publication_id,asset_id,content,width,height,description,approved_by,authorization_version) VALUES($1,$2,$3,$4,$5,$6,$7,$8)",
     [
       publicationId,
-      randomUUID(),
+      assetId,
       image.evidence.content,
       image.evidence.width,
       image.evidence.height,
@@ -43,6 +44,7 @@ export async function insertPublicationImage(
     ],
   );
   await imageEvent(client, publicationId, actorId, version, action);
+  return assetId;
 }
 async function imageEvent(
   client: PoolClient,
@@ -129,8 +131,9 @@ export async function changePublicationImage(
       publication.id,
       next,
     ]);
+    let assetId: string | null = null;
     if (image)
-      await insertPublicationImage(
+      assetId = await insertPublicationImage(
         client,
         publication.id,
         user.id,
@@ -140,7 +143,11 @@ export async function changePublicationImage(
       );
     else await imageEvent(client, publication.id, user.id, next, "removed");
     await client.query("COMMIT");
-    return { imageVersion: next };
+    return {
+      imageVersion: next,
+      assetId,
+      description: image?.description ?? null,
+    };
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;
