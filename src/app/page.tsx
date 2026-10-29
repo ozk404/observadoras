@@ -110,33 +110,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.tools} aria-labelledby="tools-title">
-        <h2 id="tools-title">Herramientas del observatorio</h2>
-        <dl className={styles.toolRows}>
-          <div>
-            <dt>Registro y seguimiento</dt>
-            <dd>
-              El equipo consulta los hallazgos, registra notas y conserva su
-              estado de revisión y seguimiento.
-            </dd>
-          </div>
-          <div>
-            <dt>Análisis asistido por IA</dt>
-            <dd>
-              Sugerencias de clasificación, resúmenes y borradores de alertas
-              sujetos a revisión humana.
-            </dd>
-          </div>
-          <div>
-            <dt>Consulta agregada</dt>
-            <dd>
-              Un panel privado reúne reportes validados por período,
-              clasificación humana y estado.
-            </dd>
-          </div>
-        </dl>
-      </section>
-
       <section className={styles.about} aria-labelledby="program-title">
         <div className={styles.program}>
           <h2 id="program-title">¿Qué es el Programa <span>Paridad 2026?</span></h2>

@@ -35,13 +35,6 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
     await expect(
       scope.getByRole("heading", { name, exact: true }),
     ).toBeVisible();
-  const tools = page.getByRole("region", {
-    name: "Herramientas del observatorio",
-  });
-  await expect(tools).toContainText("sujetos a revisión humana");
-  await expect(tools).toContainText(
-    "Un panel privado reúne reportes validados",
-  );
   const purpose = page.getByRole("region", {
     name: "Objetivo del observatorio",
   });
