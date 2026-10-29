@@ -4,8 +4,8 @@ import "@fontsource-variable/manrope";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "Observadoras Digitales · Fundación Oxlajuj No’j",
-    template: "%s · Observadoras Digitales",
+    default: "Observatorio de Violencia Política · Fundación Oxlajuj No’j",
+    template: "%s · Observatorio de Violencia Política",
   },
   description:
     "Un espacio para documentar y visibilizar las barreras a la participación política de las mujeres.",
@@ -25,9 +25,9 @@ export default function RootLayout({
           <div className="header-inner">
             <Link href="/" className="wordmark">
               <span>
-                Observadoras<span className="brand-dot">.</span>
+                Observatorio<span className="brand-dot">.</span>
               </span>
-              <small>DIGITALES / OXLAJUJ NO’J</small>
+              <small>DE VIOLENCIA POLÍTICA</small>
             </Link>
             <nav aria-label="Navegación principal">
               <Link href="/reportes">Ver reportes</Link>
@@ -45,7 +45,9 @@ export default function RootLayout({
         <footer className="site-footer">
           <div>
             <strong>Fundación Oxlajuj No’j</strong>
-            <span>Observadoras Digitales · Programa Paridad 2026</span>
+            <span>
+              Observatorio de Violencia Política · Programa Paridad 2026
+            </span>
           </div>
           <div>
             <Link href="/privacidad">

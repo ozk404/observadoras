@@ -6,7 +6,9 @@ import { Arrow } from "@/components/icons";
 import styles from "./home.module.css";
 
 export const metadata: Metadata = {
-  title: "Observatorio ciudadano digital",
+  title: {
+    absolute: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
+  },
   description:
     "Documentación, análisis y seguimiento de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Fundación Oxlajuj No’j · Programa Paridad 2026.",
 };
@@ -16,7 +18,7 @@ export default function Home() {
       <section className={styles.hero} aria-labelledby="home-title">
         <div className={styles.heroCopy}>
           <h1 id="home-title">
-            Observatorio <span>ciudadano digital.</span>
+            Observatorio <span>de Violencia Política</span>
           </h1>
           <p>
             Documentamos y analizamos violencia política digital, desinformación
@@ -40,6 +42,21 @@ export default function Home() {
             sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1000px) 45vw, 608px"
             className={styles.heroIllustration}
           />
+        </div>
+      </section>
+      <section className={styles.introduction} aria-labelledby="what-title">
+        <h2 id="what-title">¿Qué es el observatorio?</h2>
+        <div>
+          <p>
+            En el marco del Programa Paridad 2026, Fundación Oxlajuj N’oj
+            desarrolla el Observatorio de Violencia Política: un espacio de
+            monitoreo ciudadano para documentar, sistematizar y dar seguimiento
+            a casos de violencia política, desinformación y barreras a la
+            participación política de las mujeres.
+          </p>
+          <p>
+            La evidencia reunida respalda y orienta las acciones del Programa.
+          </p>
         </div>
       </section>
       <section className={styles.scope} aria-labelledby="scope-title">
@@ -71,14 +88,21 @@ export default function Home() {
 
       <section className={styles.purpose} aria-labelledby="purpose-title">
         <div className={styles.purposeInner}>
-          <h2 id="purpose-title">
-            Hallazgos para el monitoreo y la incidencia.
-          </h2>
-          <p>
-            El observatorio organiza los registros ciudadanos para documentar
-            problemáticas y sustentar propuestas de la Fundación ante
-            instituciones estatales.
-          </p>
+          <h2 id="purpose-title">Objetivo del observatorio</h2>
+          <div>
+            <p>
+              Recopilar, documentar, sistematizar y analizar información para
+              visibilizar la violencia política digital contra las mujeres,
+              especialmente cuando limita, obstaculiza o impide su participación
+              en espacios de decisión.
+            </p>
+            <p>
+              El observatorio asume el compromiso de construir una base de
+              evidencia confiable y accesible para comprender estas barreras y
+              fortalecer las garantías para el ejercicio libre y seguro de los
+              derechos políticos de las mujeres.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -111,25 +135,33 @@ export default function Home() {
 
       <section className={styles.about} aria-labelledby="program-title">
         <div className={styles.program}>
-          <h2 id="program-title">Programa Paridad 2026</h2>
+          <h2 id="program-title">¿Qué es el Programa Paridad 2026?</h2>
           <p>
-            Una iniciativa de Fundación Oxlajuj No’j dirigida a mujeres jóvenes
-            y juventudes diversas en Guatemala. Vincula el monitoreo ciudadano
-            con la incidencia normativa y las acciones sociojurídicas.
+            Una iniciativa de Fundación Oxlajuj N’oj, ejecutada con el apoyo
+            técnico del Comité de América Latina y El Caribe para la Defensa de
+            los Derechos de las Mujeres (CLADEM), para fortalecer la
+            participación política y ciudadana de mujeres jóvenes y juventudes
+            diversas.
+          </p>
+          <p>
+            Identifica y documenta barreras, violencia política, desinformación,
+            exclusión y discriminación que puedan limitar esa participación. Su
+            finalidad es que el principio de paridad se traduzca en una
+            participación efectiva de las mujeres en los espacios de toma de
+            decisiones.
           </p>
         </div>
         <aside
           className={styles.territory}
           aria-label="Alcance territorial del programa"
         >
-          <h3>Alcance territorial</h3>
+          <h3>Diez departamentos</h3>
+          <p>Con prioridad en:</p>
           <ul>
             <li>Guatemala</li>
-            <li>Baja Verapaz</li>
-            <li>Quetzaltenango</li>
-            <li>Jutiapa</li>
-            <li>San Marcos</li>
             <li>Quiché</li>
+            <li>Quetzaltenango</li>
+            <li>Sololá</li>
           </ul>
         </aside>
       </section>

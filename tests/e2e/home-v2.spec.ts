@@ -4,7 +4,7 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
 }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Observatorio ciudadano digital.",
+    "Observatorio de Violencia Política",
   );
   const content = await page.locator("body").innerText();
   expect(content).not.toMatch(
@@ -14,18 +14,16 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
   await expect(
     page.getByRole("link", { name: "Saltar al contenido" }),
   ).toBeFocused();
-  const program = page.getByRole("region", { name: "Programa Paridad 2026" });
+  const program = page.getByRole("region", { name: "¿Qué es el Programa Paridad 2026?" });
   await expect(program).toContainText("mujeres jóvenes y juventudes diversas");
   const territory = program.getByRole("complementary", {
     name: "Alcance territorial del programa",
   });
   await expect(territory.getByRole("listitem")).toHaveText([
     "Guatemala",
-    "Baja Verapaz",
-    "Quetzaltenango",
-    "Jutiapa",
-    "San Marcos",
     "Quiché",
+    "Quetzaltenango",
+    "Sololá",
   ]);
   await expect(page.locator("main ol")).toHaveCount(0);
   const scope = page.getByRole("region", { name: "Ámbitos de observación" });
@@ -45,9 +43,9 @@ test("Inicio ADN: responsive structure, factual copy, primary purple blocks and 
     "Un panel privado reúne reportes validados",
   );
   const purpose = page.getByRole("region", {
-    name: "Hallazgos para el monitoreo y la incidencia.",
+    name: "Objetivo del observatorio",
   });
-  await expect(purpose).toContainText("instituciones estatales");
+  await expect(purpose).toContainText("espacios de decisión");
   const catalog = page.getByRole("region", { name: "Reportes publicados" });
   const contrast = await purpose.evaluate((el) => {
     const background = getComputedStyle(el).backgroundColor;

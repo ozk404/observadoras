@@ -99,3 +99,6 @@ Validación: TypeScript y dos recorridos focalizados aprobados (nueva selección
 
 
 Entorno único de trabajo autorizado (27-10-2026): localhost:3000 usa Next dev/Webpack con polling y código montado mediante compose.override.yaml. Conservados volumen PostgreSQL, cuentas, reportes y configuración OpenAI. `dev.mjs up/down/logs` opera este entorno;3100 queda detenido, disponible solo para pruebas ficticias bajo demanda con test-up/test-down. Entrega empaquetada omite el override con -f compose.yaml. Comprobados sintaxis del helper, configuración Compose, recarga de una edición en la página abierta y conteos idénticos antes/después (8 reportes,11 cuentas,3 publicaciones). No se ejecutaron fixtures sobre la base principal ni se reconstruyó la imagen.
+
+
+Inicio institucional actualizado (28-10-2026): nombre oficial Observatorio de Violencia Política en hero, cabecera, pie y metadatos. Nueva sección ¿Qué es?, objetivo en bloque morado, Paridad2026 con apoyo técnico de CLADEM, alcance de diez departamentos y cuatro territorios prioritarios proporcionados por el usuario. Compromiso de evidencia presentado como propósito institucional. Conservados hero/ilustración/adornos y acciones. TypeScript aprobado; revisión visual pendiente porque Docker Desktop devuelve500 y localhost:3000 no está disponible. No se reconstruyeron imágenes ni se modificaron datos.
