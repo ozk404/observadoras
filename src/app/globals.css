@@ -490,6 +490,7 @@ nav a:hover {
   margin-bottom: 20px;
 }
 .site-footer {
+  flex-wrap: wrap;
   border-top: 1px solid var(--line);
   padding: 32px max(40px, calc((100% - 1240px) / 2));
   display: flex;
@@ -497,6 +498,16 @@ nav a:hover {
   gap: 24px;
   font-size: 10px;
   color: var(--muted);
+}
+.site-footer .site-credits {
+  flex-basis: 100%;
+  margin: 8px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.8;
 }
 .site-footer > div {
   display: flex;
