@@ -603,7 +603,7 @@
   padding: 0;
 }
 .logoGrid li { min-width: 0; }
-.logoGrid a {
+.logoGrid a, .logoImage {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -622,10 +622,10 @@
   .logos { width: calc(100% - 40px); margin-top: 48px; padding-top: 24px; }
   .logoGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .logoGrid li:last-child { grid-column: 1/-1; width: calc(50% - 6px); justify-self: center; }
-  .logoGrid a { min-height: 88px; }
+  .logoGrid a, .logoImage { min-height: 88px; }
   .logoGrid img { height: 64px; }
 }
-@media (prefers-reduced-motion: reduce) { .logoGrid a { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .logoGrid a, .logoImage { transition: none; } }
 
 .reportInvite {
   width: min(1280px, calc(100% - 96px));

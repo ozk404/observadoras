@@ -20,3 +20,37 @@ export const publicationSections = [
     max: 1000,
   },
 ] as const;
+
+export type PublicationCopy = {
+  title: string;
+  body: string;
+  categories: string[];
+  summary: string;
+  context: string;
+  findings: string;
+  analysis: string;
+  limitations: string;
+};
+export type ManagedPublication = PublicationCopy & {
+  id: string;
+  version: number;
+  published_at: string;
+  updated_at: string;
+  withdrawn_at: string | null;
+};
+export type PublicationContext = {
+  publication: ManagedPublication;
+  events: {
+    id: string;
+    action: string;
+    version: number;
+    reason: string;
+    actor_name: string;
+    created_at: string;
+  }[];
+  image: {
+    image_version: number;
+    asset_id: string | null;
+    description: string | null;
+  };
+};

@@ -111,11 +111,11 @@ export async function changePublicationImage(
       );
     const publication = (
       await client.query(
-        "SELECT id,image_version FROM publications WHERE report_id=$1 FOR UPDATE",
+        "SELECT id,image_version,withdrawn_at FROM publications WHERE report_id=$1 FOR UPDATE",
         [reportId],
       )
     ).rows[0];
-    if (!publication || publication.image_version !== version)
+    if (!publication || publication.withdrawn_at || publication.image_version !== version)
       throw new HttpError(
         409,
         "La imagen pública cambió. Recarga antes de continuar.",

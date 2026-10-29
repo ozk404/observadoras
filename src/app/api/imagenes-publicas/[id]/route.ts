@@ -22,7 +22,7 @@ export async function GET(
       return new Response(null, { status: 404, headers });
     const row = (
       await db.query<{ content: Buffer }>(
-        "SELECT i.content FROM publication_images i JOIN publications p ON p.id=i.publication_id WHERE i.asset_id=$1",
+        "SELECT i.content FROM publication_images i JOIN publications p ON p.id=i.publication_id WHERE i.asset_id=$1 AND p.withdrawn_at IS NULL",
         [id],
       )
     ).rows[0];

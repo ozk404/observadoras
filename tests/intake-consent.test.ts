@@ -32,6 +32,12 @@ test("new consent is versioned and historical synthetic declarations cannot auth
     assert.equal(row.state, "completed");
     assert.equal(row.consent_version, "2026-10-26-reports-v1");
     assert.equal(row.consented_at.getTime(), consentedAt);
+    await db.query("UPDATE intake_analyses SET consent_version='2026-10-29-reports-v2',state='queued',attempts=0,result=NULL,transport=NULL WHERE report_id=$1", [reportId]);
+    await runIntakeOnce();
+    row = (await db.query("SELECT * FROM intake_analyses WHERE report_id=$1", [reportId])).rows[0];
+    assert.equal(row.state,"completed");
+    assert.equal(row.consent_version,"2026-10-29-reports-v2");
+    assert.equal(row.consented_at.getTime(),consentedAt);
     await db.query("UPDATE intake_analyses SET state='queued',attempts=0,result=NULL,transport=NULL WHERE report_id=$1", [reportId]);
 
     await db.query("UPDATE intake_analyses SET ai_consent=false,consent_version=NULL,consented_at=NULL,synthetic_confirmed=true WHERE report_id=$1", [reportId]);

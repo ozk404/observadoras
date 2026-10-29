@@ -146,6 +146,11 @@ export default function Privacy() {
         tu solicitud. Evita adjuntar documentos de identidad o información
         sensible que no sea necesaria.
       </p>
+      <p>
+        La Fundación atenderá las solicitudes recibidas en este correo en un
+        plazo de 15 días desde su recepción. La atención no implica aprobación
+        automática de lo solicitado; el equipo comunicará la decisión correspondiente.
+      </p>
     </article>
   );
 }

@@ -6,12 +6,14 @@ import styles from "./publication-fields.module.css";
 export function PublicationFields({
   disabled,
   onChange,
+  initial,
 }: {
   disabled: boolean;
   onChange: () => void;
+  initial?: Partial<import("@/lib/publication").PublicationCopy>;
 }) {
-  const [categories, setCategories] = useState<string[]>([]);
-  const [analysis, setAnalysis] = useState("");
+  const [categories, setCategories] = useState<string[]>(initial?.categories ?? []);
+  const [analysis, setAnalysis] = useState(initial?.analysis ?? "");
   return (
     <fieldset disabled={disabled} className={styles.panel} onChange={onChange}>
       <legend>
@@ -58,6 +60,7 @@ export function PublicationFields({
             <textarea
               id={`public-${field.key}`}
               name={`public-${field.key}`}
+              defaultValue={initial?.[field.key] ?? ""}
               maxLength={field.max}
               rows={field.key === "summary" ? 3 : 4}
               required={field.key === "limitations" && !!analysis.trim()}

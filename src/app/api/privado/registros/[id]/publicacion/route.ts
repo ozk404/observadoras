@@ -1,3 +1,4 @@
+import { getPublicationContext, managePublication } from "@/server/publication-management";
 import { requireUser } from "@/server/auth";
 import { getReport, publishReport } from "@/server/reports";
 import { apiError, checkOrigin, readJson, HttpError } from "@/server/security";
@@ -98,3 +99,20 @@ function parseCategories(value: FormDataEntryValue | null) {
     );
   }
 }
+
+type Context = { params: Promise<{id:string}> };
+async function managementResponse(request:Request,context:Context,method:"GET"|"PATCH"|"DELETE") {
+  try {
+    if(method!=="GET") checkOrigin(request);
+    const user=await requireUser(true);
+    const {id}=await context.params;
+    const result=method==="GET" ? await getPublicationContext(user,id) : await managePublication(user,id,await readJson(request),method==="DELETE");
+    if(!result) throw new HttpError(404,"No hay una publicación para este reporte.");
+    return Response.json(result,{headers:{"Cache-Control":"private, no-store"}});
+  } catch(error) {
+    const response=apiError(error);response.headers.set("Cache-Control","private, no-store");return response;
+  }
+}
+export async function GET(request:Request,context:Context){return managementResponse(request,context,"GET")}
+export async function PATCH(request:Request,context:Context){return managementResponse(request,context,"PATCH")}
+export async function DELETE(request:Request,context:Context){return managementResponse(request,context,"DELETE")}

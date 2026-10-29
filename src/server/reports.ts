@@ -420,6 +420,11 @@ export async function publishReport(
         data.limitations,
       ],
     );
+    await client.query(
+      `INSERT INTO publication_events(id,publication_id,actor_id,action,version,snapshot)
+       SELECT $1,id,$2,'published',1,jsonb_build_object('title',title,'body',body,'categories',categories,'summary',summary,'context',context,'findings',findings,'analysis',analysis,'limitations',limitations)
+       FROM publications WHERE id=$3`, [randomUUID(),user.id,publicationId],
+    );
     if (image) {
       await client.query(
         "UPDATE publications SET image_version=1 WHERE id=$1",
@@ -451,7 +456,7 @@ export async function publications(page = 1) {
       image_asset_id: string | null;
       image_description: string | null;
     }>(
-      "SELECT p.id,p.title,p.body,p.published_at,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id ORDER BY p.published_at DESC,p.id LIMIT 13 OFFSET $1",
+      "SELECT p.id,p.title,p.body,p.published_at,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.withdrawn_at IS NULL ORDER BY p.published_at DESC,p.id LIMIT 13 OFFSET $1",
       [(page - 1) * 12],
     )
   ).rows;
@@ -474,7 +479,7 @@ export async function publication(id: string) {
         analysis: string;
         limitations: string;
       }>(
-        "SELECT p.id,p.title,p.body,p.published_at,p.categories,p.summary,p.context,p.findings,p.analysis,p.limitations,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.id=$1",
+        "SELECT p.id,p.title,p.body,p.published_at,p.categories,p.summary,p.context,p.findings,p.analysis,p.limitations,i.asset_id AS image_asset_id,i.description AS image_description FROM publications p LEFT JOIN publication_images i ON i.publication_id=p.id WHERE p.id=$1 AND p.withdrawn_at IS NULL",
         [id],
       )
     ).rows[0] ?? null

@@ -6,6 +6,24 @@
 
 Esta revisión no es un despliegue ni una certificación de seguridad o cumplimiento jurídico. Se conservaron las cuentas, reportes y configuración de localhost:3000. Las pruebas utilizaron información ficticia y un proveedor IA simulado en una base aislada, sin llamadas externas a OpenAI.
 
+## Actualización posterior — gestión de publicaciones
+
+Implementados y comprobados después de la auditoría: corrección del texto y apartados públicos, retirada y republicación expresa por revisoras, motivo e historial privados, control de versiones y retirada conjunta de imagen. Una imagen retirada no reaparece al republicar. El original y la revisión interna se conservan. La migración 014 preserva aprobaciones anteriores con su persona y fecha originales.
+
+Los cinco logos se mantienen; únicamente lc4 enlaza a https://www.fundacionoxlajujnoj.org/ y lc5 a https://tecsify.com/. No quedan enlaces provisionales en esos logos.
+
+El usuario confirma atención de solicitudes por correo institucional en 15 días desde su recepción. Conservación/supresión y revisión jurídica siguen pendientes. Aviso v3 para nuevos envíos, conservando sin alteración los consentimientos v1/v2.
+
+Validación del incremento: TypeScript correcto; **36/36 pruebas de servidor**, sin omisiones, en una base temporal aislada; los dos recorridos de inicio y los dos nuevos de publicaciones aprobados entre ejecución y repetición focalizada. Estos últimos comprueban acceso401/403, origen, confirmaciones, versión obsoleta, concurrencia, corrección de apartados, retirada de catálogo/detalle/imagen, conservación del original y nueva aprobación sin recuperar la imagen. El recorrido de interfaz conserva controles funcionales con el refresco suspendido. No se repitió la suite completa de 62 escenarios.
+
+Compilación de producción del incremento correcta: `observadoras-production-check:publication-management-20261029`, SHA256 `ecf93edb6fc62a8867b3f2564a43941e9f9607c5e184e14867d4df4da030c0d3`. Se conserva el entorno principal con recarga en3000; las pruebas aisladas quedan detenidas sin eliminar volúmenes.
+
+Credenciales: pendiente la elección solicitada al usuario entre generación segura en archivo privado local o cambio personal desde Usuarios. No se restableció la contraseña ni se cerraron sesiones de la cuenta real sin esa definición.
+
+Los respaldos están excluidos expresamente de este incremento. El análisis de vulnerabilidades del sistema operativo con Docker Scout sigue pendiente de autenticación. No se declara preparación definitiva para producción mientras subsistan estas condiciones y las decisiones institucionales.
+
+La tabla siguiente conserva los hallazgos de la auditoría original; los puntos de publicaciones y enlaces quedan sustituidos por esta actualización.
+
 ## Pendientes para autorizar la apertura
 
 | Prioridad | Hallazgo confirmado | Cierre necesario |

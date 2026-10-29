@@ -16,8 +16,8 @@ import { listFollowup } from "@/server/followup";
 import { ReportOperations } from "@/components/report-operations";
 import { getAlertContext } from "@/server/alert-drafts";
 import { EvidencePreview } from "@/components/evidence-preview";
-import { publicImageContext } from "@/server/publication-images";
-import { PublicImagePanel } from "@/components/public-image-panel";
+import { getPublicationContext } from "@/server/publication-management";
+import { PublicationManagement } from "@/components/publication-management";
 import styles from "./detail.module.css";
 export default async function Detail({
   params,
@@ -46,9 +46,9 @@ export default async function Detail({
   const alertContext = canFollowup
     ? await getAlertContext(user, report.id)
     : null;
-  const imageContext =
+  const publicationContext =
     user.role === "reviewer" && report.status === "published"
-      ? await publicImageContext(report.id)
+      ? await getPublicationContext(user, report.id)
       : null;
   const date = new Intl.DateTimeFormat("es-GT", {
     dateStyle: "medium",
@@ -65,7 +65,7 @@ export default async function Detail({
       </Link>
       <header className={styles.header}>
         <div className={styles.meta}>
-          <Status status={report.status} />
+          {publicationContext?.publication.withdrawn_at ? <span className="status">Publicación retirada</span> : <Status status={report.status} />}
           <span>
             {report.author_id ? "Registro interno" : "Envío sin cuenta"}
           </span>
@@ -86,7 +86,7 @@ export default async function Detail({
                 : "Resultado de revisión"}
             </a>
           )}
-        {report.status === "validated" && user.role === "reviewer" && (
+        {["validated", "published"].includes(report.status) && user.role === "reviewer" && (
           <a href="#publicacion">Publicación</a>
         )}
         {adjustments.length > 0 && <a href="#ajustes">Ajustes</a>}
@@ -240,7 +240,7 @@ export default async function Detail({
                   revisión.
                 </p>
               )}
-              <div id="publicacion" className={styles.publication}>
+              <div id={report.status === "validated" ? "publicacion" : undefined} className={styles.publication}>
                 <AiReview
                   id={report.id}
                   version={report.version}
@@ -251,12 +251,12 @@ export default async function Detail({
                   canPublish={report.status === "validated"}
                 />
               </div>
-              {imageContext && (
-                <div className={styles.publication}>
-                  <PublicImagePanel
+              {publicationContext && (
+                <div id="publicacion" className={styles.publication}>
+                  <PublicationManagement
                     key={report.id}
                     id={report.id}
-                    context={imageContext}
+                    context={publicationContext}
                   />
                 </div>
               )}

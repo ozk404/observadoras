@@ -18,38 +18,12 @@ export const metadata: Metadata = {
   description:
     "Documentación, análisis y seguimiento de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Fundación Oxlajuj No’j · Programa Paridad 2026.",
 };
-// Destinations remain provisional until the final URLs are supplied.
 const projectLogos = [
-  {
-    id: 1,
-    image: partnerLogo1,
-    name: "Paridad",
-    href: "https://example.com/",
-  },
-  {
-    id: 2,
-    image: partnerLogo2,
-    name: "Diakonia",
-    href: "https://example.com/",
-  },
-  {
-    id: 3,
-    image: partnerLogo3,
-    name: "CLADEM, con el apoyo de Suecia",
-    href: "https://example.com/",
-  },
-  {
-    id: 4,
-    image: partnerLogo4,
-    name: "Fundación Oxlajuj N’oj",
-    href: "https://example.com/",
-  },
-  {
-    id: 5,
-    image: partnerLogo5,
-    name: "Tecsify",
-    href: "https://example.com/",
-  },
+  { id: 1, image: partnerLogo1, name: "Paridad", href: null },
+  { id: 2, image: partnerLogo2, name: "Diakonia", href: null },
+  { id: 3, image: partnerLogo3, name: "CLADEM, con el apoyo de Suecia", href: null },
+  { id: 4, image: partnerLogo4, name: "Fundación Oxlajuj N’oj", href: "https://www.fundacionoxlajujnoj.org/" },
+  { id: 5, image: partnerLogo5, name: "Tecsify", href: "https://tecsify.com/" },
 ];
 
 export default function Home() {
@@ -206,9 +180,15 @@ export default function Home() {
         <ul className={styles.logoGrid}>
           {projectLogos.map((logo) => (
             <li key={logo.id}>
-              <a href={logo.href} target="_blank" rel="noopener noreferrer" aria-label={`${logo.name} (abre en otra pestaña)`}>
-                <Image src={logo.image} alt="" sizes="(max-width: 720px) 140px, 200px" />
-              </a>
+              {logo.href ? (
+                <a href={logo.href} target="_blank" rel="noopener noreferrer" aria-label={`${logo.name} (abre en otra pestaña)`}>
+                  <Image src={logo.image} alt="" sizes="(max-width: 720px) 140px, 200px" />
+                </a>
+              ) : (
+                <span className={styles.logoImage}>
+                  <Image src={logo.image} alt={logo.name} sizes="(max-width: 720px) 140px, 200px" />
+                </span>
+              )}
             </li>
           ))}
         </ul>

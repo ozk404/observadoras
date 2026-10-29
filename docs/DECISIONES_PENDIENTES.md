@@ -67,3 +67,12 @@ D-10: cuentas cerradas gestionadas desde Usuarios por permiso administrativo ind
 29-10-2026: revisión del aviso solicitada por el usuario. Aclaradas responsabilidad del remitente, usos prohibidos, límites del servicio y tratamiento real IA/publicación; no se promete exoneración total ni renuncia de derechos. Antes de adoptar condiciones definitivas: revisión jurídica en Guatemala, identificación/contacto formal del responsable, canal y procedimiento de derechos/corrección/retirada, plazos y criterios de conservación/supresión y condiciones del proveedor. No inventar estos datos. La revisión editorial no atribuye aceptación retroactiva ni reemplaza el consentimiento IA ya registrado.
 
 29-10-2026: el usuario confirma programaparidadoxlajujnoj@gmail.com como canal institucional de contacto para solicitudes sobre datos, corrección y retirada. Incorporado al aviso con enlace mailto. Siguen pendientes procedimiento/plazos de atención, conservación/supresión y revisión jurídica; no se inventan garantías de respuesta ni se automatizan retiradas.
+
+
+## Cierre técnico de publicaciones y atención — 29-10-2026
+
+El usuario autoriza corrección y retirada de versiones públicas por revisoras, con motivo interno, nueva aprobación humana, control de versión e historial privado. Retirar oculta catálogo, detalle e imagen pública; se conserva el original privado. Volver a publicar exige confirmación expresa y no recupera automáticamente la imagen retirada. No modifica la validación interna ni el seguimiento del reporte.
+
+El usuario confirma que todas las solicitudes sobre datos se reciben en programaparidadoxlajujnoj@gmail.com y que la Fundación las atenderá en 15 días desde su recepción. Aclara expresamente que **no** es un plazo de conservación: conservación/supresión y revisión jurídica siguen pendientes. No se programan eliminaciones de reportes. Aviso v3 para nuevos envíos; v1 y v2 mantienen exclusivamente su autorización histórica del análisis inicial.
+
+Los respaldos quedan excluidos expresamente de este incremento. Los cinco logos permanecen visibles, con enlaces únicamente para lc4 (Fundación) y lc5 (Tecsify).
