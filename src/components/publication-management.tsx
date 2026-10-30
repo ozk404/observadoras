@@ -90,7 +90,7 @@ export function PublicationManagement({
       >
         <header className={styles.header}>
           <h2 id="managed-publication-title">
-            {withdrawn ? "Publicación retirada" : "Versión pública aprobada"}
+            {withdrawn ? "Publicación retirada" : "Publicación"}
           </h2>
           {!withdrawn && (
             <a

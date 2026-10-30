@@ -1,6 +1,11 @@
 # Local workspace: live source, existing accounts and reports on port 3000.
 # Packaged delivery: docker compose -f compose.yaml up -d --build
 services:
+  # Preserve the existing local PostgreSQL data and locale. Production uses the pinned base in compose.yaml.
+  db:
+    image: postgres:17-bookworm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   migrate:
     volumes:
       - ./db:/app/db:ro
@@ -24,4 +29,5 @@ services:
       - ./src:/app/src:ro
       - ./scripts:/app/scripts:ro
 volumes:
+  postgres_data:
   local_next:

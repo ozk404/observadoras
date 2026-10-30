@@ -1,8 +1,14 @@
 # Revisión de preparación para producción — 29-10-2026
 
+## Cierre técnico de entrega
+
+**Entrega preparada y validada para instalación en producción.** Compilación final correcta, 36 pruebas de servidor aprobadas en las nuevas bases y siete recorridos de navegador comprobados entre ejecución y repetición focalizada. Escaneo de app y PostgreSQL completado: cero críticos y altos; permanecen 3 y 4 coincidencias medias respectivamente. El detalle, digest final y alcance exacto están en `ESCANEO-ENTREGA-2026-10-29.md`.
+
+No se desplegó en un servidor público ni se migraron datos reales. La guía `DESPLIEGUE.md` explica la configuración, cuentas y separación de volúmenes para no sustituir físicamente la base local. Respaldos excluidos y eliminación de reportes exclusivamente manual, según las decisiones del usuario.
+
 ## Dictamen
 
-**La funcionalidad actual está validada; todavía no se recomienda abrir el servicio al público con datos reales.** La decisión no depende de contar ya con dominio o proveedor de alojamiento. Hay pendientes concretos de administración de contenido, datos y operación.
+**El código y el paquete de entrega están validados para desplegarse.** La instalación debe configurar HTTPS, secretos propios y cuentas, y planificar cualquier traslado de datos. Esta revisión no afirma que esos pasos ya se ejecutaron.
 
 Esta revisión no es un despliegue ni una certificación de seguridad o cumplimiento jurídico. Se conservaron las cuentas, reportes y configuración de localhost:3000. Las pruebas utilizaron información ficticia y un proveedor IA simulado en una base aislada, sin llamadas externas a OpenAI.
 
@@ -20,24 +26,24 @@ Compilación de producción del incremento correcta: `observadoras-production-ch
 
 Credenciales: el usuario decide conservar el acceso de prueba y cambiar la contraseña personalmente desde Usuarios. No se restableció la contraseña ni se cerraron sesiones. Esta decisión permite continuar la preparación técnica; la credencial de prueba no es adecuada para una apertura pública.
 
-Los respaldos están excluidos expresamente de este incremento. El análisis de vulnerabilidades del sistema operativo con Docker Scout sigue pendiente de autenticación. No se declara preparación definitiva para producción mientras subsistan estas condiciones y las decisiones institucionales.
+Los respaldos están excluidos expresamente de este incremento. El intento inicial con Docker Scout requería autenticación; ese pendiente técnico quedó resuelto con el escaneo completo de Grype descrito al inicio. La entrega técnica está preparada; la configuración y apertura del servidor y las decisiones jurídicas corresponden a la instalación y gestión institucional.
 
 ## Estado actual para la salida
 
 | Tema | Estado actual |
 |---|---|
-| Funcionalidad y entrega empaquetada | Validada: compilación de producción, TypeScript, 36 pruebas de servidor y recorridos focalizados del incremento. No hay cambios de código desde esa validación. |
+| Funcionalidad y entrega empaquetada | Validada sobre Alpine: compilación, 36 pruebas de servidor y siete recorridos comprobados entre ejecución y repetición focalizada. |
 | Publicaciones | Resuelto: corregir, retirar y volver a publicar con permisos, historial y versiones; original privado conservado. |
 | Logos | Resuelto: cinco visibles y solo Fundación/Tecsify con enlace definitivo. |
 | Solicitudes sobre datos | Canal y atención en 15 días definidos por el usuario. No se implementa envío de correo desde el sistema. |
 | Conservación de reportes | Definida por el usuario: sin caducidad ni eliminación automática; toda eliminación definitiva será manual y autorizada. No se ha añadido un botón de eliminación de originales. |
 | Revisión jurídica | Pendiente de validación institucional del aviso y condiciones aplicables. |
 | Contraseña de prueba | Conservada por decisión del usuario; el cambio se hará desde Usuarios. Debe sustituirse antes de habilitar acceso público al área privada. |
-| Escaneo de sistema operativo | Docker Scout requiere autenticación; no completado. La consulta anterior de npm no reportó vulnerabilidades conocidas en dependencias de ejecución. |
+| Escaneo de sistema operativo | Completado con Grype sobre la imagen final y PostgreSQL: 0 críticos/altos; 3 y 4 coincidencias medias documentadas. |
 | Respaldos | Fuera del incremento por indicación expresa; restauración técnica comprobada previamente, operación periódica no verificada. |
 | Instalación pública | Usar la imagen de producción sin override de desarrollo, origen HTTPS exacto, cookies seguras y secretos propios. No se realizó despliegue público. |
 
-**Conclusión actual:** el código está preparado para el proceso de despliegue, dentro de las funciones comprobadas. No se declara listo para abrirlo al público mientras se conserve la credencial de prueba y no se cierren los pendientes institucionales y de verificación indicados. No se exige contratar alojamiento ni aportar un dominio para emitir este dictamen.
+**Conclusión actual:** entrega técnica preparada para el proceso de despliegue. La apertura real requiere completar la instalación, usar credenciales adecuadas y atender las decisiones operativas documentadas; no es necesario contratar alojamiento para validar el código.
 
 ## Comprobaciones ejecutadas
 
@@ -86,7 +92,7 @@ Registros locales ignorados por Git:
 
 ## Límites de esta revisión y entrega
 
-- Docker Scout está instalado, pero rechazó el análisis por falta de sesión autenticada. **No se completó un análisis de vulnerabilidades del sistema operativo de la imagen.** No se inició sesión ni se alteró la configuración de Docker.
+- Docker Scout rechazó el intento inicial por falta de sesión. El escaneo se completó después con Grype y una base válida; no se desactivó la verificación TLS ni se agregaron excepciones.
 - OpenAI real, calidad del análisis sobre casos reales y condiciones comerciales/institucionales del proveedor no se revalidaron. La integración y los fallos se probaron con simulador.
 - Navegador Chromium con tamaños móviles/escritorio; no equivale a una prueba en Safari o dispositivos físicos. No se hizo prueba de carga, pentest externo ni auditoría integral de accesibilidad.
 - La configuración pública necesita origen exacto, HTTPS, cookies seguras, secretos propios y política de proxy. Son requisitos de la instalación final, no una solicitud de contratar o seleccionar alojamiento durante esta revisión.

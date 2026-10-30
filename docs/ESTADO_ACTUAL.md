@@ -138,3 +138,8 @@ Aviso v3: atención por correo en 15 días según confirmación del usuario; con
 
 
 Conservación definida por el usuario (29-10-2026): los reportes y su información no se eliminan automáticamente ni caducan por antigüedad. Toda eliminación definitiva será manual y autorizada; no se incorpora una nueva interfaz de borrado de originales en esta decisión. Retirar una publicación conserva el original privado y el historial. Los 15 días se refieren únicamente a atención por correo. La revisión jurídica permanece independiente de esta regla de producto.
+
+
+Entrega de producción validada (29-10-2026): Node 22 y PostgreSQL 17 sobre bases oficiales Alpine fijadas por digest; SWC/sharp comprobados y aplicación compilada. Escaneo completo con Grype: 0 críticos y altos, 3 coincidencias medias en app y 4 en PostgreSQL, conservadas sin excepciones. 36 pruebas de servidor aprobadas y siete recorridos comprobados entre ejecución y repetición del caso afectado por un encabezado duplicado, corregido a «Publicación». App/base saludables y worker operativo en validación aislada. No se repitió la suite histórica completa ni se probó OpenAI real.
+
+Producción usa production_data y el override local conserva postgres_data con su base anterior. No se transfirieron registros reales ni se cambió el contenedor local. Una transferencia entre las bases requiere migración lógica. Guía en DESPLIEGUE.md y resultados/digest final en ESCANEO-ENTREGA-2026-10-29.md. Respaldos excluidos; contraseña local conservada por instrucción del usuario y cambio manual desde administración.
