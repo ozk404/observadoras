@@ -1,0 +1,26 @@
+# Server only: docker compose -f compose.yaml -f compose.production.yaml up -d
+# Explicit file selection excludes the local development override.
+services:
+  app:
+    environment:
+      APP_ORIGIN: https://${SITE_DOMAIN:?Define SITE_DOMAIN in .env}
+      COOKIE_SECURE: "true"
+      TRUST_PROXY: "true"
+  proxy:
+    image: caddy:2.10.2-alpine
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Define SITE_DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  caddy_data:
+  caddy_config:
