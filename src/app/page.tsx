@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import heroIllustration from "../../public/illustrations/hero.webp";
@@ -11,13 +10,6 @@ import partnerLogo5 from "../../public/illustrations/lc5.webp";
 import { Arrow, ObservationIcon } from "@/components/icons";
 import styles from "./home.module.css";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
-  },
-  description:
-    "Documentación, análisis y seguimiento de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Fundación Oxlajuj No’j · Programa Paridad 2026.",
-};
 const projectLogos = [
   { id: 1, image: partnerLogo1, name: "Paridad", href: null },
   { id: 2, image: partnerLogo2, name: "Diakonia", href: null },

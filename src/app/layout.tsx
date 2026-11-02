@@ -3,12 +3,31 @@ import Link from "next/link";
 import "@fontsource-variable/manrope";
 import "./globals.css";
 export const metadata: Metadata = {
+  metadataBase: new URL("https://observadoras.tecsify.com"),
   title: {
-    default: "Observatorio de Violencia Política · Fundación Oxlajuj No’j",
+    default: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
     template: "%s · Observatorio de Violencia Política",
   },
   description:
-    "Un espacio para documentar y visibilizar las barreras a la participación política de las mujeres.",
+    "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
+  icons: {
+    icon: [{ url: "/illustrations/favic.jpg", type: "image/jpeg", sizes: "32x32" }],
+    shortcut: "/illustrations/favic.jpg",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_GT",
+    siteName: "Observatorio de Violencia Política",
+    title: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
+    description: "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
+    images: [{ url: "/illustrations/metaimg.jpg", width: 1200, height: 630, alt: "Observatorio de Violencia Política · Programa Paridad 2026" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
+    description: "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
+    images: ["/illustrations/metaimg.jpg"],
+  },
 };
 export default function RootLayout({
   children,

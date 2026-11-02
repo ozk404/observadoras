@@ -1,5 +1,17 @@
 # Servidor de observadoras.tecsify.com
 
+## Despliegue en un comando
+
+Después de actualizar el repositorio en el servidor existente, ejecutar:
+
+```bash
+bash scripts/deploy-server.sh
+```
+
+Compila, migra, crea admin/admin únicamente si la cuenta no existe, arranca en producción con red persistente, valida/recarga el Caddy existente y comprueba HTTPS. No restablece contraseñas existentes ni recrea PostgreSQL. Verifica primero la imagen y el volumen actuales y se detiene ante diferencias. Si falta el bloque de dominio, lo añade conservando una copia del Caddyfile y restaura el archivo si la validación falla. DNS debe estar configurado. Un fallo posterior no revierte migraciones ni elimina datos; corregir la causa y repetir el mismo comando. La contraseña inicial admin/admin es la excepción solicitada por el propietario; puede cambiarse desde Usuarios y no reaparecerá en despliegues posteriores.
+
+## Operación manual de referencia
+
 Este servidor comparte únicamente el proxy Caddy existente con Referente. No iniciar el servicio proxy de compose.production.yaml. PostgreSQL mantiene postgres:17-bookworm y el volumen observadoras_postgres_data; no ejecutar down -v ni cambiar el nombre del proyecto.
 
 Desde la carpeta observadoras, después de actualizar el código:
