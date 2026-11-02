@@ -1,0 +1,26 @@
+# Existing server with referente_caddy. Do not include compose.override.yaml.
+# docker compose -f compose.yaml -f compose.server.yaml up -d --build
+services:
+  db:
+    # Preserve the existing server database image and volume.
+    image: postgres:17-bookworm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  app:
+    command: ["npm", "start"]
+    environment:
+      NODE_ENV: production
+      APP_ORIGIN: https://observadoras.tecsify.com
+      COOKIE_SECURE: "true"
+      TRUST_PROXY: "true"
+    networks:
+      default:
+      public_proxy:
+        aliases:
+          - observadoras-web
+networks:
+  public_proxy:
+    external: true
+    name: referente_net
+volumes:
+  postgres_data:
