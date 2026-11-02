@@ -13,6 +13,12 @@ if [[ "$db_image" != postgres:17-bookworm || "$db_volume" != observadoras_postgr
   exit 1
 fi
 "${dc[@]}" build app
+docker start observadoras-db-1 >/dev/null
+for attempt in {1..30}; do
+  if docker exec observadoras-db-1 sh -c 'pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"' >/dev/null; then break; fi
+  if [[ "$attempt" == 30 ]]; then echo 'PostgreSQL is not ready; deployment stopped.' >&2; exit 1; fi
+  sleep 2
+done
 "${dc[@]}" run --rm --no-deps migrate
 "${dc[@]}" run --rm --no-deps app node --import tsx scripts/bootstrap-admin.ts
 "${dc[@]}" up -d --no-deps --wait --wait-timeout 120 app ai-worker

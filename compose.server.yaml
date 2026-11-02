@@ -9,6 +9,7 @@ services:
   app:
     command: ["npm", "start"]
     environment:
+      DATABASE_HOST: observadoras-db-1
       NODE_ENV: production
       APP_ORIGIN: https://observadoras.tecsify.com
       COOKIE_SECURE: "true"
@@ -18,6 +19,12 @@ services:
       public_proxy:
         aliases:
           - observadoras-web
+  migrate:
+    environment:
+      DATABASE_HOST: observadoras-db-1
+  ai-worker:
+    environment:
+      DATABASE_HOST: observadoras-db-1
 networks:
   public_proxy:
     external: true
