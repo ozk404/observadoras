@@ -15,8 +15,8 @@ services:
       retries: 15
     restart: unless-stopped
   migrate:
-    build: .
     image: observadoras-app:local
+    pull_policy: never
     security_opt: ["no-new-privileges:true"]
     cap_drop: ["ALL"]
     env_file: .env
@@ -43,6 +43,7 @@ services:
     restart: unless-stopped
   ai-worker:
     image: observadoras-app:local
+    pull_policy: never
     security_opt: ["no-new-privileges:true"]
     cap_drop: ["ALL"]
     env_file: .env
