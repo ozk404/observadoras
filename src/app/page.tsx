@@ -24,7 +24,7 @@ export default function Home() {
       <section className={styles.hero} aria-labelledby="home-title">
         <div className={styles.heroCopy}>
           <h1 id="home-title">
-            Observatorio <span>de Violencia Política</span>
+            Observatorio <span>de Violencia Política Digital</span>
           </h1>
           <p>
             Documentamos y analizamos violencia política digital, desinformación
@@ -58,7 +58,7 @@ export default function Home() {
         <div className={styles.introContent}>
           <p>
             Fundación Oxlajuj N’oj desarrolla el Observatorio de Violencia
-            Política en el marco del Programa Paridad 2026 para documentar,
+            Política Digital en el marco del Programa Paridad 2026 para documentar,
             sistematizar y dar seguimiento a casos de violencia política,
             desinformación y barreras a la participación política de las mujeres.
           </p>

@@ -1,4 +1,40 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-latin-400-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-latin-500-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-latin-600-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-latin-700-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/poppins-latin-800-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
 :root {
+  --font-site: "Poppins", sans-serif;
   --brand: #69088b;
   --deep: #300060;
   --ink: #281635;
@@ -155,7 +191,7 @@ body {
   margin: 0;
   background: var(--white);
   color: var(--ink);
-  font-family: "Manrope Variable", sans-serif;
+  font-family: var(--font-site);
   font-size: 16px;
   line-height: 1.65;
 }
@@ -241,19 +277,27 @@ em {
 .wordmark {
   text-decoration: none;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   line-height: 1.2;
 }
-.wordmark > span {
+.wordmark-logo {
+  width: clamp(44px, 5vw, 56px);
+  height: auto;
+  flex: none;
+}
+.wordmark-text {
+  display: grid;
+  gap: 4px;
   font-size: 27px;
   font-weight: 800;
   letter-spacing: -1.4px;
 }
 .wordmark small {
-  margin-top: 8px;
-  font-size: 9px;
-  letter-spacing: 2.3px;
-  font-weight: 650;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 .brand-dot {
   color: var(--brand);
@@ -995,7 +1039,7 @@ textarea::placeholder {
     flex-wrap: wrap;
     gap: 22px;
   }
-  .wordmark > span {
+  .wordmark-text {
     font-size: 25px;
   }
   .header-inner nav {
@@ -1199,8 +1243,7 @@ textarea::placeholder {
 }
 /* ADN v2 shell applies only while Inicio is mounted. */
 body:has(.home-v2) .header-inner { width: min(1280px, calc(100% - 96px)); min-height: 96px; }
-body:has(.home-v2) .wordmark > span { font-family: "Archivo Home", sans-serif; font-weight: 800; font-size: 29px; letter-spacing: -1.2px; }
-body:has(.home-v2) .wordmark small { letter-spacing: 1.5px; }
+body:has(.home-v2) .wordmark-text { font-size: 29px; letter-spacing: -1.2px; }
 body:has(.home-v2) .nav-primary { border-radius: 8px; min-height: 44px; display: inline-flex; align-items: center; }
 body:has(.home-v2) .site-footer { border-color: #d9ccdf; }
 @media (max-width: 1000px) {
@@ -1208,7 +1251,7 @@ body:has(.home-v2) .site-footer { border-color: #d9ccdf; }
 }
 @media (max-width: 720px) {
   body:has(.home-v2) .header-inner { width: calc(100% - 40px); padding-block: 22px; }
-  body:has(.home-v2) .wordmark > span { font-size: 27px; }
+  body:has(.home-v2) .wordmark-text { font-size: 25px; }
 }
 /* Operational screens favor readable labels and clearly bounded controls. */
 .help {

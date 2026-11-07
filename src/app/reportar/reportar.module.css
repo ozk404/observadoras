@@ -1,10 +1,3 @@
-@font-face {
-  font-family: "Archivo Reportar";
-  src: url("../fonts/archivo-latin.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-}
 .page {
   max-width: 1240px;
   margin: 0 auto;
@@ -17,7 +10,7 @@
   text-align: left;
 }
 .heading h1 {
-  font-family: "Archivo Reportar", sans-serif;
+  font-family: var(--font-site);
   font-size: clamp(36px, 4vw, 48px);
   font-weight: 800;
   letter-spacing: -1.6px;
@@ -52,7 +45,7 @@
   height: 28px;
 }
 .context h2 {
-  font-family: "Archivo Reportar", sans-serif;
+  font-family: var(--font-site);
   color: white;
   font-size: 24px;
   line-height: 1.2;
@@ -153,7 +146,7 @@
   height: 100%;
 }
 .page :global(.capture-surface) h2 {
-  font-family: "Archivo Reportar", sans-serif;
+  font-family: var(--font-site);
   font-size: 23px;
   font-weight: 750;
   line-height: 1.25;
@@ -272,7 +265,7 @@
   text-align: center;
 }
 .page :global(.confirmation) h2 {
-  font-family: "Archivo Reportar", sans-serif;
+  font-family: var(--font-site);
   font-size: 36px;
   letter-spacing: -1px;
 }

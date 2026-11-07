@@ -61,7 +61,7 @@
   border-bottom: 1px solid #d9ccdf;
 }
 .panel header h2 {
-  font-family: "Archivo Ficha", "Archivo Equipo", sans-serif;
+  font-family: var(--font-site);
   font-size: 22px;
   font-weight: 750;
   margin: 0;

@@ -34,7 +34,7 @@
   color: #675d6e;
 }
 .driver-popover.report-tour-popover {
-  --driver-popover-font-family: "Manrope Variable", sans-serif;
+  --driver-popover-font-family: var(--font-site);
   box-sizing: border-box;
   width: 360px;
   min-width: 0;
@@ -47,7 +47,7 @@
   box-shadow: 0 16px 64px #271b3033;
 }
 .report-tour-popover .driver-popover-title {
-  font-family: "Archivo Reportar", sans-serif;
+  font-family: var(--font-site);
   font-size: 24px;
   line-height: 1.15;
   letter-spacing: -0.6px;
@@ -55,7 +55,7 @@
   padding-right: 24px;
 }
 .report-tour-popover .driver-popover-description {
-  font-family: "Manrope Variable", sans-serif;
+  font-family: var(--font-site);
   font-size: 15px;
   line-height: 1.65;
   color: #675d6e;
@@ -81,8 +81,7 @@
 }
 .report-tour-popover .driver-popover-progress-text {
   font:
-    750 13px "Manrope Variable",
-    sans-serif;
+    750 13px var(--font-site);
   color: #69088b;
   white-space: nowrap;
 }
@@ -91,8 +90,7 @@
 }
 .report-tour-popover .driver-popover-footer-btn {
   font:
-    700 14px "Manrope Variable",
-    sans-serif;
+    700 14px var(--font-site);
   min-height: 44px;
   padding: 10px 14px;
   border: 1px solid #d9ccdf;
@@ -265,4 +263,4 @@
   display: none !important;
 }
 
-.team-tour-popover .driver-popover-title { font-family: "Archivo Equipo", sans-serif; }
+.team-tour-popover .driver-popover-title { font-family: var(--font-site); }

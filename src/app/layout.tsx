@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import "@fontsource-variable/manrope";
+import Image from "next/image";
+import logo from "../../public/illustrations/logof.webp";
 import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://observadoras.tecsify.com"),
   title: {
-    default: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
-    template: "%s · Observatorio de Violencia Política",
+    default: "Observatorio de Violencia Política Digital · Fundación Oxlajuj N’oj",
+    template: "%s · Observatorio de Violencia Política Digital",
   },
   description:
     "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
@@ -17,14 +18,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_GT",
-    siteName: "Observatorio de Violencia Política",
-    title: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
+    siteName: "Observatorio de Violencia Política Digital",
+    title: "Observatorio de Violencia Política Digital · Fundación Oxlajuj N’oj",
     description: "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
-    images: [{ url: "/illustrations/metaimg.jpg", width: 1200, height: 630, alt: "Observatorio de Violencia Política · Programa Paridad 2026" }],
+    images: [{ url: "/illustrations/metaimg.jpg", width: 1200, height: 630, alt: "Observatorio de Violencia Política Digital · Programa Paridad 2026" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Observatorio de Violencia Política · Fundación Oxlajuj N’oj",
+    title: "Observatorio de Violencia Política Digital · Fundación Oxlajuj N’oj",
     description: "Monitoreo ciudadano de violencia política digital, desinformación y barreras a la participación política de las mujeres en Guatemala. Programa Paridad 2026.",
     images: ["/illustrations/metaimg.jpg"],
   },
@@ -43,10 +44,11 @@ export default function RootLayout({
         <header className="site-header">
           <div className="header-inner">
             <Link href="/" className="wordmark">
-              <span>
-                Observatorio<span className="brand-dot">.</span>
+              <Image className="wordmark-logo" src={logo} alt="" sizes="56px" />
+              <span className="wordmark-text">
+                <span>Observatorio<span className="brand-dot">.</span></span>
+                <small>de Violencia Política Digital</small>
               </span>
-              <small>DE VIOLENCIA POLÍTICA</small>
             </Link>
             <nav aria-label="Navegación principal">
               <Link href="/reportes">Ver reportes</Link>
@@ -65,7 +67,7 @@ export default function RootLayout({
           <div>
             <strong>Fundación Oxlajuj No’j</strong>
             <span>
-              Observatorio de Violencia Política · Programa Paridad 2026
+              Observatorio de Violencia Política Digital · Programa Paridad 2026
             </span>
           </div>
           <div>
