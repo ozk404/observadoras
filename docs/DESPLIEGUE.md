@@ -67,4 +67,4 @@ Para trasladar registros existentes se debe planificar una exportación/importac
 - Confirmar el correo institucional y la atención en 15 días. Los reportes no caducan ni se eliminan automáticamente.
 - Revisar los hallazgos medios documentados en `ESCANEO-ENTREGA-2026-10-29.md`. El escaneo no equivale a un pentest ni a una revisión jurídica.
 
-Los respaldos permanecen fuera de este incremento por instrucción del usuario. Su exclusión no implica que exista una operación periódica de recuperación configurada.
+La exportación completa y la restauración manual están disponibles en [respaldos y restauración](RESPALDOS.md). El paquete cifrado incluye la base, el código y la configuración. La programación periódica y el almacenamiento remoto se configuran por separado.

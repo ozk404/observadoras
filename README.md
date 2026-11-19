@@ -67,7 +67,23 @@ El cambio de servidor o de imagen de PostgreSQL requiere planificar una exportac
 
 El acceso del equipo es cerrado. El permiso de administración de usuarios es independiente del rol de revisión. Las instalaciones locales y nuevas crean su primera cuenta explícitamente. El script del servidor actual tiene su propio arranque de administración. Cambia su contraseña inicial desde Usuarios y consulta la [guía de cuentas](docs/DESPLIEGUE.md#cuentas) para recuperación.
 
-La Fundación administra la información. Las solicitudes se atienden por correo en un plazo de 15 días. Toda eliminación definitiva es manual y autorizada. Retirar una publicación conserva el reporte original privado. Los respaldos quedan fuera del alcance de esta entrega. Consulta el [aviso vigente](docs/avisos/2026-10-29-reports-v3.txt).
+La Fundación administra la información. Las solicitudes se atienden por correo en un plazo de 15 días. Toda eliminación definitiva es manual y autorizada. Retirar una publicación conserva el reporte original privado. Consulta el [aviso vigente](docs/avisos/2026-10-29-reports-v3.txt).
+
+## Respaldo completo y traslado
+
+Exporta la base completa, el código, los archivos públicos y la configuración en un paquete cifrado. El comando solicita una contraseña de recuperación.
+
+```bash
+node scripts/backup.mjs export --container observadoras-db-1 --output backups/observatorio.ovpbackup
+```
+
+Para importar, prepara una base PostgreSQL vacía y un directorio de código nuevo.
+
+```bash
+node scripts/backup.mjs import --container observadoras-db-1 --input backups/observatorio.ovpbackup --files-to ../observatorio-restaurado
+```
+
+La importación conserva cuentas y contraseñas, invalida sesiones previas y recupera la configuración en `.env.reference` para adaptarla al destino. Consulta los requisitos, el traslado definitivo y las comprobaciones en [respaldos y restauración](docs/RESPALDOS.md).
 
 ## Verificación de entrega
 
